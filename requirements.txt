@@ -1,0 +1,8 @@
+beautifulsoup4
+emoji>=2.0.0
+ftfy
+pandas
+plotly
+regex
+scikit-learn
+streamlit
