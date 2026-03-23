@@ -1,57 +1,82 @@
-# Phân Tích Cảm Xúc Đa Khía Cạnh (ABSA) - Review Sách Tiki
+# Đồ án Phân tích Cảm xúc Đa khía cạnh (ABSA) - Tiki Book Reviews
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
-[![Framework](https://img.shields.io/badge/Framework-PyTorch-red.svg)](https://pytorch.org/)
-[![Model](https://img.shields.io/badge/Model-PhoBERT-orange.svg)](https://huggingface.co/vinai/phobert-base-v2)
-[![Dataset](https://img.shields.io/badge/Dataset-Kaggle-blue.svg)](https://www.kaggle.com/datasets/phtnguyn1ytj/tiki-book-reviews)
+## 1. Giới thiệu Project
+Dự án tập trung vào việc tiền xử lý văn bản, trực quan hóa dữ liệu và xây dựng mô hình Deep Learning (**PhoBERT**) để phân loại cảm xúc từ các đánh giá sách thực tế trên Tiki. Mô hình không chỉ nhận diện cảm xúc (Tích cực/Tiêu cực/Trung lập) mà còn phân tích sâu vào 6 khía cạnh của một đơn hàng:
+- Nội dung sách (Content), Khổ giấy/Bìa (Physical), Giá cả (Price), Đóng gói (Packaging), Giao hàng (Delivery), Chăm sóc khách hàng (Service).
+- Tích hợp một quy trình **Pipeline Làm Sạch Dữ Liệu độc lập (Stateless)** mạnh mẽ và một **Web Dashboard (Streamlit)** để kiểm tra biến rỗng, nhiễu, lỗi đánh máy, từ lóng (Teencode).
 
-Dự án nghiên cứu và triển khai hệ thống **Phân tích Cảm xúc Đa khía cạnh (Aspect-Based Sentiment Analysis - ABSA)** dựa trên dữ liệu đánh giá sách từ nền tảng thương mại điện tử Tiki. Sử dụng mô hình ngôn ngữ **PhoBERT** để đồng thời phân loại cảm xúc chung và 6 khía cạnh cụ thể của sản phẩm.
+<p align="center">
+  <img src="pipeline.png" alt="Sơ đồ Luồng Tiền Xử Lý (Data Preprocessing Pipeline)" width="800">
+</p>
 
-## 🚀 Tính Năng Chính
-- **Pipeline Tiền Xử Lý Chuyên Sâu:** Chuẩn hóa Unicode, xử lý Emoji, loại bỏ nhiễu (URL, Email, SĐT), xử lý Teencode và ký tự lặp.
-- **Phân Tích Đa Khía Cạnh:** Phân loại cảm xúc (Tích cực, Trung lập, Tiêu cực) trên 6 khía cạnh:
-  - `Content`: Nội dung sách.
-  - `Physical`: Chất lượng giấy, bìa, in ấn.
-  - `Price`: Giá cả.
-  - `Packaging`: Quy cách đóng gói.
-  - `Delivery`: Dịch vụ giao hàng.
-  - `Service`: Chăm sóc khách hàng.
-- **Deep Learning Model:** Fine-tune mô hình `vinai/phobert-base-v2` với Focal Loss để xử lý mất cân bằng dữ liệu.
-- **Dashboard Trực Quan:** Tích hợp Streamlit Dashboard để theo dõi thống kê và kiểm tra kết quả tiền xử lý.
+## 2. Cấu trúc Thư mục Chi tiết
+Hệ thống thư mục được tổ chức theo tiêu chuẩn của các dự án Data Science và Machine Learning:
 
-## 📁 Cấu Trúc Thư Mục
 ```text
 DoAn2/
-├── data/                   # Quản lý dữ liệu đa phiên bản (Raw, Interim, Processed)
-├── src/                    # Logic lõi (Preprocessing, Balancing, Analysis)
-├── notebooks/              # Các bước thực nghiệm EDA, Training PhoBERT
-├── scripts/                # Script tiện ích (Crawler, Converter)
-├── experiments/            # Lưu trữ model checkpoints và metrics
-├── dashboard.py            # Giao diện visualization dữ liệu
-└── requirements.txt        # Thư viện cần thiết
+├── data/                    # Khu vực toàn quyền của Dữ liệu (Không chứa code)
+│   ├── raw/                 # 👉 Chứa dữ liệu thô nguyên thủy vừa cào từ Tiki về (.csv)
+│   ├── interim/             # 👉 Dữ liệu trung gian (đã chia cắt Train/Test nhưng chưa lọc rác)
+│   └── processed/           # 👉 Dữ liệu hoàn chỉnh (sạch 100%, sẵn sàng đưa vào Train)
+│
+├── src/                     # Source Code Lõi của hệ thống (Viết kiểu OOP chuẩn mực)
+│   ├── analysis/            # 👉 Script rà soát lỗi rỗng, đếm số từ, tìm teencode (Scanner)
+│   └── preprocessing/       # 👉 Nơi chứa chuỗi thuật toán Làm Sạch Dữ Liệu (Pipeline)
+│       ├── unicode_norm.py  # 👉 Chuẩn hóa dấu thanh Tiếng Việt thống nhất
+│       ├── emoji_norm.py    # 👉 Dịch biểu tượng cảm xúc (Emoji) ra chữ thuần
+│       ├── noise_cleaner.py # 👉 Xóa bỏ rác (Link URL, Số điện thoại, Email, Ký tự HTML)
+│       ├── vocab_norm.py    # 👉 Sửa lỗi đánh máy cơ bản, tự động phiên dịch Teencode
+│       ├── formatters.py    # 👉 Chuyển chữ thường, cắt bỏ hàng ngàn khoảng trắng thừa
+│       ├── quality_filter.py# 👉 Lọc bỏ review quá ngắn, xóa dòng trùng lặp (Drop Duplicates)
+│       ├── map_utils.py     # 👉 Tiện ích hỗ trợ đọc thư viện ánh xạ quy tắc
+│       ├── pipeline.py      # 👉 Đóng gói tất cả các script trên thành 1 ống nối liền mạch
+│       ├── split_dataset.py # 👉 Kịch bản chia data 80% (Train) và 20% (Test) an toàn không Leak
+│       └── cli.py           # 👉 File giao tiếp Terminal để user đứng ở ngoài gõ lệnh chay
+│
+├── notebooks/               # Bếp nấu thực nghiệm (Nghiên cứu/Train mô hình trên Kaggle/Colab)
+│   ├── 01_before_after...   # 👉 File chứng minh tính hiệu quả của Pipeline làm sạch
+│   ├── 02_eda_detailed...   # 👉 Khám phá dữ liệu, vẽ biểu đồ phân phối từ vựng
+│   ├── 03_phobert_balance.. # 👉 Xử lý mất cân bằng nhãn bằng Focal Loss
+│   └── 04_absa_roberta...   # 👉 Train mô hình cốt lõi PhoBERT ra checkpoint
+│
+├── experiments/             # Nơi chứa kết quả chạy thử nghiệm
+│   └── reports/             # 👉 Giữ các file JSON quét lỗi (Scan) của Data Scanner 
+│
+├── web_crapping/            # Web Crawler (Scripts để cào bình luận từ hệ thống Tiki)
+│
+├── dashboard.py             # App giao diện Web (Streamlit) để vẽ biểu đồ đánh giá độ rác của dữ liệu
+├── requirements.txt         # Khai báo các thư viện phụ thuộc của dự án
+└── README.md                # Tài liệu hướng dẫn sử dụng
 ```
 
-## 🛠 Hướng Dẫn Cài Đặt
-1. **Clone project:**
-   ```bash
-   git clone https://github.com/nvtanphat/vietnamese-book-review-absa.git
-   cd vietnamese-book-review-absa
-   ```
-2. **Cài đặt môi trường:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Dữ liệu:**
-   Tải bộ dữ liệu đã làm sạch tại [Kaggle Dataset](https://www.kaggle.com/datasets/phtnguyn1ytj/tiki-cleaned-book-reviews) và giải nén vào thư mục `data/processed/`.
+## 3. Thư viện cần cài đặt
+Yêu cầu Python 3.8 trở lên. Vui lòng cài đặt toàn bộ thư viện thông qua file `requirements.txt`:
+```bash
+pip install -r requirements.txt
+```
+*(Thư viện lõi bao gồm: Pandas, Scikit-learn, Emoji, Streamlit, Plotly, PyTorch và Transformers).*
 
-## 📊 Mô Hình (PhoBERT)
-Mô hình sử dụng kiến trúc `RobertaForSequenceClassification` với 27 đơn vị đầu ra (3 nhãn Sentiment + 24 nhãn cho 6 khía cạnh). 
-- **Max Length:** 128
-- **Batch Size:** 16
-- **Epochs:** 4
+## 4. Cách chạy Code
+Đứng ở thư mục rễ (root) của dự án `DoAn2/` và chạy lần lượt trong Terminal:
 
-## 👨‍💻 Tác Giả
-- **Phat Nguyen** (@nvtanphat)
+- **Bước 1: Làm sạch và chuẩn bị dữ liệu (Train/Test Split)**
+  ```bash
+  python -m src.preprocessing.split_dataset
+  ```
 
-## 📄 Giấy Phép
-Dự án được phân phối dưới giấy phép MIT.
+- **Bước 2: Quét lỗi dữ liệu lập báo cáo thống kê (Scanner)**
+  ```bash
+  python -m src.analysis.scan_cli
+  ```
+
+- **Bước 3: Xem báo cáo phân tích bằng Biểu đồ Web**
+  ```bash
+  streamlit run dashboard.py
+  ```
+
+- **Bước 4: Huấn luyện AI**
+  (Sau khi dữ liệu đã sạch, truy cập thư mục `notebooks/` và chạy tiếp các file `01_` -> `04_` trên Jupyter Notebook để tiến hành xây dựng mô hình PhoBERT).
+
+## 5. Đội ngũ thực hiện
+- **Nguyễn Văn Tấn Phát**
+- **Nguyễn Hoàng Lộc**
