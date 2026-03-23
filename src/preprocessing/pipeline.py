@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from pathlib import Path
 from typing import Any
@@ -24,6 +24,7 @@ def preprocess_dataframe(
     keep_raw: bool = True,
     min_chars: int = quality_filter.SHORT_TEXT_MIN_CHARS,
     drop_duplicates: bool = True,
+    keep_columns: list[str] | None = None,
 ) -> pd.DataFrame:
     target = frame.copy()
     source_column = text_column
@@ -45,6 +46,14 @@ def preprocess_dataframe(
         min_chars=min_chars,
         drop_duplicates=drop_duplicates,
     )
+
+    if keep_columns is not None:
+        ordered_columns = []
+        for column in keep_columns:
+            if column in target.columns and column not in ordered_columns:
+                ordered_columns.append(column)
+        target = target.loc[:, ordered_columns]
+
     return target
 
 
@@ -55,6 +64,7 @@ def preprocess_file(
     keep_raw: bool = True,
     min_chars: int = quality_filter.SHORT_TEXT_MIN_CHARS,
     drop_duplicates: bool = True,
+    keep_columns: list[str] | None = None,
 ) -> pd.DataFrame:
     path = Path(input_path)
     frame = pd.read_json(path) if path.suffix.lower() == ".json" else pd.read_csv(path)
@@ -64,6 +74,7 @@ def preprocess_file(
         keep_raw=keep_raw,
         min_chars=min_chars,
         drop_duplicates=drop_duplicates,
+        keep_columns=keep_columns,
     )
 
     if output_path is not None:
@@ -75,3 +86,4 @@ def preprocess_file(
             cleaned.to_csv(output, index=False)
 
     return cleaned
+

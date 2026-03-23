@@ -3,8 +3,9 @@ from __future__ import annotations
 from pathlib import Path
 
 DEFAULT_INPUT_CANDIDATES = (
-    Path("data/raw/tiki-book-review.csv"),
+    Path("data/interim/raw_train/train.json"),
     Path("data/raw/tiki-book-review.json"),
+    Path("data/raw/tiki-book-review.csv"),
 )
 
 DEFAULT_OUTPUT_PATH = Path("experiments/reports/data_scan_report.json")
