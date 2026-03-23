@@ -1,82 +1,147 @@
-# Đồ án Phân tích Cảm xúc Đa khía cạnh (ABSA) - Tiki Book Reviews
+<div align="center">
 
-## 1. Giới thiệu Project
-Dự án tập trung vào việc tiền xử lý văn bản, trực quan hóa dữ liệu và xây dựng mô hình Deep Learning (**PhoBERT**) để phân loại cảm xúc từ các đánh giá sách thực tế trên Tiki. Mô hình không chỉ nhận diện cảm xúc (Tích cực/Tiêu cực/Trung lập) mà còn phân tích sâu vào 6 khía cạnh của một đơn hàng:
-- Nội dung sách (Content), Khổ giấy/Bìa (Physical), Giá cả (Price), Đóng gói (Packaging), Giao hàng (Delivery), Chăm sóc khách hàng (Service).
-- Tích hợp một quy trình **Pipeline Làm Sạch Dữ Liệu độc lập (Stateless)** mạnh mẽ và một **Web Dashboard (Streamlit)** để kiểm tra biến rỗng, nhiễu, lỗi đánh máy, từ lóng (Teencode).
+# 📚 Vietnamese Book Review — Aspect-Based Sentiment Analysis
+
+**Phân tích Cảm xúc Đa khía cạnh trên Đánh giá Sách Tiki**
+
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![PhoBERT](https://img.shields.io/badge/Model-PhoBERT_v2-FF6F00?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/vinai/phobert-base-v2)
+[![Streamlit](https://img.shields.io/badge/Dashboard-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Dataset](https://img.shields.io/badge/Dataset-Kaggle-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/phtnguyn1ytj/tiki-cleaned-book-reviews)
+
+---
+
+Xây dựng hệ thống **NLP end-to-end** từ thu thập dữ liệu, tiền xử lý chuyên sâu cho Tiếng Việt,  
+đến huấn luyện mô hình Deep Learning **PhoBERT** phân tích đồng thời **cảm xúc tổng thể**  
+và **6 khía cạnh chi tiết** của một đơn hàng sách.
+
+</div>
+
+---
+
+## 🎯 1. Giới thiệu
+
+Dự án ứng dụng **kỹ thuật Xử lý Ngôn ngữ Tự nhiên (NLP)** và **Deep Learning** để khai phá ý kiến khách hàng từ hàng chục ngàn bài đánh giá sách trên sàn thương mại điện tử **Tiki**.
+
+> 💡 **Điểm khác biệt:** Thay vì chỉ phân loại "Tích cực / Tiêu cực" chung chung, mô hình có khả năng bóc tách đồng thời **6 khía cạnh** của sản phẩm.
+
+| Khía cạnh | Ý nghĩa | Ví dụ |
+|:---:|---|---|
+| 📖 **Content** | Nội dung sách | *"Sách hay, kiến thức bổ ích"* |
+| 📦 **Physical** | Chất lượng vật lý (giấy, bìa, in ấn) | *"Giấy mỏng, in mờ"* |
+| 💰 **Price** | Giá cả | *"Giá hợp lý so với chất lượng"* |
+| 🎁 **Packaging** | Đóng gói | *"Bọc cẩn thận, có túi chống sốc"* |
+| 🚚 **Delivery** | Giao hàng | *"Ship nhanh, đúng hẹn"* |
+| 🛎️ **Service** | Chăm sóc khách hàng | *"Nhân viên hỗ trợ nhiệt tình"* |
+
+### 🔍 Sơ đồ Pipeline Tiền Xử Lý
 
 <p align="center">
-  <img src="pipeline.png" alt="Sơ đồ Luồng Tiền Xử Lý (Data Preprocessing Pipeline)" width="800">
+  <img src="pipeline.png" alt="Data Preprocessing Pipeline" width="750">
 </p>
 
-## 2. Cấu trúc Thư mục Chi tiết
-Hệ thống thư mục được tổ chức theo tiêu chuẩn của các dự án Data Science và Machine Learning:
+---
+
+## 📁 2. Cấu trúc Thư mục
 
 ```text
 DoAn2/
-├── data/                    # Khu vực toàn quyền của Dữ liệu (Không chứa code)
-│   ├── raw/                 # 👉 Chứa dữ liệu thô nguyên thủy vừa cào từ Tiki về (.csv)
-│   ├── interim/             # 👉 Dữ liệu trung gian (đã chia cắt Train/Test nhưng chưa lọc rác)
-│   └── processed/           # 👉 Dữ liệu hoàn chỉnh (sạch 100%, sẵn sàng đưa vào Train)
 │
-├── src/                     # Source Code Lõi của hệ thống (Viết kiểu OOP chuẩn mực)
-│   ├── analysis/            # 👉 Script rà soát lỗi rỗng, đếm số từ, tìm teencode (Scanner)
-│   └── preprocessing/       # 👉 Nơi chứa chuỗi thuật toán Làm Sạch Dữ Liệu (Pipeline)
-│       ├── unicode_norm.py  # 👉 Chuẩn hóa dấu thanh Tiếng Việt thống nhất
-│       ├── emoji_norm.py    # 👉 Dịch biểu tượng cảm xúc (Emoji) ra chữ thuần
-│       ├── noise_cleaner.py # 👉 Xóa bỏ rác (Link URL, Số điện thoại, Email, Ký tự HTML)
-│       ├── vocab_norm.py    # 👉 Sửa lỗi đánh máy cơ bản, tự động phiên dịch Teencode
-│       ├── formatters.py    # 👉 Chuyển chữ thường, cắt bỏ hàng ngàn khoảng trắng thừa
-│       ├── quality_filter.py# 👉 Lọc bỏ review quá ngắn, xóa dòng trùng lặp (Drop Duplicates)
-│       ├── map_utils.py     # 👉 Tiện ích hỗ trợ đọc thư viện ánh xạ quy tắc
-│       ├── pipeline.py      # 👉 Đóng gói tất cả các script trên thành 1 ống nối liền mạch
-│       ├── split_dataset.py # 👉 Kịch bản chia data 80% (Train) và 20% (Test) an toàn không Leak
-│       └── cli.py           # 👉 File giao tiếp Terminal để user đứng ở ngoài gõ lệnh chay
+├── 📂 data/                         # Vòng đời dữ liệu
+│   ├── raw/                         #   └─ Dữ liệu thô (.csv) từ Tiki
+│   ├── interim/                     #   └─ Đã chia Train/Test, chưa làm sạch
+│   └── processed/                   #   └─ Sạch 100%, sẵn sàng huấn luyện
 │
-├── notebooks/               # Bếp nấu thực nghiệm (Nghiên cứu/Train mô hình trên Kaggle/Colab)
-│   ├── 01_before_after...   # 👉 File chứng minh tính hiệu quả của Pipeline làm sạch
-│   ├── 02_eda_detailed...   # 👉 Khám phá dữ liệu, vẽ biểu đồ phân phối từ vựng
-│   ├── 03_phobert_balance.. # 👉 Xử lý mất cân bằng nhãn bằng Focal Loss
-│   └── 04_absa_roberta...   # 👉 Train mô hình cốt lõi PhoBERT ra checkpoint
+├── 📂 src/                          # Source code lõi (Module hóa)
+│   ├── analysis/                    #   └─ Data Scanner & báo cáo lỗi
+│   └── preprocessing/               #   └─ Pipeline làm sạch văn bản ↓
+│       ├── unicode_norm.py          #       Chuẩn hóa dấu thanh Tiếng Việt
+│       ├── noise_cleaner.py         #       Xóa URL, HTML, SĐT, Email
+│       ├── emoji_norm.py            #       Chuyển Emoji → chuỗi ký tự
+│       ├── vocab_norm.py            #       Sửa Teencode, từ viết tắt
+│       ├── formatters.py            #       Lowercase, cắt khoảng trắng thừa
+│       ├── quality_filter.py        #       Lọc câu ngắn & xóa trùng lặp
+│       ├── pipeline.py              #       Đóng gói toàn bộ → 1 ống xử lý
+│       ├── split_dataset.py         #       Chia 80/20 Train-Test (Stratified)
+│       └── cli.py                   #       Giao diện dòng lệnh (CLI)
 │
-├── experiments/             # Nơi chứa kết quả chạy thử nghiệm
-│   └── reports/             # 👉 Giữ các file JSON quét lỗi (Scan) của Data Scanner 
+├── 📂 notebooks/                    # Jupyter Notebooks thực nghiệm
+│   ├── 01_before_after_...          #   └─ So sánh trước/sau tiền xử lý
+│   ├── 02_eda_detailed_...          #   └─ Khám phá & trực quan dữ liệu
+│   ├── 03_phobert_balance_...       #   └─ Xử lý mất cân bằng nhãn
+│   └── 04_absa_roberta_...          #   └─ Huấn luyện PhoBERT Multi-task
 │
-├── web_crapping/            # Web Crawler (Scripts để cào bình luận từ hệ thống Tiki)
+├── 📂 experiments/reports/          # Báo cáo JSON từ Data Scanner
+├── 📂 web_crapping/                 # Scripts cào dữ liệu từ Tiki
 │
-├── dashboard.py             # App giao diện Web (Streamlit) để vẽ biểu đồ đánh giá độ rác của dữ liệu
-├── requirements.txt         # Khai báo các thư viện phụ thuộc của dự án
-└── README.md                # Tài liệu hướng dẫn sử dụng
+├── dashboard.py                     # 📊 Web App trực quan (Streamlit)
+├── requirements.txt                 # 📋 Danh sách thư viện
+└── README.md                        # 📄 Bạn đang đọc file này!
 ```
 
-## 3. Thư viện cần cài đặt
-Yêu cầu Python 3.8 trở lên. Vui lòng cài đặt toàn bộ thư viện thông qua file `requirements.txt`:
+---
+
+## ⚙️ 3. Cài đặt
+
+> **Yêu cầu:** Python ≥ 3.8
+
 ```bash
+# Clone repo
+git clone https://github.com/nvtanphat/vietnamese-book-review-absa.git
+cd vietnamese-book-review-absa
+
+# Cài đặt thư viện
 pip install -r requirements.txt
 ```
-*(Thư viện lõi bao gồm: Pandas, Scikit-learn, Emoji, Streamlit, Plotly, PyTorch và Transformers).*
 
-## 4. Cách chạy Code
-Đứng ở thư mục rễ (root) của dự án `DoAn2/` và chạy lần lượt trong Terminal:
+<details>
+<summary>📦 <b>Thư viện chính sử dụng</b></summary>
 
-- **Bước 1: Làm sạch và chuẩn bị dữ liệu (Train/Test Split)**
-  ```bash
-  python -m src.preprocessing.split_dataset
-  ```
+| Thư viện | Mục đích |
+|---|---|
+| `pandas` | Xử lý DataFrame |
+| `scikit-learn` | Chia tập Train/Test |
+| `emoji` | Phân tích biểu tượng cảm xúc |
+| `ftfy` | Sửa lỗi encoding Unicode |
+| `regex` | Biểu thức chính quy nâng cao |
+| `plotly` | Vẽ biểu đồ tương tác |
+| `streamlit` | Xây dựng Dashboard Web |
+| `torch` | Framework Deep Learning |
+| `transformers` | Hugging Face (PhoBERT) |
 
-- **Bước 2: Quét lỗi dữ liệu lập báo cáo thống kê (Scanner)**
-  ```bash
-  python -m src.analysis.scan_cli
-  ```
+</details>
 
-- **Bước 3: Xem báo cáo phân tích bằng Biểu đồ Web**
-  ```bash
-  streamlit run dashboard.py
-  ```
+---
 
-- **Bước 4: Huấn luyện AI**
-  (Sau khi dữ liệu đã sạch, truy cập thư mục `notebooks/` và chạy tiếp các file `01_` -> `04_` trên Jupyter Notebook để tiến hành xây dựng mô hình PhoBERT).
+## 🚀 4. Hướng dẫn Chạy
 
-## 5. Đội ngũ thực hiện
-- **Nguyễn Văn Tấn Phát**
-- **Nguyễn Hoàng Lộc**
+> ⚠️ Luôn đứng tại **thư mục gốc** của dự án để thực thi.
+
+| Bước | Mô tả | Lệnh |
+|:---:|---|---|
+| **1** | Làm sạch dữ liệu & Chia Train/Test | `python -m src.preprocessing.split_dataset` |
+| **2** | Quét lỗi & Xuất báo cáo thống kê | `python -m src.analysis.scan_cli` |
+| **3** | Mở Dashboard trực quan hóa | `streamlit run dashboard.py` |
+| **4** | Huấn luyện mô hình PhoBERT | Chạy lần lượt `notebooks/01_` → `04_` |
+
+---
+
+## 👨‍💻 5. Đội ngũ thực hiện
+
+<table>
+  <tr>
+    <td align="center"><b>Nguyễn Văn Tấn Phát</b></td>
+    <td align="center"><b>Nguyễn Hoàng Lộc</b></td>
+  </tr>
+</table>
+
+---
+
+<div align="center">
+
+**⭐ Nếu dự án hữu ích, hãy cho chúng mình một Star nhé!**
+
+*MIT License © 2026*
+
+</div>
