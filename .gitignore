@@ -171,4 +171,10 @@ dataset-metadata.json
 logs/
 output/
 temp/
+tmp/
 /tmp/
+artifacts/
+notebooks/artifacts/
+notebooks/assets/
+git_status.txt
+.ipynb_checkpoints/

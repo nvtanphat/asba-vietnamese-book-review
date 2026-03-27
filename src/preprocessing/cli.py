@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 from pathlib import Path
@@ -6,14 +6,9 @@ from pathlib import Path
 from src.preprocessing.pipeline import preprocess_file
 
 
-KEEP_COLUMNS = [
+CLEAN_COLUMNS = [
     'review_id',
-    'rating',
-    'review_title',
-    'product_name',
-    'category',
     'content',
-    'content_raw',
     'sentiment_llm',
     'as_content',
     'as_physical',
@@ -23,24 +18,24 @@ KEEP_COLUMNS = [
     'as_service',
 ]
 DEFAULT_INPUTS = {
-    'train': Path('data/interim/train/train.json'),
-    'test': Path('data/interim/test/test.json'),
+    'train': Path('data/interim/raw_train/train.json'),
+    'val': Path('data/interim/raw_val/val.json'),
+    'test': Path('data/interim/raw_test/test.json'),
 }
 DEFAULT_OUTPUTS = {
     'train': Path('data/processed/train_clean.json'),
+    'val': Path('data/processed/val_clean.json'),
     'test': Path('data/processed/test_clean.json'),
 }
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description='Clean train/test review splits.')
-    parser.add_argument('--split', choices=['train', 'test'], default='train')
+    parser = argparse.ArgumentParser(description='Clean raw train/val/test splits into multitask-ready processed outputs.')
+    parser.add_argument('--split', choices=['train', 'val', 'test'], default='train')
     parser.add_argument('--input', default=None)
     parser.add_argument('--output', default=None)
     parser.add_argument('--text-column', default='content')
     parser.add_argument('--min-chars', type=int, default=10)
-    parser.add_argument('--keep-raw', action='store_true', default=True)
-    parser.add_argument('--no-keep-raw', dest='keep_raw', action='store_false')
     parser.add_argument('--drop-duplicates', action='store_true', default=True)
     parser.add_argument('--no-drop-duplicates', dest='drop_duplicates', action='store_false')
     return parser
@@ -54,10 +49,10 @@ def main() -> int:
         input_path,
         output_path,
         text_column=args.text_column,
-        keep_raw=args.keep_raw,
+        keep_raw=False,
         min_chars=args.min_chars,
         drop_duplicates=args.drop_duplicates,
-        keep_columns=KEEP_COLUMNS,
+        keep_columns=CLEAN_COLUMNS,
     )
     print(f'split={args.split}')
     print(f'rows={len(cleaned)}')

@@ -7,6 +7,8 @@ import pandas as pd
 
 from . import emoji_norm, formatters, noise_cleaner, quality_filter, unicode_norm, vocab_norm
 
+CSV_ENCODING = "utf-8-sig"
+JSON_ENCODING = "utf-8"
 
 def clean_text_series(series: pd.Series) -> pd.Series:
     """Quy trình làm sạch một cột văn bản: Unicode -> Nhiễu -> Emoji -> Từ vựng -> Định dạng."""
@@ -76,7 +78,11 @@ def preprocess_file(
     """Đọc dữ liệu từ file (CSV hoặc JSON), tiến hành tiền xử lý và lưu kết quả ra file mới."""
     path = Path(input_path)
     # Tự động nhận diện định dạng file dựa trên đuôi mở rộng
-    frame = pd.read_json(path) if path.suffix.lower() == ".json" else pd.read_csv(path)
+    if path.suffix.lower() == ".json":
+        with path.open("r", encoding=JSON_ENCODING) as handle:
+            frame = pd.read_json(handle)
+    else:
+        frame = pd.read_csv(path, encoding=CSV_ENCODING)
     
     # Thực hiện quy trình xử lý trên DataFrame vừa đọc
     cleaned = preprocess_dataframe(
@@ -95,8 +101,9 @@ def preprocess_file(
         output.parent.mkdir(parents=True, exist_ok=True)
         # Lưu dữ liệu theo định dạng tương ứng
         if output.suffix.lower() == ".json":
-            cleaned.to_json(output, orient="records", force_ascii=False, indent=2)
+            with output.open("w", encoding=JSON_ENCODING, newline="") as handle:
+                cleaned.to_json(handle, orient="records", force_ascii=False, indent=2)
         else:
-            cleaned.to_csv(output, index=False)
+            cleaned.to_csv(output, index=False, encoding=CSV_ENCODING)
 
     return cleaned

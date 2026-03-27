@@ -7,6 +7,9 @@ from typing import Any
 import pandas as pd
 import regex as re
 
+CSV_ENCODING = "utf-8-sig"
+JSON_ENCODING = "utf-8"
+
 # Thử import thư viện ftfy để tự động sửa các lỗi mã hóa văn bản (mojibake) thường gặp
 try:
     from ftfy import fix_text
@@ -82,7 +85,11 @@ def normalize_file(input_path: str | Path, output_path: str | Path | None = None
     """Đọc dữ liệu từ file (CSV/JSON), chuẩn hóa Unicode và lưu kết quả ra file mới."""
     path = Path(input_path)
     # Tự động nhận diện định dạng file đầu vào
-    frame = pd.read_json(path) if path.suffix.lower() == ".json" else pd.read_csv(path)
+    if path.suffix.lower() == ".json":
+        with path.open("r", encoding=JSON_ENCODING) as handle:
+            frame = pd.read_json(handle)
+    else:
+        frame = pd.read_csv(path, encoding=CSV_ENCODING)
     # Thực hiện chuẩn hóa trên DataFrame vừa đọc
     cleaned = normalize_dataframe(frame, text_column=text_column)
 
@@ -93,8 +100,9 @@ def normalize_file(input_path: str | Path, output_path: str | Path | None = None
         output.parent.mkdir(parents=True, exist_ok=True)
         # Lưu file theo định dạng JSON (records) hoặc CSV
         if output.suffix.lower() == ".json":
-            cleaned.to_json(output, orient="records", force_ascii=False, indent=2)
+            with output.open("w", encoding=JSON_ENCODING, newline="") as handle:
+                cleaned.to_json(handle, orient="records", force_ascii=False, indent=2)
         else:
-            cleaned.to_csv(output, index=False)
+            cleaned.to_csv(output, index=False, encoding=CSV_ENCODING)
 
     return cleaned
