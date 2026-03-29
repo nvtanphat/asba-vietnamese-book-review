@@ -10,13 +10,27 @@ from . import emoji_norm, formatters, noise_cleaner, quality_filter, unicode_nor
 CSV_ENCODING = "utf-8-sig"
 JSON_ENCODING = "utf-8"
 
-def clean_text_series(series: pd.Series) -> pd.Series:
-    """Quy trình làm sạch một cột văn bản: Unicode -> Nhiễu -> Emoji -> Từ vựng -> Định dạng."""
-    cleaned = unicode_norm.normalize_series(series) # Chuẩn hóa Unicode (dựng sẵn, tổ hợp)
-    cleaned = noise_cleaner.normalize_series(cleaned) # Làm sạch HTML, URL, Email, SĐT
-    cleaned = emoji_norm.normalize_series(cleaned) # Chuyển đổi emoji sang tiếng Việt
-    cleaned = vocab_norm.normalize_series(cleaned) # Chuẩn hóa từ vựng/viết tắt
-    cleaned = formatters.normalize_series(cleaned) # Chuẩn hóa dấu câu và khoảng trắng
+
+def _normalize_without_lowercase(series: pd.Series) -> pd.Series:
+    """Run the text-cleaning pipeline without case folding."""
+    cleaned = unicode_norm.normalize_series(series)
+    cleaned = noise_cleaner.normalize_series(cleaned)
+    cleaned = emoji_norm.normalize_series(cleaned)
+    cleaned = vocab_norm.normalize_series(cleaned)
+    cleaned = formatters.normalize_series(cleaned)
+    return cleaned
+
+
+def lowercase_series(series: pd.Series) -> pd.Series:
+    """Lowercase string values while preserving missing values."""
+    return series.map(lambda value: value.lower() if isinstance(value, str) else value)
+
+
+def clean_text_series(series: pd.Series, lowercase: bool = True) -> pd.Series:
+    """Clean a text series and optionally convert the final output to lowercase."""
+    cleaned = _normalize_without_lowercase(series)
+    if lowercase:
+        cleaned = lowercase_series(cleaned)
     return cleaned
 
 
@@ -28,26 +42,26 @@ def preprocess_dataframe(
     min_chars: int = quality_filter.SHORT_TEXT_MIN_CHARS,
     drop_duplicates: bool = True,
     keep_columns: list[str] | None = None,
+    lowercase: bool = True,
 ) -> pd.DataFrame:
-    """Xử lý tiền xử lý cho toàn bộ DataFrame (tập hợp dữ liệu bảng)."""
+    """Preprocess a dataframe and keep only the requested columns."""
     target = frame.copy()
     source_column = text_column
     output_column = output_column or text_column
 
-    # Nếu yêu cầu giữ lại bản gốc, tạo cột mới '{source}_raw' để lưu trữ
     if keep_raw:
         raw_column = f"{source_column}_raw"
         if raw_column not in target.columns:
             target[raw_column] = target[source_column]
 
-    # Thực hiện quy trình làm sạch cho cột văn bản được chọn
-    target[output_column] = clean_text_series(target[source_column])
+    if lowercase:
+        target[output_column] = clean_text_series(target[source_column])
+    else:
+        target[output_column] = _normalize_without_lowercase(target[source_column])
 
-    # Nếu tên cột xuất ra khác tên cột đầu vào, có thể xóa cột đầu vào cũ
     if output_column != source_column:
         target.drop(columns=[source_column], inplace=True, errors="ignore")
 
-    # Lọc bỏ các dòng dữ liệu 'nhiễu' (quá ngắn hoặc bị trùng lặp)
     target = quality_filter.drop_noise_rows(
         target,
         text_column=output_column,
@@ -55,7 +69,6 @@ def preprocess_dataframe(
         drop_duplicates=drop_duplicates,
     )
 
-    # Nếu có danh sách các cột cụ thể muốn giữ lại, thực hiện lọc và sắp xếp
     if keep_columns is not None:
         ordered_columns = []
         for column in keep_columns:
@@ -74,17 +87,16 @@ def preprocess_file(
     min_chars: int = quality_filter.SHORT_TEXT_MIN_CHARS,
     drop_duplicates: bool = True,
     keep_columns: list[str] | None = None,
+    lowercase: bool = True,
 ) -> pd.DataFrame:
-    """Đọc dữ liệu từ file (CSV hoặc JSON), tiến hành tiền xử lý và lưu kết quả ra file mới."""
+    """Load a CSV/JSON file, preprocess it, and optionally write the result."""
     path = Path(input_path)
-    # Tự động nhận diện định dạng file dựa trên đuôi mở rộng
     if path.suffix.lower() == ".json":
         with path.open("r", encoding=JSON_ENCODING) as handle:
             frame = pd.read_json(handle)
     else:
         frame = pd.read_csv(path, encoding=CSV_ENCODING)
-    
-    # Thực hiện quy trình xử lý trên DataFrame vừa đọc
+
     cleaned = preprocess_dataframe(
         frame,
         text_column=text_column,
@@ -92,14 +104,12 @@ def preprocess_file(
         min_chars=min_chars,
         drop_duplicates=drop_duplicates,
         keep_columns=keep_columns,
+        lowercase=lowercase,
     )
 
-    # Nếu có chỉ định đường dẫn lưu file
     if output_path is not None:
         output = Path(output_path)
-        # Tạo thư mục chứa file nếu chưa tồn tại
         output.parent.mkdir(parents=True, exist_ok=True)
-        # Lưu dữ liệu theo định dạng tương ứng
         if output.suffix.lower() == ".json":
             with output.open("w", encoding=JSON_ENCODING, newline="") as handle:
                 cleaned.to_json(handle, orient="records", force_ascii=False, indent=2)

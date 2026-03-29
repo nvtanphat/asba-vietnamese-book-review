@@ -18,6 +18,7 @@ Pipeline hien tai gom 2 pha:
 
 2. Split-specific cleaning
    - Moi split raw duoc clean rieng.
+   - Text output cuoi cung duoc lower-case sau khi normalize de giu feature on dinh.
    - Output clean mac dinh chi giu:
      - `review_id`
      - `content`
@@ -83,6 +84,8 @@ python -m src.preprocessing.cli --split val
 python -m src.preprocessing.cli --split test
 ```
 
+Mac dinh CLI se lower-case text; neu can giu nguyen case, them `--no-lowercase`.
+
 ### 3.3 Quet loi du lieu
 
 ```bash
@@ -90,6 +93,10 @@ python -m src.analysis.scan_cli
 ```
 
 Mac dinh scanner uu tien `data/interim/raw_train/train.json`.
+
+### 3.4 Debug truc tiep bang notebook
+
+Mo `notebooks/00_preprocessing_debug.ipynb` neu muon xem tung buoc tien xu ly, doi chieu voi test, va debug nhanh khi pipeline bi fail.
 
 ## 4. Contract du lieu
 

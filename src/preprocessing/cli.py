@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 from pathlib import Path
@@ -38,6 +38,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument('--min-chars', type=int, default=10)
     parser.add_argument('--drop-duplicates', action='store_true', default=True)
     parser.add_argument('--no-drop-duplicates', dest='drop_duplicates', action='store_false')
+    parser.add_argument('--no-lowercase', dest='lowercase', action='store_false', default=True)
     return parser
 
 
@@ -53,6 +54,7 @@ def main() -> int:
         min_chars=args.min_chars,
         drop_duplicates=args.drop_duplicates,
         keep_columns=CLEAN_COLUMNS,
+        lowercase=args.lowercase,
     )
     print(f'split={args.split}')
     print(f'rows={len(cleaned)}')
