@@ -309,20 +309,17 @@ streamlit run dashboard.py
 - `scikit-learn`
 - `Hugging Face Hub`
 
-## Dashboard Đã Có
+## Giao diện Dashboard
 
-### ABSA Dashboard
+Hệ thống cung cấp hai giao diện Dashboard chuyên biệt:
 
-- nhập một review và xem kết quả dự đoán ngay,
-- xem sentiment tổng thể,
-- xem khía cạnh nào xuất hiện,
-- xem biểu đồ radar và bar chart cho từng khía cạnh.
+### 1. Dashboard Kiểm tra dữ liệu (Data Quality Dashboard)
+Cho phép phân tích đặc điểm tập dữ liệu, phát hiện nhiễu và kiểm tra phân bố nhãn trước khi huấn luyện.
+![Data Quality Dashboard](assets/images/dashboard_data.png)
 
-### Data Quality Dashboard
-
-- đọc report JSON,
-- hiển thị các lỗi / bất thường dữ liệu,
-- dùng cho kiểm tra và báo cáo trước khi train model.
+### 2. Dashboard Phân tích ABSA (ABSA Inference Dashboard)
+Giao diện người dùng cuối để nhập liệu và phân tích cảm xúc đa khía cạnh thời gian thực.
+![ABSA Inference Dashboard](assets/images/dashboard_absa.png)
 
 ## Ghi Chú
 
