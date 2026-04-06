@@ -210,7 +210,7 @@ Cho phép phân tích đặc điểm tập dữ liệu, phát hiện nhiễu và
 ### 2. Dashboard Phân tích ABSA (ABSA Inference Dashboard)
 Giao diện người dùng cuối để nhập liệu và phân tích cảm xúc đa khía cạnh thời gian thực.
 
-![ABSA Inference Dashboard](assets/images/dashboard_absa.png)
+![ABSA Inference Dashboard](assets/images/dashboard_asba.png)
 
 ## Ghi Chú
 - `app.py` là giao diện demo ABSA.
