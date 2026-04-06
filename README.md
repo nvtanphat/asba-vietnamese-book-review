@@ -21,6 +21,11 @@ Dự án **Vietnamese Book Review ABSA** là một hệ thống phân tích cả
    * **Dịch vụ**: Tư vấn, hỗ trợ đổi trả, phản hồi shop.
 3. **Aspect-Specific Sentiment**: Xác định cảm xúc cụ thể cho từng khía cạnh vừa được nhận diện.
 
+## 📊 Dataset
+
+
+👉 **[Tiki Cleaned Book Reviews](https://www.kaggle.com/datasets/jyang10/tiki-cleaned-book-reviews)**
+
 ---
 
 ## 🛠️ Thư viện cần cài
@@ -138,7 +143,13 @@ Tóm lại:
 
 Quy trình triển khai dự án từ thu thập dữ liệu đến chạy ứng dụng:
 
-### 1. Thu thập dữ liệu (Crawling)
+### 1. Thu thập và Sử dụng dữ liệu (Data Source)
+Bạn có thể lấy dữ liệu theo hai cách:
+
+**Cách A: Tải từ Kaggle (Khuyên dùng)**
+Tải trực tiếp dữ liệu đã gán nhãn và làm sạch tại: [Kaggle - Tiki Cleaned Book Reviews](https://www.kaggle.com/datasets/jyang10/tiki-cleaned-book-reviews)
+
+**Cách B: Thu thập dữ liệu (Crawling)**
 Sử dụng script để lấy dữ liệu review sách trực tiếp từ Tiki:
 ```bash
 python web_crapping/crawler.py
