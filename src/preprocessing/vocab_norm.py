@@ -11,10 +11,35 @@ from .map_utils import load_json_map
 ELONGATED_RE = re.compile(r"(.)\1{2,}")
 # Tách văn bản thành các token: từ ngữ (\w+), ký hiệu ([^\w\s]+) hoặc khoảng trắng (\s+)
 TOKEN_RE = re.compile(r"\w+|[^\w\s]+|\s+", re.UNICODE)
-# Tải bảng tra cứu từ vựng (viết tắt, tiếng lóng -> từ chuẩn)
-VOCAB_MAP = load_json_map("vocab_map.json")
 # Danh sách các nguyên âm tiếng Việt để xử lý kéo dài âm tiết đúng quy tắc
 VIETNAMESE_VOWELS = set("aeiouyăâêôơưàáạảãằắặẳẵầấậẩẫèéẹẻẽềếệểễìíịỉĩòóọỏõồốộổỗờớợởỡùúụủũừứựửữỳýỵỷỹ")
+SAFE_SINGLE_CHAR_KEYS = {"k", "j", "r", "z", "đ"}
+
+
+def _build_safe_vocab_map() -> dict[str, str]:
+    """Load and filter vocabulary map to reduce noisy/ambiguous substitutions."""
+    raw_map = load_json_map("vocab_map.json")
+    filtered: dict[str, str] = {}
+
+    for key, value in raw_map.items():
+        src = str(key).strip().lower()
+        dst = str(value).strip().lower()
+        if not src or not dst:
+            continue
+        # Drop identity mappings (e.g. "app" -> "app"), they do not normalize anything.
+        if src == dst:
+            continue
+        # Single-character substitutions are very risky in Vietnamese.
+        # Keep only a small approved set that is common and semantically stable.
+        if len(src) == 1 and src not in SAFE_SINGLE_CHAR_KEYS:
+            continue
+        filtered[src] = dst
+
+    return filtered
+
+
+# Tải bảng tra cứu từ vựng (viết tắt, tiếng lóng -> từ chuẩn)
+VOCAB_MAP = _build_safe_vocab_map()
 
 
 def _to_text(value: Any) -> str | None:

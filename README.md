@@ -1,84 +1,50 @@
-# Vietnamese Book Review ABSA
+# Vietnamese Book Review ABSA (Aspect-Based Sentiment Analysis)
 
-Hệ thống phân tích cảm xúc đa khía cạnh cho đánh giá sách Tiki, kết hợp mô hình học sâu, tiền xử lý văn bản tiếng Việt và hai giao diện Streamlit:
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.0+-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![HuggingFace](https://img.shields.io/badge/Hugging%20Face-Transformers-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/)
 
-- `app.py`: dashboard ABSA để nhập review và xem dự đoán.
-- `dashboard.py`: dashboard kiểm tra dữ liệu và báo cáo chất lượng tập train / test.
+## 📝 Giới thiệu Project
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
-![Transformers](https://img.shields.io/badge/Transformers-FFD21E?style=flat-square&logo=huggingface&logoColor=black)
-![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white)
-![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=flat-square&logo=plotly&logoColor=white)
-![scikit--learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)
-![Hugging%20Face](https://img.shields.io/badge/Hugging%20Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black)
+Dự án **Vietnamese Book Review ABSA** là một hệ thống phân tích cảm xúc đa khía cạnh (Aspect-Based Sentiment Analysis) chuyên biệt cho đánh giá sách trên sàn thương mại điện tử Tiki. Hệ thống kết hợp các mô hình học sâu tiên tiến (PhoBERT, BiLSTM), các thực nghiệm khác nhau và kỹ thuật tiền xử lý văn bản tiếng Việt chuyên sâu để trích xuất thông tin chi tiết từ phản hồi người dùng.
 
-## Mục Tiêu
+### Các bài toán giải quyết:
+1.  **Sentiment Classification**: Phân loại cảm xúc tổng thể của review (Tích cực, Trung lập, Tiêu cực).
+2.  **Aspect Detection**: Nhận diện 6 khía cạnh cốt lõi trong trải nghiệm mua sách:
+    *   **Nội dung**: Chất lượng nội dung sách, dịch thuật.
+    *   **Hình thức**: Chất lượng in ấn, giấy, bìa, bookmark.
+    *   **Giá cả**: Mức giá, khuyến mãi, voucher.
+    *   **Đóng gói**: Cách bọc sách, chống sốc, hộp carton.
+    *   **Giao hàng**: Tốc độ giao, thái độ shiper.
+    *   **Dịch vụ**: Tư vấn, hỗ trợ đổi trả, phản hồi shop.
+3.  **Aspect-Specific Sentiment**: Xác định cảm xúc cụ thể cho từng khía cạnh vừa được nhận diện.
 
-Dự án giải quyết hai bài toán chính:
+---
 
-1. Phân loại cảm xúc tổng thể của một review thành `tiêu cực`, `trung lập`, hoặc `tích cực`.
-2. Phát hiện cảm xúc theo từng khía cạnh của trải nghiệm mua sách:
-   - Nội dung
-   - Hình thức
-   - Giá cả
-   - Đóng gói
-   - Giao hàng
-   - Dịch vụ
+## 🛠️ Thư viện cần cài
 
-## Tính Năng
+Dự án yêu cầu Python 3.8+ và các thư viện chính sau:
 
-- Dự đoán sentiment tổng thể từ một review tiếng Việt.
-- Nhận diện khía cạnh nào được nhắc đến trong review.
-- Hiển thị xác suất, độ tin cậy và khía cạnh nổi bật.
-- Tiền xử lý text trước khi đưa vào model.
-- Dashboard kiểm tra dữ liệu với các báo cáo:
-  - tổng quan dữ liệu,
-  - giá trị thiếu,
-  - độ dài văn bản,
-  - mã hóa / Unicode,
-  - nhiễu text,
-  - emoji,
-  - từ vựng bất thường,
-  - trùng lặp,
-  - phân bố nhãn.
+```bash
+# Cài đặt toàn bộ dependencies
+pip install -r requirements.txt
+```
 
-## Kiến Trúc Mô Hình
+**Các thư viện nòng cốt:**
+*   `transformers` & `torch`: Xử lý mô hình PhoBERT và deep learning.
+*   `pyvi` & `regex`: Tiền xử lý, tách từ tiếng Việt.
+*   `streamlit`: Xây dựng giao diện Dashboard.
+*   `pandas` & `scikit-learn`: Xử lý dữ liệu và baseline mô hình.
+*   `plotly`: Trực quan hóa báo cáo dữ liệu.
 
-### `app.py` - ABSA inference
+---
 
-`src/models/predictor.py` đang dùng model ABSA dạng multi-head:
 
-- Head 1: sentiment tổng thể với 3 lớp.
-- Head 2: nhận diện khía cạnh xuất hiện hay không.
-- Head 3: sentiment cho từng khía cạnh.
-
-Model được tải từ Hugging Face:
-
-- Repo: `hoangloc112/ABSA-TIKI-BOOK`
-- Subfolder sử dụng: `phobert`
-
-Ngưỡng hiện tại để coi một khía cạnh là “được nhắc đến”:
-
-- `presence_conf > 0.65`
-
-Nếu một khía cạnh không đạt ngưỡng, hệ thống sẽ không gán sentiment cho khía cạnh đó.
-
-### `dashboard.py` - Data report dashboard
-
-Dashboard này đọc file JSON report đã sinh từ bước scan dữ liệu và hiển thị:
-
-- thống kê tổng quan,
-- missing values,
-- length analysis,
-- encoding issues,
-- noise patterns,
-- emoji statistics,
-- vocab anomalies,
-- duplicate analysis,
-- label distribution,
-- JSON gốc.
+### 📊 Hệ thống Dashboard
+Dự án cung cấp hai thành phần giao diện chính:
+1.  **Inference App (`app.py`)**: Giao diện người dùng cuối để nhập review và xem dự đoán ABSA.
+2.  **Data Dashboard (`dashboard.py`)**: Công cụ dành cho nhà phát triển để kiểm soát chất lượng dữ liệu tập Train/Test.
 
 ## Pipeline Tiền Xử Lý
 
@@ -171,122 +137,62 @@ Tóm lại:
 - `experiments/` chứa report kết quả và prediction output.
 - `scripts/` là các lệnh chạy kiểm tra, đánh giá.
 
-## Cách Chạy
+## 🚀 Hướng dẫn chạy code
 
-### 1. Cài đặt thư viện
+Quy trình triển khai dự án từ thu thập dữ liệu đến chạy ứng dụng:
 
-```bash
-pip install -r requirements.txt
-```
-
-### 2. Crawl dữ liệu gốc từ Tiki
-
-Script crawl lấy review sách từ Tiki và lưu mặc định vào `crawl_data/tiki_books_reviews_v2.csv`.
-
+### 1. Thu thập dữ liệu (Crawling)
+Sử dụng script để lấy dữ liệu review sách trực tiếp từ Tiki:
 ```bash
 python web_crapping/crawler.py
 ```
+*Dữ liệu sẽ được lưu tại `crawl_data/tiki_books_reviews_v2.csv`.*
 
-### 3. Tách dữ liệu train / val / test
-
-Script này:
-
-- đọc dữ liệu đã gán nhãn trong `data/raw/`,
-- tách thành `train`, `val`, `test`,
-- lưu cả bản raw interim và bản đã clean.
-
+### 2. Chuẩn bị và Tiền xử lý (Preprocessing)
+Tách tập dữ liệu và chạy pipeline làm sạch văn bản (Unicode, emoji, noise, teencode):
 ```bash
+# Tách tập Train/Val/Test
 python src/preprocessing/split_dataset.py
-```
 
-Kết quả mặc định:
-
-- `data/interim/raw_train/train.json`
-- `data/interim/raw_val/val.json`
-- `data/interim/raw_test/test.json`
-- `data/processed/train_clean.json`
-- `data/processed/val_clean.json`
-- `data/processed/test_clean.json`
-
-### 4. Tiền xử lý dữ liệu
-
-Nếu bạn muốn chạy riêng từng split qua CLI:
-
-```bash
+# Chạy tiền xử lý cho từng tập
 python -m src.preprocessing.cli --split train
 python -m src.preprocessing.cli --split val
 python -m src.preprocessing.cli --split test
 ```
 
-Script này làm các bước:
-
-- chuẩn hóa Unicode,
-- làm sạch noise text,
-- chuẩn hóa emoji,
-- chuẩn hóa từ vựng,
-- lower-case nếu bật,
-- lọc dòng quá ngắn và trùng lặp.
-
-### 5. Scan / phân tích chất lượng dữ liệu
-
-Tạo report JSON để dùng cho `dashboard.py`:
-
+### 3. Phân tích & Đánh giá (Analysis & Evaluation)
+Kiểm tra chất lượng dữ liệu và hiệu năng mô hình:
 ```bash
+# Tạo báo cáo chất lượng dữ liệu (JSON)
 python -m src.analysis.scan_cli --input data/interim/raw_train/train.json --output experiments/reports/train_scan.json
-```
 
-Nếu muốn scan một file khác, đổi `--input` và `--output` tương ứng.
-
-### 6. Huấn luyện / thực nghiệm mô hình
-
-Phần train model hiện được tổ chức trong notebook và các report thực nghiệm trong `notebooks/` và `experiments/`.
-
-- Classic ML / baseline: dùng đặc trưng truyền thống.
-- PhoBERT: mô hình ABSA đa đầu ra.
-- ViT5: hướng generative ABSA.
-
-### 7. Đánh giá mô hình
-
-Chạy script đánh giá trên tập test đã clean:
-
-```bash
+# Đánh giá mô hình trên tập Test
 python scripts/evaluation.py
 ```
 
-Script này đang dùng mặc định:
+### 4. Khởi chạy Dashboard (UI)
+Dự án cung cấp 2 giao diện Streamlit:
 
-- `data/processed/test_clean.json`
+*   **ABSA Inference Dashboard**: Demo dự đoán cảm xúc đa khía cạnh.
+    ```bash
+    streamlit run app.py
+    ```
+*   **Data Quality Dashboard**: Phân tích và thống kê tập dữ liệu.
+    ```bash
+    streamlit run dashboard.py
+    ```
 
-### 8. Kiểm tra phân bố nhãn
+---
 
-```bash
-python scripts/check.py
-```
+## 🔄 Luồng xử lý toàn diện (Full Pipeline)
+1.  **Crawl** review từ Tiki.
+2.  **Split** dữ liệu tại `data/raw/`.
+3.  **Clean** dữ liệu qua `src/preprocessing/`.
+4.  **Scan** chất lượng để tạo report JSON.
+5.  **Train/Experiment** trong `notebooks/`.
+6.  **Evaluate** kết quả cuối cùng.
+7.  **Deploy** demo với Streamlit.
 
-### 9. Chạy dashboard ABSA
-
-```bash
-streamlit run app.py
-```
-
-### 10. Chạy dashboard kiểm tra dữ liệu
-
-```bash
-streamlit run dashboard.py
-```
-
-## Luồng Chạy Toàn Dự Án
-
-1. Crawl review từ Tiki bằng `web_crapping/crawler.py`.
-2. Chuẩn bị dữ liệu gốc trong `data/raw/`.
-3. Tách train / val / test bằng `src/preprocessing/split_dataset.py`.
-4. Tiền xử lý dữ liệu bằng `src/preprocessing/cli.py` hoặc pipeline trong `src/preprocessing/pipeline.py`.
-5. Scan chất lượng dữ liệu bằng `src.analysis.scan_cli`.
-6. Huấn luyện / thực nghiệm mô hình trong notebook hoặc phần experiment.
-7. Đánh giá bằng `scripts/evaluation.py`.
-8. Kiểm tra phân bố nhãn bằng `scripts/check.py`.
-9. Mở `app.py` để demo ABSA.
-10. Mở `dashboard.py` để xem dashboard phân tích dữ liệu.
 
 ## File Dữ Liệu / Report Quan Trọng
 
@@ -298,16 +204,6 @@ streamlit run dashboard.py
 - `experiments/reports/fasttext_xgboost_v3_nosmote_predictions.json`
 - `experiments/reports/fasttext_xgboost_v4_two_stage_neutral_predictions.json`
 
-## Công Nghệ Sử Dụng
-
-- `Python`
-- `Streamlit`
-- `PyTorch`
-- `Transformers`
-- `Pandas`
-- `Plotly`
-- `scikit-learn`
-- `Hugging Face Hub`
 
 ## Giao diện Dashboard
 

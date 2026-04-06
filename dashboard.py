@@ -8,7 +8,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-DEFAULT_REPORT_PATH = Path("experiments/reports/train_scan.json")
+DEFAULT_REPORT_PATH = Path("experiments/reports/raw_train_scan.json")
 
 
 DISPLAY_COLUMN_LABELS = {
