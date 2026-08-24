@@ -28,6 +28,68 @@
 
 ---
 
+## 🏛️ Kiến Trúc Hệ Thống
+
+```text
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │            DỮ LIỆU ĐÁNH GIÁ TIKI TỰ THU THẬP             │
+                                  │      (13,412 Bình luận | 2,009 Sản phẩm | 7 Mục tiêu)    │
+                                  └────────────────────────────┬─────────────────────────────┘
+                                                               │
+                                                               ▼
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │      Pipeline Tiền Xử Lý (packages/absa_core)            │
+                                  │   Unicode NFC • Làm sạch nhiễu • Teencode • Emoji        │
+                                  └────────────────────────────┬─────────────────────────────┘
+                                                               │
+                                                               ▼
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │       Phân Tách Nhóm Cố Định 70/15/15 (Stratified)       │
+                                  │   Train (9,300) | Val (1,991) | Sealed Test (1,992)      │
+                                  │   Mã băm SHA-256: c32f956aee64af890c0645d37da203a9...    │
+                                  └─────────┬──────────────────┬───────────────────┬─────────┘
+                                            │                  │                   │
+                      ┌─────────────────────┘                  │                   └─────────────────────┐
+                      ▼                                        ▼                                         ▼
+         ┌─────────────────────────┐              ┌─────────────────────────┐              ┌─────────────────────────┐
+         │    Baseline Cổ Điển     │              │    Mạng Nơ-ron Chuỗi    │              │  Transformer Tiền Huấn  │
+         │  • Logistic Regression  │              │  • TextCNN              │              │  • PhoBERT-base         │
+         │  • Linear SVM (TF-IDF)  │              │  • BiLSTM               │              │  • XLM-RoBERTa-base     │
+         └────────────┬────────────┘              └────────────┬────────────┘              │  • mDeBERTa-v3-base     │
+                      │                                        │                           │  • ViT5 + LoRA (Sinh)   │
+                      │                                        │                           └────────────┬────────────┘
+                      └────────────────────────────┬───────────┴────────────────────────────────────────┘
+                                                   │
+                                                   ▼
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │         Hiệu Chỉnh Ngưỡng Hiện Diện (Validation Only)    │
+                                  │       Tối ưu P(present) = 1 - P(absent) >= t_aspect      │
+                                  │     Hàm mục tiêu: 3-Class Macro F1 + Neutral Protection  │
+                                  └────────────────────────────┬─────────────────────────────┘
+                                                               │
+                                                               ▼
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │             Xếp Hạng Bảng Benchmark Công Bằng            │
+                                  │            Đánh giá theo Validation F1 Kết hợp:          │
+                                  │   F1_comb = 0.5 * F1_overall + 0.5 * mean(F1_aspects)    │
+                                  └────────────────────────────┬─────────────────────────────┘
+                                                               │
+                                                               ▼
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │               Cổng Chất Lượng & Đề Xuất                  │
+                                  │    Mở niêm phong Test -> Đăng ký -> artifacts/final/     │
+                                  └─────────┬──────────────────────────────────────┬─────────┘
+                                            │                                      │
+                                            ▼                                      ▼
+                         ┌─────────────────────────────────────┐ ┌─────────────────────────────────────┐
+                         │          FastAPI REST Engine        │ │        Next.js Web Dashboard        │
+                         │   • /predict (Đơn & Hàng loạt)      │ │   • Thử nghiệm phân tích real-time  │
+                         │   • /model-info & Giám sát Drift    │ │   • Thống kê biểu đồ khía cạnh      │
+                         └─────────────────────────────────────┘ └─────────────────────────────────────┘
+```
+
+---
+
 ## 📊 Dữ Liệu Tự Xây Dựng & Quy Chuẩn Gán Nhãn
 
  Bộ dữ liệu gốc nằm tại [`data/raw/tiki-book-review_merged_fixed_v3.json`](data/raw/tiki-book-review_merged_fixed_v3.json) được **tự thu thập và gán nhãn chuẩn hóa** cho 7 mục tiêu song song:
