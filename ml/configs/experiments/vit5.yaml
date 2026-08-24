@@ -1,0 +1,20 @@
+model_name: VietAI/vit5-base
+max_length: 192
+target_max_length: 96
+max_new_tokens: 96
+num_beams: 2
+batch_size: 4
+epochs: 5
+patience: 2
+lr: 0.0002
+weight_decay: 0.01
+warmup_ratio: 0.05
+balanced_sampler: true
+lora: true
+lora_r: 8
+lora_alpha: 16
+lora_dropout: 0.05
+target_modules: [q, v]
+primary_benchmark_eligible: false
+loss_type: focal
+focal_gamma: 2.0

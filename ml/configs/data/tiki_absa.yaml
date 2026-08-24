@@ -1,0 +1,17 @@
+input: data/raw/tiki-book-review_merged_fixed_v3.json
+split_strategy: text_group_stratified
+train_ratio: 0.70
+val_ratio: 0.15
+test_ratio: 0.15
+text_column: content
+labels:
+  sentiment: [0, 1, 2]
+  aspects: [0, 1, 2, 3]
+  absent_class: 3
+aspects:
+  - as_content
+  - as_physical
+  - as_price
+  - as_packaging
+  - as_delivery
+  - as_service

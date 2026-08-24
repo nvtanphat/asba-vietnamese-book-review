@@ -1,0 +1,16 @@
+C: 2.0
+max_iter: 1200
+class_weight: balanced_capped
+max_class_weight: 6.0
+word_tfidf:
+  ngram_range: [1, 2]
+  min_df: 2
+  max_df: 0.995
+  max_features: 60000
+char_tfidf:
+  ngram_range: [3, 5]
+  min_df: 2
+  max_features: 60000
+loss_type: focal
+focal_gamma: 2.0
+focal_rounds: 3

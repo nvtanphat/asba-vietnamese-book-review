@@ -1,0 +1,35 @@
+tracking:
+  backend: local          # local | mlflow | off
+  experiment_name: sentenai-absa
+  local_dir: experiments/_tracking
+  mlflow_tracking_uri: null  # prefer MLFLOW_TRACKING_URI env var when set
+
+registry:
+  path: artifacts/registry/registry.json
+  release_root: artifacts/releases
+  production_artifact: artifacts/final
+  registered_model_name: sentenai-absa
+
+# No arbitrary absolute F1 floor is fabricated before the unified benchmark exists.
+# After the first authoritative benchmark, teams may add min_* thresholds here.
+quality_gates:
+  candidate:
+    require_metrics: [val_f1_combined]
+  staging:
+    require_metrics: [val_f1_combined]
+  production:
+    require_metrics: [val_f1_combined, test_f1_combined]
+    require_test: true
+    max_generalization_gap: 0.10
+
+monitoring:
+  telemetry_path: artifacts/monitoring/predictions.jsonl
+  reference_profile: artifacts/monitoring/reference_profile.json
+  drift_report: artifacts/monitoring/drift_report.json
+  min_samples: 100
+  warning_js: 0.10
+  critical_js: 0.20
+
+lineage:
+  snapshot_path: mlops/state/data_snapshot.json
+  include_environment: true

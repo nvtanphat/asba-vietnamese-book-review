@@ -1,0 +1,35 @@
+stages:
+  validate_raw:
+    cmd: python -m mlops validate-data --input data/raw/tiki-book-review_merged_fixed_v3.json
+    deps:
+      - data/raw/tiki-book-review_merged_fixed_v3.json
+      - mlops/data_quality.py
+
+  split:
+    cmd: python -m ml.data.split --input data/raw/tiki-book-review_merged_fixed_v3.json --output-dir data/splits --strategy ${split.strategy} --seed ${split.seed}
+    deps:
+      - data/raw/tiki-book-review_merged_fixed_v3.json
+      - ml/data/split.py
+      - ml/data/validation.py
+      - packages/absa_core/absa_core/preprocessing
+    params:
+      - split.seed
+      - split.strategy
+    outs:
+      - data/splits:
+          cache: true
+
+  validate_split:
+    cmd: python scripts/data/validate_splits.py
+    deps:
+      - data/splits
+      - scripts/data/validate_splits.py
+
+  reference_profile:
+    cmd: python -m mlops profile-data --input data/splits/train.json --output artifacts/monitoring/reference_profile.json
+    deps:
+      - data/splits/train.json
+      - mlops/drift.py
+    outs:
+      - artifacts/monitoring/reference_profile.json:
+          cache: true

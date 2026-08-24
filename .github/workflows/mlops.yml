@@ -1,0 +1,33 @@
+name: MLOps contracts
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - "ml/**"
+      - "mlops/**"
+      - "tools/kaggle_cli/**"
+      - "data/raw/**"
+      - "data/splits/split_manifest.json"
+      - "dvc.yaml"
+      - "params.yaml"
+      - ".github/workflows/mlops.yml"
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --group ml
+      - name: Validate raw ABSA dataset contract
+        run: uv run python -m mlops validate-data --input data/raw/tiki-book-review_merged_fixed_v3.json
+      - name: Verify committed raw-data fingerprint
+        run: uv run python -m mlops snapshot-data --input data/raw/tiki-book-review_merged_fixed_v3.json --output mlops/state/data_snapshot.json --check
+      - name: Compile maintained ML/MLOps/Kaggle code
+        run: uv run python -m compileall -q ml mlops tools packages/absa_core/absa_core apps/api/app
+      - name: Deterministic MLOps + ML contracts
+        run: uv run pytest -q tests/unit tests/smoke

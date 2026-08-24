@@ -1,0 +1,10 @@
+# Optional dependencies only needed to execute the faithful .py migrations of old notebooks.
+-r requirements.txt
+seaborn
+wordcloud
+networkx
+gensim
+underthesea
+py-vncorenlp
+umap-learn
+datasets

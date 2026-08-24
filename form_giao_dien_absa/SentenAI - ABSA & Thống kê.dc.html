@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/industry-ae7b7b8a-0afe-448d-a020-4607143890cd/styles.css">
+  <script src="_ds/industry-ae7b7b8a-0afe-448d-a020-4607143890cd/_ds_bundle.js"></script>
+  <style>
+    body { margin: 0; }
+    a { color: var(--color-accent-700); }
+    a:hover { color: var(--color-accent-900); }
+    @keyframes senten-conveyor { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  </style>
+</helmet>
+
+<div style="background: var(--color-bg); min-height: 100vh; padding: 32px 0 96px; font-family: var(--font-body); color: var(--color-text);">
+
+  <div style="max-width: 1600px; margin: 0 auto; padding: 0 32px 16px;">
+    <div style="font-family: var(--font-heading); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--color-accent-700);">Màn hình · Phân tích ABSA (trang chính)</div>
+  </div>
+
+  <div id="absa-screen" style="max-width: 1600px; margin: 0 auto; padding: 0 32px; display: flex; flex-direction: column; gap: 20px;">
+
+    <!-- NAV A -->
+    <div class="blueprint" style="position: relative; border: 1px solid var(--color-divider); padding: 14px 24px; display: flex; align-items: center; gap: 28px;">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div style="display: flex; align-items: center; gap: 10px; margin-right: auto;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 5a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H3V5Z"></path><path d="M21 5a2 2 0 0 0-2-2h-5a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h7V5Z"></path></svg>
+        <span class="nav-brand">SentenAI</span>
+        <span style="font-size: 12px; color: var(--color-text); opacity: .55; font-family: var(--font-body); padding-left: 8px; border-left: 1px solid var(--color-divider);">Nhà sách Minh Long</span>
+      </div>
+      <nav style="display: flex; gap: 22px;">
+        <a href="#absa-screen" aria-current="page">Phân tích ABSA</a>
+        <a href="#stats-screen">Thống kê &amp; Báo cáo</a>
+        <a style="opacity: .4; pointer-events: none;">Cài đặt</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <button class="btn btn-icon" aria-label="Tìm kiếm"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg></button>
+        <button class="btn btn-icon" aria-label="Thông báo" style="position: relative;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+          <span style="position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; background: var(--color-accent); border-radius: 50%;"></span>
+        </button>
+        <button class="btn btn-icon" aria-label="Chuyển giao diện tối"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+        <div style="width: 1px; height: 24px; background: var(--color-divider); margin: 0 8px;"></div>
+        <div style="display: flex; align-items: center; gap: 8px; cursor: default;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--color-accent-100); color: var(--color-accent-800); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 13px; flex: none;">NA</div>
+          <div style="line-height: 1.25;">
+            <div style="font-size: 13px; font-weight: 500;">Ngọc Anh</div>
+            <div style="font-size: 11px; opacity: .55;">Quản lý · Minh Long</div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: .6;"><path d="m6 9 6 6 6-6"></path></svg>
+        </div>
+        <button class="btn btn-icon" aria-label="Đăng xuất"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></button>
+      </div>
+    </div>
+
+    <!-- AUTOPLAY STRIP -->
+    <sc-if value="{{ showAutoplayBanner }}" hint-placeholder-val="{{ true }}">
+      <div class="blueprint" style="position: relative; border: 1px solid var(--color-accent); background: var(--color-accent-100); padding: 10px 20px; display: flex; align-items: center; gap: 16px; overflow: hidden;">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <span class="tag tag-accent" style="display: inline-flex; align-items: center; gap: 6px; flex: none; background: var(--color-accent-700); color: var(--color-bg);">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+          AUTO-PLAY · ĐANG CHẠY
+        </span>
+        <div style="flex: 1; display: flex; align-items: center; gap: 10px; overflow: hidden; mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);">
+          <div style="display: flex; gap: 10px; flex: none; animation: senten-conveyor 14s linear infinite;">
+            <span class="tag tag-outline" style="flex: none;">★★★★★ "Giao nhanh, đóng gói kỹ…"</span>
+            <span class="tag tag-outline" style="flex: none;">★★★☆☆ "Bìa hơi móp nhẹ…"</span>
+            <span class="tag tag-outline" style="flex: none;">★★★★★ "Nội dung rất hay…"</span>
+            <span class="tag tag-outline" style="flex: none;">★★☆☆☆ "Giao trễ 3 ngày…"</span>
+            <span class="tag tag-outline" style="flex: none;">★★★★☆ "Giá hơi cao nhưng ổn…"</span>
+            <span class="tag tag-outline" style="flex: none;">★★★★★ "Sẽ ủng hộ tiếp…"</span>
+          </div>
+        </div>
+        <span style="font-size: 12px; opacity: .7; flex: none;">Chu kỳ 8s · lần quét tiếp theo trong <b>5s</b></span>
+      </div>
+    </sc-if>
+
+    <!-- STATE GALLERY -->
+    <div class="card blueprint" style="position: relative; padding: 12px 16px; flex-direction: row; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <span style="font-size: 10px; letter-spacing: .1em; text-transform: uppercase; opacity: .5;">Trạng thái hệ thống (minh hoạ)</span>
+      <span class="tag tag-neutral" style="display: inline-flex; align-items: center; gap: 6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 1 1-3-6.7"></path></svg> Đang phân tích…</span>
+      <span class="tag" style="background: var(--color-accent-100); color: var(--color-accent-800); display: inline-flex; align-items: center; gap: 6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="M22 4 12 14.01l-3-3"></path></svg> Phân tích thành công</span>
+      <span class="tag" style="background: oklch(94% 0.03 35); color: oklch(40% 0.12 35); display: inline-flex; align-items: center; gap: 6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4M12 17h.01"></path></svg> Mất kết nối tới Tiki — thử lại</span>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div style="display: grid; grid-template-columns: 1fr 380px; grid-template-rows: auto 1fr; gap: 20px;">
+
+      <!-- INPUT CARD -->
+      <div class="card blueprint" style="position: relative; grid-column: 1; grid-row: 1; padding: var(--space-4);">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="card-kicker">BƯỚC 1 · ĐẦU VÀO</div>
+        <div class="card-title" style="font-size: 20px; margin-bottom: 4px;">Phân tích bình luận khách hàng</div>
+        <textarea class="input" rows="3" readonly style="font-size: 14px;">Giao hàng hơi chậm so với dự kiến, đóng gói cẩn thận nên sách không bị móp méo. Nội dung sách rất hay, dịch mượt, đọc là không dứt ra được. Giá hơi cao so với mặt bằng chung nhưng xứng đáng.</textarea>
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px; flex-wrap: wrap;">
+          <span class="tag tag-outline" style="display: inline-flex; align-items: center; gap: 6px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 17H7A5 5 0 0 1 7 7h2"></path><path d="M15 7h2a5 5 0 1 1 0 10h-2"></path><path d="M8 12h8"></path></svg>
+            Từ Tiki
+          </span>
+          <span style="font-size: 12px; opacity: .65;">Nhà Giả Kim — Paulo Coelho · ★★★★☆ (4 sao)</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap;">
+          <button class="btn btn-primary"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"></path></svg> Phân tích bằng AI</button>
+          <button class="btn btn-secondary"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"></path><path d="M15 7h2a5 5 0 1 1 0 10h-2"></path><path d="M8 12h8"></path></svg> Lấy review thật từ Tiki</button>
+          <button class="btn btn-ghost">Thử ví dụ <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"></path></svg></button>
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 12px; opacity: .6;">Auto-Play</span>
+            <span class="tag" style="background: var(--color-accent-700); color: var(--color-bg); display: inline-flex; align-items: center; gap: 6px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg> ĐANG BẬT</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap;">
+          <span class="tag tag-neutral">Ví dụ: đánh giá 5 sao</span>
+          <span class="tag tag-neutral">Ví dụ: than phiền giao hàng</span>
+          <span class="tag tag-neutral">Ví dụ: phàn nàn về giá</span>
+        </div>
+      </div>
+
+      <!-- RESULTS ROW -->
+      <div style="grid-column: 1; grid-row: 2; display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; align-items: start;">
+
+        <!-- OVERALL CARD -->
+        <div class="card blueprint" style="position: relative; padding: var(--space-4); height: 100%;">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">KẾT QUẢ · TỔNG THỂ</div>
+          <div class="card-title" style="font-size: 17px;">Cảm xúc chung</div>
+          <div style="display: flex; align-items: baseline; gap: 10px; margin: 6px 0 4px;">
+            <span style="font-family: var(--font-heading); font-size: 52px; line-height: 1; color: {{ overall.color }};">{{ overall.confidence }}%</span>
+            <span class="tag" style="background: {{ overall.bg }}; color: {{ overall.color }}; font-size: 13px;">{{ overall.label }}</span>
+          </div>
+          <div style="font-size: 11px; opacity: .55; margin-bottom: 4px;">Độ tin cậy của mô hình phân loại</div>
+          <div style="display: flex; height: 8px; width: 100%; overflow: hidden; border: 1px solid var(--color-divider); margin-top: 6px;">
+            <div style="width: {{ overall.posPct }}%; background: var(--color-accent-700);"></div>
+            <div style="width: {{ overall.neuPct }}%; background: var(--color-neutral-500);"></div>
+            <div style="width: {{ overall.negPct }}%; background: oklch(48% 0.12 35);"></div>
+          </div>
+          <div style="display: flex; gap: 12px; font-size: 11px; opacity: .7; margin-top: 6px; flex-wrap: wrap;">
+            <span>● Tích cực {{ overall.posPct }}%</span>
+            <span>● Trung lập {{ overall.neuPct }}%</span>
+            <span>● Tiêu cực {{ overall.negPct }}%</span>
+          </div>
+          <div class="hr" style="margin: var(--space-2) 0;"></div>
+          <button class="btn btn-ghost" style="padding-left: 0; font-size: 12px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m6 9 6 6 6-6"></path></svg>
+            Xem dữ liệu thô (JSON)
+          </button>
+          <sc-if value="{{ rawJsonExpanded }}" hint-placeholder-val="{{ false }}">
+            <pre style="background: var(--color-surface); border: 1px solid var(--color-divider); padding: var(--space-2); font-size: 11px; overflow: auto; max-height: 220px; margin: 0;">{{ rawJsonText }}</pre>
+          </sc-if>
+        </div>
+
+        <!-- ASPECTS CARD -->
+        <div class="card blueprint" style="position: relative; padding: var(--space-4);">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">KẾT QUẢ · 6 KHÍA CẠNH</div>
+          <div class="card-title" style="font-size: 17px; margin-bottom: 4px;">Phân tích theo khía cạnh</div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3);">
+            <sc-for list="{{ aspects }}" as="item" hint-placeholder-count="6">
+              <div class="blueprint" style="position: relative; border: 1px solid var(--color-divider); padding: 12px; display: flex; flex-direction: column; gap: 7px;">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="width: 26px; height: 26px; flex: none; display: flex; align-items: center; justify-content: center; border: 1px solid var(--color-divider); color: var(--color-accent-700);">
+                    <sc-if value="{{ item.iconBook }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 5a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H3V5Z"></path><path d="M21 5a2 2 0 0 0-2-2h-5a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h7V5Z"></path></svg></sc-if>
+                    <sc-if value="{{ item.iconLayers }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5Z"></path><path d="m3 12 9 5 9-5"></path><path d="m3 17 9 5 9-5"></path></svg></sc-if>
+                    <sc-if value="{{ item.iconDollar }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M17 5.5c0-1.7-2-3-5-3s-5 1.3-5 3 2 3 5 3 5 1.3 5 3-2 3-5 3-5-1.3-5-3"></path></svg></sc-if>
+                    <sc-if value="{{ item.iconPackage }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V7l-9-4-9 4v1"></path><path d="m21 8-9 4-9-4"></path><path d="M21 8v9l-9 4-9-4V8"></path><path d="M12 12v9"></path></svg></sc-if>
+                    <sc-if value="{{ item.iconTruck }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"></path><path d="M14 10h4l3 3v3h-7"></path><circle cx="6.5" cy="19" r="1.5"></circle><circle cx="17.5" cy="19" r="1.5"></circle></svg></sc-if>
+                    <sc-if value="{{ item.iconHeadset }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2"></path><path d="M21 14v4a2 2 0 0 1-2 2h-1v-6h3Z"></path><path d="M3 14v4a2 2 0 0 0 2 2h1v-6H3Z"></path></svg></sc-if>
+                  </span>
+                  <span style="font-size: 13px; font-weight: 500; line-height: 1.2;">{{ item.name }}</span>
+                </div>
+                <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                  <span class="tag" style="background: {{ item.mentionTagBg }}; color: {{ item.mentionTagColor }}; font-size: 10px;">{{ item.mentionedLabel }}</span>
+                  <sc-if value="{{ item.mentioned }}" hint-placeholder-val="{{ true }}">
+                    <span class="tag" style="background: {{ item.sentimentBg }}; color: {{ item.sentimentColor }}; font-size: 10px;">{{ item.sentimentLabel }}</span>
+                  </sc-if>
+                </div>
+                <div style="height: 4px; background: var(--color-neutral-200); overflow: hidden;">
+                  <div style="height: 100%; width: {{ item.confidence }}%; background: {{ item.confidenceBarColor }};"></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="card blueprint" style="position: relative; grid-column: 2; grid-row: 1 / 3; padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3);">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="card-kicker">PHIÊN LÀM VIỆC HIỆN TẠI</div>
+        <div class="card-title" style="font-size: 17px;">Thống kê nhanh</div>
+        <div>
+          <span style="font-family: var(--font-heading); font-size: 40px; line-height: 1;">{{ quick.total }}</span>
+          <span style="font-size: 12px; opacity: .6;"> review đã quét trong phiên</span>
+        </div>
+        <div>
+          <div style="display: flex; height: 8px; width: 100%; overflow: hidden; border: 1px solid var(--color-divider);">
+            <div style="width: {{ quick.posPct }}%; background: var(--color-accent-700);"></div>
+            <div style="width: {{ quick.neuPct }}%; background: var(--color-neutral-500);"></div>
+            <div style="width: {{ quick.negPct }}%; background: oklch(48% 0.12 35);"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; opacity: .65; margin-top: 5px;">
+            <span>Tích cực {{ quick.posPct }}%</span><span>Trung lập {{ quick.neuPct }}%</span><span>Tiêu cực {{ quick.negPct }}%</span>
+          </div>
+        </div>
+        <div class="hr" style="margin: 0;"></div>
+        <div>
+          <div style="font-size: 12px; font-weight: 500; margin-bottom: 8px;">Khía cạnh bị chê nhiều nhất</div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <sc-for list="{{ sidebarRanking }}" as="r" hint-placeholder-count="3">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;"><span>{{ r.name }}</span><span style="opacity: .6;">{{ r.count }} lượt</span></div>
+                <div style="height: 5px; background: var(--color-neutral-200);"><div style="height: 100%; width: {{ r.barPct }}%; background: var(--color-accent-700);"></div></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div class="blueprint" style="position: relative; border: 1px solid var(--color-accent); background: var(--color-accent-100); padding: 10px; font-size: 12px; line-height: 1.5;">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div style="display: flex; align-items: center; gap: 6px; font-weight: 500; margin-bottom: 4px; color: var(--color-accent-800);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4M12 17h.01"></path></svg>
+            Gợi ý hành động
+          </div>
+          {{ quick.suggestion }}
+        </div>
+        <a href="#stats-screen" class="btn btn-ghost" style="margin-top: auto; padding-left: 0; justify-content: flex-start;">Xem thống kê đầy đủ <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m9 18 6-6-6-6"></path></svg></a>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width: 1600px; margin: 56px auto 20px; padding: 0 32px;">
+    <div style="height: 1px; background: repeating-linear-gradient(90deg, var(--color-divider) 0 8px, transparent 8px 16px); margin-bottom: 24px;"></div>
+    <div style="font-family: var(--font-heading); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--color-accent-700);">Màn hình · Thống kê &amp; Báo cáo</div>
+  </div>
+
+  <div id="stats-screen" style="max-width: 1600px; margin: 0 auto; padding: 0 32px; display: flex; flex-direction: column; gap: 24px;">
+
+    <!-- NAV B -->
+    <div class="blueprint" style="position: relative; border: 1px solid var(--color-divider); padding: 14px 24px; display: flex; align-items: center; gap: 28px;">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div style="display: flex; align-items: center; gap: 10px; margin-right: auto;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-700)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 5a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H3V5Z"></path><path d="M21 5a2 2 0 0 0-2-2h-5a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h7V5Z"></path></svg>
+        <span class="nav-brand">SentenAI</span>
+        <span style="font-size: 12px; color: var(--color-text); opacity: .55; font-family: var(--font-body); padding-left: 8px; border-left: 1px solid var(--color-divider);">Nhà sách Minh Long</span>
+      </div>
+      <nav style="display: flex; gap: 22px;">
+        <a href="#absa-screen">Phân tích ABSA</a>
+        <a href="#stats-screen" aria-current="page">Thống kê &amp; Báo cáo</a>
+        <a style="opacity: .4; pointer-events: none;">Cài đặt</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <button class="btn btn-icon" aria-label="Tìm kiếm"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg></button>
+        <button class="btn btn-icon" aria-label="Thông báo"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg></button>
+        <button class="btn btn-icon" aria-label="Chuyển giao diện tối"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></button>
+        <div style="width: 1px; height: 24px; background: var(--color-divider); margin: 0 8px;"></div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--color-accent-100); color: var(--color-accent-800); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 13px; flex: none;">NA</div>
+          <div style="line-height: 1.25;">
+            <div style="font-size: 13px; font-weight: 500;">Ngọc Anh</div>
+            <div style="font-size: 11px; opacity: .55;">Quản lý · Minh Long</div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: .6;"><path d="m6 9 6 6 6-6"></path></svg>
+        </div>
+        <button class="btn btn-icon" aria-label="Đăng xuất"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></button>
+      </div>
+    </div>
+
+    <!-- SECTION 1: LONG-TERM TREND -->
+    <div class="card blueprint" style="position: relative; padding: var(--space-4);">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px;">
+        <div>
+          <div class="card-kicker">DỮ LIỆU MÁY CHỦ</div>
+          <div class="card-title" style="font-size: 20px;">Xu hướng dài hạn</div>
+        </div>
+        <span class="tag tag-outline" style="display: inline-flex; align-items: center; gap: 6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 14.9A5 5 0 0 1 6 5.3 6 6 0 0 1 17.8 7.5 4.5 4.5 0 0 1 17 16H6a3 3 0 0 1-2-1.1Z"></path></svg>
+          Không mất khi tải lại trang
+        </span>
+        <div class="seg" style="margin-left: auto;">
+          <label class="seg-opt"><input type="radio" name="rng" checked="{{ weeklyRangeIsWeek }}"></input><span class="dot" style="display:none;"></span>Tuần</label>
+          <label class="seg-opt"><input type="radio" name="rng" checked="{{ weeklyRangeIsMonth }}"></input><span class="dot" style="display:none;"></span>Tháng</label>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: flex-end; gap: 18px; height: 170px; margin-top: 16px; padding-left: 4px;">
+        <sc-for list="{{ weeklyTrend }}" as="w" hint-placeholder-count="8">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+            <div style="display: flex; flex-direction: column; width: 30px;">
+              <div style="height: {{ w.heightNeg }}px; background: oklch(48% 0.12 35);"></div>
+              <div style="height: {{ w.heightNeu }}px; background: var(--color-neutral-500);"></div>
+              <div style="height: {{ w.heightPos }}px; background: var(--color-accent-700);"></div>
+            </div>
+            <span style="font-size: 11px; opacity: .6;">{{ w.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px; padding-left: 4px; margin-top: 4px;">
+        <sc-for list="{{ weeklyTrend }}" as="w" hint-placeholder-count="8">
+          <div style="width: 30px; height: 8px; display: flex; overflow: hidden; border: 1px solid var(--color-divider);">
+            <div style="width: {{ w.posPct }}%; background: var(--color-accent-700);"></div>
+            <div style="width: {{ w.neuPct }}%; background: var(--color-neutral-500);"></div>
+            <div style="width: {{ w.negPct }}%; background: oklch(48% 0.12 35);"></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+        <span style="font-size: 11px; opacity: .5;">{{ rangeCaption }} · trên: số lượng theo cảm xúc · dưới: tỷ lệ %</span>
+        <div style="display: flex; gap: 14px; font-size: 11px; opacity: .7;">
+          <span>● Tích cực</span><span>● Trung lập</span><span>● Tiêu cực</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: SESSION STATS -->
+    <div>
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+        <h2 style="margin: 0; font-size: 26px;">Thống kê phiên làm việc hiện tại</h2>
+        <span class="tag tag-outline" style="display: inline-flex; align-items: center; gap: 6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="13" rx="1"></rect><path d="M8 20h8M12 17v3"></path></svg>
+          Chỉ lưu trên trình duyệt này
+        </span>
+        <span style="font-size: 12px; opacity: .55;">Mất khi đóng trình duyệt hoặc bấm "Xóa lịch sử"</span>
+        <div style="margin-left: auto; display: flex; gap: 8px;">
+          <button class="btn btn-secondary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 0 1-15.5 6.4L3 16"></path><path d="M3 12a9 9 0 0 1 15.5-6.4L21 8"></path><path d="M21 3v5h-5M3 21v-5h5"></path></svg> Làm mới</button>
+          <button class="btn btn-secondary" style="color: oklch(48% 0.12 35);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="m19 6-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg> Xóa lịch sử phiên</button>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
+        <div class="card blueprint" style="position: relative; padding: var(--space-3);"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">TỔNG SỐ ĐÃ QUÉT</div>
+          <div style="font-family: var(--font-heading); font-size: 34px;">{{ overview.total }}</div>
+        </div>
+        <div class="card blueprint" style="position: relative; padding: var(--space-3);"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">TỶ LỆ TIÊU CỰC</div>
+          <div style="font-family: var(--font-heading); font-size: 34px; color: oklch(48% 0.12 35);">{{ overview.negPct }}%</div>
+        </div>
+        <div class="card blueprint" style="position: relative; padding: var(--space-3);"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">KHÍA CẠNH BỊ CHÊ NHIỀU NHẤT</div>
+          <div style="font-family: var(--font-heading); font-size: 26px;">{{ overview.topAspect }}</div>
+        </div>
+        <div class="card blueprint" style="position: relative; padding: var(--space-3);"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">ĐỘ TIN CẬY TRUNG BÌNH</div>
+          <div style="font-family: var(--font-heading); font-size: 34px;">{{ overview.avgConfidence }}%</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 20px; margin-bottom: 20px;">
+        <div class="card blueprint" style="position: relative; padding: var(--space-4); display: flex; gap: 20px; align-items: center;">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <svg width="120" height="120" viewBox="0 0 120 120" style="flex: none; transform: rotate(-90deg);">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--color-neutral-200)" stroke-width="14"></circle>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--color-accent-700)" stroke-width="14" stroke-dasharray="{{ donut.posDash }}" stroke-dashoffset="{{ donut.posOffset }}"></circle>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--color-neutral-500)" stroke-width="14" stroke-dasharray="{{ donut.neuDash }}" stroke-dashoffset="{{ donut.neuOffset }}"></circle>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="oklch(48% 0.12 35)" stroke-width="14" stroke-dasharray="{{ donut.negDash }}" stroke-dashoffset="{{ donut.negOffset }}"></circle>
+          </svg>
+          <div>
+            <div class="card-kicker">TỶ LỆ CẢM XÚC TỔNG THỂ</div>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px; font-size: 13px;">
+              <span>● Tích cực — <b>{{ overview.posPct }}%</b></span>
+              <span>● Trung lập — <b>{{ overview.neuPct }}%</b></span>
+              <span>● Tiêu cực — <b>{{ overview.negPct }}%</b></span>
+            </div>
+          </div>
+        </div>
+        <div class="card blueprint" style="position: relative; padding: var(--space-4);">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">XU HƯỚNG TỶ LỆ TIÊU CỰC TRONG PHIÊN</div>
+          <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;">
+            <span class="card-title" style="font-size: 15px;">Đang giảm dần</span>
+            <span style="font-size: 12px; color: var(--color-accent-700);">↓ {{ trendDeltaAbs }} điểm so với đầu phiên</span>
+          </div>
+          <svg viewBox="0 0 300 100" width="100%" height="100" preserveAspectRatio="none">
+            <polyline points="{{ trendPoints }}" fill="none" stroke="oklch(48% 0.12 35)" stroke-width="2"></polyline>
+          </svg>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; opacity: .55;"><span>Đầu phiên · {{ trendStartPct }}%</span><span>Hiện tại · {{ trendEndPct }}%</span></div>
+        </div>
+      </div>
+
+      <div class="card blueprint" style="position: relative; padding: var(--space-4); margin-bottom: 20px;">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="card-kicker">XẾP HẠNG KHÍA CẠNH THEO SỐ LẦN BỊ ĐÁNH GIÁ TIÊU CỰC</div>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;">
+          <sc-for list="{{ aspectRanking }}" as="r" hint-placeholder-count="6">
+            <div style="display: grid; grid-template-columns: 160px 1fr 50px; align-items: center; gap: 12px;">
+              <span style="font-size: 13px;">{{ r.name }}</span>
+              <div style="height: 10px; background: var(--color-neutral-200);"><div style="height: 100%; width: {{ r.barPct }}%; background: var(--color-accent-700);"></div></div>
+              <span style="font-size: 12px; opacity: .65; text-align: right;">{{ r.count }} lượt</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div class="card blueprint" style="position: relative; padding: var(--space-4);">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="card-kicker">NHẬT KÝ CHI TIẾT</div>
+        <div style="display: flex; align-items: center; gap: 10px; margin: 8px 0 12px; flex-wrap: wrap;">
+          <input class="input" style="max-width: 320px;" placeholder="Lọc theo từ khóa hoặc khía cạnh…" readonly></input>
+          <div class="seg">
+            <label class="seg-opt"><input type="radio" name="logf" checked="{{ true }}"></input>Tất cả</label>
+            <label class="seg-opt"><input type="radio" name="logf"></input>Tích cực</label>
+            <label class="seg-opt"><input type="radio" name="logf"></input>Trung lập</label>
+            <label class="seg-opt"><input type="radio" name="logf"></input>Tiêu cực</label>
+          </div>
+        </div>
+        <table class="table">
+          <thead><tr><th>Giờ</th><th>Cảm xúc</th><th>Khía cạnh tiêu cực</th><th>Nội dung review</th></tr></thead>
+          <tbody>
+            <sc-for list="{{ sessionLog }}" as="row" hint-placeholder-count="8">
+              <tr>
+                <td style="white-space: nowrap; opacity: .7;">{{ row.time }}</td>
+                <td><span class="tag" style="background: {{ row.sentimentBg }}; color: {{ row.sentimentColor }};">{{ row.sentimentLabel }}</span></td>
+                <td>
+                  <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                    <sc-for list="{{ row.negAspects }}" as="na" hint-placeholder-count="2">
+                      <span class="tag tag-neutral">{{ na }}</span>
+                    </sc-for>
+                  </div>
+                </td>
+                <td style="max-width: 420px; opacity: .8;">{{ row.snippet }}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1680, &quot;height&quot;: 1400},
+  &quot;showAutoplayBanner&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Auto-Play&quot;},
+  &quot;rawJsonExpanded&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Kết quả ABSA&quot;},
+  &quot;weeklyRange&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;week&quot;, &quot;options&quot;: [&quot;week&quot;, &quot;month&quot;], &quot;tsType&quot;: &quot;'week'|'month'&quot;, &quot;section&quot;: &quot;Xu hướng dài hạn&quot;}
+}">
+class Component extends DCLogic {
+  renderVals() {
+    const showAutoplayBanner = this.props.showAutoplayBanner ?? true;
+    const rawJsonExpanded = this.props.rawJsonExpanded ?? false;
+    const weeklyRange = this.props.weeklyRange ?? 'week';
+
+    const POS_C = 'var(--color-accent-700)', POS_BG = 'var(--color-accent-100)';
+    const NEU_C = 'var(--color-neutral-700)', NEU_BG = 'var(--color-neutral-100)';
+    const NEG_C = 'oklch(48% 0.12 35)', NEG_BG = 'oklch(94% 0.03 35)';
+    const sentColor = s => s === 'positive' ? POS_C : s === 'negative' ? NEG_C : NEU_C;
+    const sentBg = s => s === 'positive' ? POS_BG : s === 'negative' ? NEG_BG : NEU_BG;
+    const sentLabel = s => s === 'positive' ? 'Tích cực' : s === 'negative' ? 'Tiêu cực' : 'Trung lập';
+
+    const rawAspects = [
+      { name: 'Nội dung sách', icon: 'book', mentioned: true, confidence: 96, sentiment: 'positive' },
+      { name: 'Hình thức vật lý', icon: 'layers', mentioned: false, confidence: 18, sentiment: null },
+      { name: 'Giá cả', icon: 'dollar', mentioned: true, confidence: 84, sentiment: 'negative' },
+      { name: 'Đóng gói', icon: 'package', mentioned: true, confidence: 88, sentiment: 'positive' },
+      { name: 'Giao hàng', icon: 'truck', mentioned: true, confidence: 90, sentiment: 'negative' },
+      { name: 'Dịch vụ / Tư vấn', icon: 'headset', mentioned: false, confidence: 9, sentiment: null },
+    ];
+    const aspects = rawAspects.map(a => ({
+      ...a,
+      iconBook: a.icon === 'book', iconLayers: a.icon === 'layers', iconDollar: a.icon === 'dollar',
+      iconPackage: a.icon === 'package', iconTruck: a.icon === 'truck', iconHeadset: a.icon === 'headset',
+      mentionedLabel: a.mentioned ? `Có nhắc tới · ${a.confidence}%` : `Không nhắc tới · ${a.confidence}%`,
+      mentionTagBg: a.mentioned ? 'var(--color-accent-100)' : 'var(--color-neutral-100)',
+      mentionTagColor: a.mentioned ? 'var(--color-accent-800)' : 'var(--color-neutral-600)',
+      sentimentLabel: a.sentiment ? sentLabel(a.sentiment) : null,
+      sentimentColor: a.sentiment ? sentColor(a.sentiment) : null,
+      sentimentBg: a.sentiment ? sentBg(a.sentiment) : null,
+      confidenceBarColor: a.mentioned ? sentColor(a.sentiment) : 'var(--color-neutral-400)',
+    }));
+
+    const rankingRaw = [
+      { name: 'Giao hàng', count: 19 },
+      { name: 'Giá cả', count: 14 },
+      { name: 'Đóng gói', count: 6 },
+      { name: 'Hình thức vật lý', count: 4 },
+      { name: 'Dịch vụ / Tư vấn', count: 3 },
+      { name: 'Nội dung sách', count: 1 },
+    ];
+    const maxCount = rankingRaw[0].count;
+    const aspectRanking = rankingRaw.map(r => ({ ...r, barPct: Math.round(r.count / maxCount * 100) }));
+    const sidebarRanking = aspectRanking.slice(0, 3);
+
+    const weekData = [
+      { label: 'T1', heightPos: 75, heightNeu: 27, heightNeg: 32, posPct: 56, neuPct: 20, negPct: 24 },
+      { label: 'T2', heightPos: 67, heightNeu: 24, heightNeg: 38, posPct: 52, neuPct: 19, negPct: 29 },
+      { label: 'T3', heightPos: 81, heightNeu: 22, heightNeg: 27, posPct: 62, neuPct: 17, negPct: 21 },
+      { label: 'T4', heightPos: 59, heightNeu: 30, heightNeg: 51, posPct: 42, neuPct: 21, negPct: 37 },
+      { label: 'T5', heightPos: 70, heightNeu: 24, heightNeg: 46, posPct: 50, neuPct: 17, negPct: 33 },
+      { label: 'T6', heightPos: 83, heightNeu: 19, heightNeg: 35, posPct: 61, neuPct: 14, negPct: 25 },
+      { label: 'T7', heightPos: 73, heightNeu: 27, heightNeg: 24, posPct: 59, neuPct: 22, negPct: 19 },
+      { label: 'T8', heightPos: 91, heightNeu: 22, heightNeg: 19, posPct: 69, neuPct: 16, negPct: 14 },
+    ];
+    const monthData = [
+      { label: 'Th3', heightPos: 69, heightNeu: 23, heightNeg: 32, posPct: 56, neuPct: 19, negPct: 26 },
+      { label: 'Th4', heightPos: 78, heightNeu: 22, heightNeg: 35, posPct: 58, neuPct: 16, negPct: 26 },
+      { label: 'Th5', heightPos: 74, heightNeu: 26, heightNeg: 40, posPct: 53, neuPct: 19, negPct: 29 },
+      { label: 'Th6', heightPos: 86, heightNeu: 24, heightNeg: 29, posPct: 62, neuPct: 17, negPct: 21 },
+      { label: 'Th7', heightPos: 82, heightNeu: 29, heightNeg: 25, posPct: 60, neuPct: 21, negPct: 19 },
+      { label: 'Th8', heightPos: 92, heightNeu: 22, heightNeg: 20, posPct: 69, neuPct: 16, negPct: 15 },
+    ];
+    const weeklyTrend = weeklyRange === 'month' ? monthData : weekData;
+    const rangeCaption = weeklyRange === 'month' ? '6 tháng gần nhất' : '8 tuần gần nhất';
+
+    const sessionLogRaw = [
+      { time: '14:32', sentiment: 'positive', negAspects: [], snippet: 'Sách đóng gói chắc chắn, giao nhanh hơn dự kiến, nội dung rất cuốn hút…' },
+      { time: '14:26', sentiment: 'negative', negAspects: ['Giao hàng', 'Giá cả'], snippet: 'Chờ giao hàng gần 2 tuần, giá lại đắt hơn nhà sách khác, khá thất vọng…' },
+      { time: '14:19', sentiment: 'neutral', negAspects: ['Hình thức vật lý'], snippet: 'Sách ổn, bìa hơi mỏng, nội dung chưa có gì đặc biệt…' },
+      { time: '14:11', sentiment: 'positive', negAspects: [], snippet: 'Dịch giả dịch rất mượt, giấy đẹp, đóng gói kỹ, sẽ ủng hộ tiếp…' },
+      { time: '14:03', sentiment: 'negative', negAspects: ['Giao hàng'], snippet: 'Shipper giao trễ 3 ngày so với cam kết, thái độ không thân thiện…' },
+      { time: '13:58', sentiment: 'positive', negAspects: [], snippet: 'Giá hợp lý, nội dung sách bổ ích, đóng gói an toàn…' },
+      { time: '13:51', sentiment: 'negative', negAspects: ['Đóng gói', 'Giao hàng'], snippet: 'Sách bị móp góc do đóng gói sơ sài, giao hàng cũng chậm…' },
+      { time: '13:44', sentiment: 'neutral', negAspects: ['Dịch vụ / Tư vấn'], snippet: 'Liên hệ CSKH hỏi đổi trả nhưng phản hồi khá chậm, sách thì bình thường…' },
+    ];
+    const sessionLog = sessionLogRaw.map(r => ({ ...r, sentimentLabel: sentLabel(r.sentiment), sentimentColor: sentColor(r.sentiment), sentimentBg: sentBg(r.sentiment), hasNegAspects: r.negAspects.length > 0 }));
+
+    const overall = { label: 'Tích cực', color: POS_C, bg: POS_BG, confidence: 78, posPct: 78, neuPct: 14, negPct: 8 };
+    const quick = {
+      total: 47, posPct: 58, neuPct: 19, negPct: 23, topAspect: 'Giao hàng',
+      suggestion: 'Giao hàng đang là khía cạnh bị phàn nàn nhiều nhất trong phiên (19 lượt). Cân nhắc rà soát SLA giao vận hoặc trao đổi lại với đơn vị vận chuyển ở khu vực phát sinh nhiều đơn trễ.',
+    };
+    const overview = { total: 47, negPct: 23, posPct: 58, neuPct: 19, topAspect: 'Giao hàng', avgConfidence: 87 };
+    const donut = { posDash: '182.2 131.96', posOffset: '0', neuDash: '59.7 254.46', neuOffset: '-182.2', negDash: '72.3 241.86', negOffset: '-241.9' };
+    const trendPoints = '0,12.5 27.3,20 54.5,5 81.8,25 109,35 136,27.5 163,40 191,45 218,37.5 245,50 272,55 300,60';
+
+    const rawJsonObj = {
+      overall: { sentiment: 'positive', confidence: overall.confidence / 100 },
+      aspects: aspects.map(a => ({ aspect: a.name, mentioned: a.mentioned, mention_confidence: +(a.confidence / 100).toFixed(2), sentiment: a.sentiment })),
+    };
+
+    return {
+      showAutoplayBanner, rawJsonExpanded,
+      weeklyRangeIsWeek: weeklyRange === 'week', weeklyRangeIsMonth: weeklyRange === 'month',
+      aspects, aspectRanking, sidebarRanking, weeklyTrend, rangeCaption, sessionLog,
+      overall, quick, overview, donut, trendPoints,
+      trendStartPct: 35, trendEndPct: 16, trendDeltaAbs: 19,
+      rawJsonText: JSON.stringify(rawJsonObj, null, 2),
+    };
+  }
+}
+</script>
+</body>
+</html>

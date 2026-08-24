@@ -1,0 +1,41 @@
+[project]
+name = "absa-core"
+version = "0.1.0"
+description = "Vietnamese ABSA preprocessing and production inference for promoted SentenAI benchmark artifacts."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.1",
+    "transformers>=4.40",
+    "huggingface-hub>=0.23",
+    "pandas>=2.0",
+    "regex>=2023.0",
+    "ftfy>=6.1",
+    "emoji>=2.0",
+    "beautifulsoup4>=4.12",
+    "pyvi>=0.1.1",
+    "scikit-learn>=1.3",
+    "joblib>=1.3",
+    "scipy>=1.10",
+    "sentencepiece>=0.2",
+]
+
+[project.optional-dependencies]
+analysis = ["scikit-learn>=1.3"]
+# CPU-optimized inference path (ONNX export + INT8 dynamic quantization) — opt-in,
+# see scripts/export_onnx.py and models/onnx_predictor.py. Not pulled in by default
+# since it's meaningfully sized and most consumers only need the torch path.
+onnx = ["onnx>=1.16", "onnxruntime>=1.18"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["absa_core"]
+
+[tool.hatch.build]
+include = [
+  "absa_core/**/*.py",
+  "absa_core/data/maps/*.json",
+]

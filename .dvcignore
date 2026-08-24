@@ -1,0 +1,10 @@
+.git/
+.venv/
+.kaggle_work/
+node_modules/
+apps/web/.next/
+experiments/_tracking/
+artifacts/registry/
+artifacts/releases/
+artifacts/final/
+artifacts/monitoring/predictions.jsonl

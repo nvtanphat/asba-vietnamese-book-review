@@ -1,0 +1,57 @@
+{
+  "seed": 42,
+  "strategy": "text_group_stratified",
+  "splits": {
+    "train": {
+      "rows": 9300,
+      "fingerprint": "6b15f35362792c26c941e5b9f00565177f9de15d789983930d9b0a56452b7f98",
+      "sentiment_distribution": {
+        "0": 0.494731,
+        "1": 0.173011,
+        "2": 0.332258
+      },
+      "aspect_presence": {
+        "as_content": 0.397634,
+        "as_physical": 0.538817,
+        "as_price": 0.073118,
+        "as_packaging": 0.242903,
+        "as_delivery": 0.262796,
+        "as_service": 0.178172
+      }
+    },
+    "val": {
+      "rows": 1991,
+      "fingerprint": "4ec6bebc4cafaadfd862196d2163238670ca77772966a58c7b7e22bffaa6d9b5",
+      "sentiment_distribution": {
+        "0": 0.494726,
+        "1": 0.17328,
+        "2": 0.331994
+      },
+      "aspect_presence": {
+        "as_content": 0.379709,
+        "as_physical": 0.539427,
+        "as_price": 0.078855,
+        "as_packaging": 0.242089,
+        "as_delivery": 0.283275,
+        "as_service": 0.180311
+      }
+    },
+    "test": {
+      "rows": 1992,
+      "fingerprint": "69a04e6850bc9c6bf04fd9c43cd8091cb76f908d4ecc6ce0648df61393a1ab28",
+      "sentiment_distribution": {
+        "0": 0.494478,
+        "1": 0.173193,
+        "2": 0.332329
+      },
+      "aspect_presence": {
+        "as_content": 0.411145,
+        "as_physical": 0.543173,
+        "as_price": 0.065763,
+        "as_packaging": 0.233434,
+        "as_delivery": 0.255522,
+        "as_service": 0.178715
+      }
+    }
+  }
+}

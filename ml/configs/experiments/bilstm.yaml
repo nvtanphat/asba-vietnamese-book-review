@@ -1,0 +1,16 @@
+max_length: 160
+vocab_size: 50000
+min_freq: 2
+embedding_dim: 200
+hidden_dim: 192
+num_layers: 2
+dropout: 0.35
+batch_size: 64
+epochs: 20
+patience: 4
+lr: 0.001
+weight_decay: 0.0001
+label_smoothing: 0.05
+max_grad_norm: 1.0
+loss_type: focal
+focal_gamma: 2.0

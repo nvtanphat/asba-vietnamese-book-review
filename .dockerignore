@@ -1,0 +1,51 @@
+# Keeps the build context small and images clean — nothing here is needed inside
+# either the API or Web container, and some of it (secrets, local DB, host venvs)
+# should never end up baked into an image in the first place.
+
+.git
+.github
+
+# Local Python/Node environments — each image builds its own, isolated ones.
+.venv
+**/__pycache__
+**/*.py[cod]
+.pytest_cache
+.ruff_cache
+node_modules
+apps/web/node_modules
+apps/web/.next
+
+# Secrets and local runtime state.
+.env
+.env.*
+!.env.example
+data/
+apps/api/data/
+*.db
+*.sqlite3
+
+# ML training assets — not needed to *serve* the model, only to train/evaluate it.
+ml/
+packages/absa_core/data/
+archive/
+archive.zip
+checkdata/
+
+# Kaggle/benchmark scratch — many GB of per-model checkpoints across 8 models; only
+# artifacts/final (the one promoted "champion" build the API actually loads) is needed.
+.kaggle_work/
+experiments/
+artifacts/checkpoints/
+artifacts/releases/
+artifacts/reports/
+.agents/
+form_giao_dien_absa/
+*.zip
+
+# Docs / editor / misc.
+*.md
+!README.md
+.vscode
+.idea
+.claude
+production_roadmap.md

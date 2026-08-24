@@ -1,0 +1,19 @@
+models:
+  - logistic
+  - linear_svm
+  - textcnn
+  - bilstm
+  - phobert
+  - xlmr
+  - mdeberta
+  - vit5
+primary_models:
+  - logistic
+  - linear_svm
+  - textcnn
+  - bilstm
+  - phobert
+  - xlmr
+  - mdeberta
+selection_metric: val_f1_combined
+test_policy: "Run after model/config selection; never tune on test."

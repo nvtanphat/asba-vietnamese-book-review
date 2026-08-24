@@ -1,0 +1,635 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=Barlow+Condensed:wght@400;600;700&display=swap');
+
+:root {
+  --color-bg: #f2f2f3;
+  --color-surface: #e9e9ea;
+  --color-text: #1d1f20;
+  --color-accent: #5980a6;
+  --color-accent-2: #728fab;
+  --color-divider: color-mix(in srgb, #1d1f20 16%, transparent);
+
+  --color-neutral-100: #f5f5f8;
+  --color-neutral-200: #e7e7ea;
+  --color-neutral-300: #d4d4d7;
+  --color-neutral-400: #b7b7ba;
+  --color-neutral-500: #98989b;
+  --color-neutral-600: #7a7a7d;
+  --color-neutral-700: #5d5d60;
+  --color-neutral-800: #424244;
+  --color-neutral-900: #2b2b2d;
+
+  --color-accent-100: #eef6ff;
+  --color-accent-200: #d6ebff;
+  --color-accent-300: #b5d9fd;
+  --color-accent-400: #94bce3;
+  --color-accent-500: #749dc4;
+  --color-accent-600: #597ea3;
+  --color-accent-700: #416180;
+  --color-accent-800: #2c455d;
+  --color-accent-900: #1d2d3d;
+
+  --color-negative: oklch(48% 0.12 35);
+  --color-negative-bg: oklch(94% 0.03 35);
+
+  --font-heading: "Barlow Condensed", system-ui, sans-serif;
+  --font-heading-weight: 600;
+  --font-body: "Barlow", system-ui, sans-serif;
+
+  --space-1: 3.4px;
+  --space-2: 6.8px;
+  --space-3: 10.2px;
+  --space-4: 13.6px;
+  --space-6: 20.4px;
+  --space-8: 27.2px;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 7px;
+}
+
+.dark {
+  --color-bg: #141618;
+  --color-surface: #1d2023;
+  --color-text: #ececec;
+  --color-accent: #6b9ac4;
+  --color-accent-2: #84a2c2;
+  --color-divider: color-mix(in srgb, #ffffff 16%, transparent);
+
+  --color-neutral-100: #1f2225;
+  --color-neutral-200: #2a2e33;
+  --color-neutral-300: #3c424a;
+  --color-neutral-400: #575e69;
+  --color-neutral-500: #78818f;
+  --color-neutral-600: #9da6b4;
+  --color-neutral-700: #c2c9d5;
+  --color-neutral-800: #e2e6ed;
+  --color-neutral-900: #f5f6fa;
+
+  --color-accent-100: #182533;
+  --color-accent-200: #22374d;
+  --color-accent-700: #8bb3db;
+  --color-accent-800: #b5d2f0;
+  --color-accent-900: #e2efff;
+
+  --color-negative: oklch(62% 0.18 35);
+  --color-negative-bg: oklch(24% 0.08 35);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 400;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  margin: 0;
+}
+
+a {
+  color: var(--color-accent-700);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-accent-900);
+}
+
+/* ── Blueprint frame ── */
+.blueprint {
+  position: relative;
+  border: 1px solid var(--color-divider);
+  background: transparent;
+}
+
+.blueprint > .corner {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  pointer-events: none;
+}
+
+.blueprint > .corner::before,
+.blueprint > .corner::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+
+.blueprint > .corner::before {
+  left: 5px;
+  top: 0;
+  width: 1px;
+  height: 100%;
+}
+
+.blueprint > .corner::after {
+  top: 5px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+}
+
+.blueprint > .corner.tl { top: -6px; left: -6px; }
+.blueprint > .corner.tr { top: -6px; right: -6px; }
+.blueprint > .corner.bl { bottom: -6px; left: -6px; }
+.blueprint > .corner.br { bottom: -6px; right: -6px; }
+
+/* ── Cards & Kickers ── */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: transparent;
+  border: 1px solid var(--color-divider);
+}
+
+.card-kicker {
+  font-family: var(--font-heading);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+  margin-bottom: 2px;
+}
+
+.card-title {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  padding: var(--space-2) calc(var(--space-3) * 1.2);
+  transition: background 0.15s ease;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-accent-700);
+  color: var(--color-bg);
+  border-color: var(--color-accent-700);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-600);
+}
+
+.btn-secondary {
+  border-color: var(--color-divider);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-text) 7%, transparent);
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--color-accent-700);
+  padding-inline: var(--space-1);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-accent-700) 10%, transparent);
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+}
+
+/* ── Tags ── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  padding: 3px 10px;
+  border-radius: 0;
+  line-height: 1.2;
+}
+
+.tag-accent {
+  background: var(--color-accent-100);
+  color: var(--color-accent-800);
+}
+
+.tag-neutral {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+}
+
+.tag-outline {
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+}
+
+/* ── Forms ── */
+.input {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--color-accent-700);
+}
+
+textarea.input {
+  min-height: 90px;
+  resize: vertical;
+}
+
+/* ── Segmented Controls ── */
+.seg {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--color-divider);
+}
+
+.seg-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.seg-opt + .seg-opt {
+  border-left: 1px solid var(--color-divider);
+}
+
+.seg-opt.active, .seg-opt:has(input:checked) {
+  background: var(--color-accent-700);
+  color: var(--color-bg);
+}
+
+.seg-opt:not(.active):hover {
+  background: color-mix(in srgb, var(--color-text) 7%, transparent);
+}
+
+/* ── Navigation ── */
+.nav-brand {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 18px;
+  color: var(--color-accent-700);
+}
+
+/* ── Table ── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th {
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.table td {
+  padding: var(--space-2);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+
+.table tbody tr:hover {
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
+}
+
+.hr {
+  height: 1px;
+  border: 0;
+  margin: var(--space-4) 0;
+  background: var(--color-divider);
+}
+
+/* ── Conveyor Animation ── */
+@keyframes senten-conveyor {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+
+.blueprint > .corner {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.blueprint > .corner::before,
+.blueprint > .corner::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+
+.blueprint > .corner::before {
+  left: 5px;
+  top: 0;
+  width: 1px;
+  height: 100%;
+}
+
+.blueprint > .corner::after {
+  top: 5px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+}
+
+.blueprint > .corner.tl { top: -6px; left: -6px; }
+.blueprint > .corner.tr { top: -6px; right: -6px; }
+.blueprint > .corner.bl { bottom: -6px; left: -6px; }
+.blueprint > .corner.br { bottom: -6px; right: -6px; }
+
+/* ── Tags & Badges ── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  line-height: 1.2;
+}
+
+.tag-accent {
+  background: var(--color-accent-700);
+  color: #fff;
+}
+
+.tag-neutral {
+  background: var(--color-neutral-200);
+  color: var(--color-text);
+  opacity: 0.85;
+}
+
+.tag-outline {
+  border: 1px solid var(--color-divider);
+  background: transparent;
+  color: var(--color-text);
+}
+
+/* ── Typography helpers ── */
+.nav-brand {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-accent-700);
+}
+
+.card-kicker {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+  margin-bottom: 4px;
+}
+
+.card-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 7px 14px;
+  border-radius: var(--radius-md);
+  transition: all 0.15s ease;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-accent-700);
+  color: #ffffff;
+  border-color: var(--color-accent-700);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-600);
+  border-color: var(--color-accent-600);
+}
+
+.btn-secondary {
+  border-color: var(--color-divider);
+  background: var(--color-surface);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+}
+
+.btn-ghost {
+  color: var(--color-accent-700);
+  padding: 6px 10px;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--color-accent-100);
+}
+
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: var(--radius-md);
+  border-color: var(--color-divider);
+  color: var(--color-text);
+}
+
+.btn-icon:hover {
+  background: var(--color-surface-hover);
+}
+
+/* ── Forms & Inputs ── */
+.input {
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 12px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.input:focus {
+  border-color: var(--color-accent-700);
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ── Segmented Controls ── */
+.seg {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.seg-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  user-select: none;
+}
+
+.seg-opt + .seg-opt {
+  border-left: 1px solid var(--color-divider);
+}
+
+.seg-opt.active {
+  background: var(--color-accent-700);
+  color: #ffffff;
+}
+
+/* ── Tables ── */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+
+.table th {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+  border-bottom: 1px solid var(--color-divider);
+  padding: 8px 12px;
+}
+
+.table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.table tr:hover td {
+  background: var(--color-surface);
+}
+
+/* ── Conveyor Animation ── */
+@keyframes senten-conveyor {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-conveyor {
+  display: flex;
+  gap: 12px;
+  flex: none;
+  animation: senten-conveyor 18s linear infinite;
+}
+
+.animate-conveyor:hover {
+  animation-play-state: paused;
+}
+
+.hr {
+  height: 1px;
+  border: 0;
+  background: var(--color-divider);
+}

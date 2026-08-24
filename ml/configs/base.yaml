@@ -1,0 +1,14 @@
+seed: 42
+data_root: data/splits
+output_root: experiments
+artifacts_root: artifacts/checkpoints
+resume: false
+selection_metric: f1_combined
+fairness:
+  frozen_split: true
+  test_for_selection: false
+  validation_for_thresholds: true
+  shared_text_cleaning: true
+  same_seed: true
+  same_metrics: true
+  tuning_trials_per_model: 20

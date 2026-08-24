@@ -1,0 +1,28 @@
+name: Model release gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "Model name whose experiments/<model> output is present in the checkout/artifact restore"
+        required: true
+        default: "phobert"
+      stage:
+        description: "Quality gate to evaluate"
+        type: choice
+        options: [staging, production]
+        default: production
+
+jobs:
+  gate-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --group ml
+      - name: Require model evaluation output
+        run: test -f "experiments/${{ inputs.model }}/metrics.json"
+      - name: Quality gate
+        run: uv run python -m mlops gate --run-dir "experiments/${{ inputs.model }}" --stage "${{ inputs.stage }}"
+      - name: Build serving image contract
+        run: docker build -f infra/api.Dockerfile . -t sentenai-api:model-gated

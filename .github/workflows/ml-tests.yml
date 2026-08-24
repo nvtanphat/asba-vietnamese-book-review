@@ -1,0 +1,16 @@
+name: ML contract tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --group ml
+      - name: Compile maintained ML code
+        run: uv run python -m compileall -q ml packages/absa_core/absa_core
+      - name: Run deterministic contract tests
+        run: uv run pytest -q tests/unit tests/smoke

@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    name: Backend (ruff + pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install Python workspace
+        run: uv sync
+
+      - name: Ruff lint
+        # Scoped to apps/api (actively maintained). packages/absa_core and ml/ carry
+        # pre-existing lint debt from before this CI existed — tracked separately,
+        # not gated here yet so this workflow doesn't ship red on day one.
+        run: uv run ruff check apps/api
+
+      - name: Run pytest
+        run: uv run python -m pytest -q
+
+  frontend:
+    name: Frontend (typecheck + lint + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type-check
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npx eslint src
+
+      - name: Build
+        run: npm run build

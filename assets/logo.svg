@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Definitions for Gradients and Shadows -->
+  <defs>
+    <!-- Background Gradient (Ledger Green) -->
+    <linearGradient id="ledgerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2f5d46" />
+      <stop offset="100%" stop-color="#1f4433" />
+    </linearGradient>
+
+    <!-- Column Gradient (Cream to Paper) -->
+    <linearGradient id="columnGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#ede3cd" />
+    </linearGradient>
+
+    <!-- Brass Gradient -->
+    <linearGradient id="brassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d9a950" />
+      <stop offset="100%" stop-color="#a9781f" />
+    </linearGradient>
+
+    <!-- Soft Drop Shadow -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0b1711" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background Card -->
+  <rect width="512" height="512" rx="128" fill="url(#ledgerGrad)" />
+
+  <!-- Outer Ring (Brass) -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="url(#brassGrad)" stroke-width="4" opacity="0.4" />
+
+  <!-- Geometric Book Group -->
+  <g filter="url(#shadow)" transform="translate(96, 96)">
+    <!-- Left Page Columns (representing data/pages) -->
+    <rect x="15" y="145" width="28" height="85" rx="14" fill="url(#columnGrad)" />
+    <rect x="55" y="105" width="28" height="135" rx="14" fill="url(#columnGrad)" />
+    <rect x="95" y="65" width="28" height="185" rx="14" fill="url(#columnGrad)" />
+
+    <!-- Right Page Columns (representing data/pages) -->
+    <rect x="197" y="65" width="28" height="185" rx="14" fill="url(#columnGrad)" />
+    <rect x="237" y="105" width="28" height="135" rx="14" fill="url(#columnGrad)" />
+    <rect x="277" y="145" width="28" height="85" rx="14" fill="url(#columnGrad)" />
+
+    <!-- Spine Connector at Bottom -->
+    <path d="M95 270C115 276 135 280 160 280C185 280 205 276 225 270" stroke="url(#brassGrad)" stroke-width="6" stroke-linecap="round" fill="none" />
+
+    <!-- AI Sparkle Star in Center Spine -->
+    <path
+      d="M160 95L174 122L200 135L174 148L160 175L146 148L120 135L146 122L160 95Z"
+      fill="url(#brassGrad)"
+    />
+  </g>
+</svg>

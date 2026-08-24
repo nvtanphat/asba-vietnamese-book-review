@@ -1,0 +1,9 @@
+split:
+  seed: 42
+  strategy: text_group_stratified
+monitoring:
+  warning_js: 0.10
+  critical_js: 0.20
+training:
+  model: phobert
+  test_sealed: true
