@@ -1,3 +1,14 @@
+# Agent & IDE metadata
+.agents/
+.claude/
+form_giao_dien_absa/
+*.zip
+MERGE_REPORT.md
+ORIGINAL_REQUEST.md
+PROJECT_TREE.txt
+TEST_INFRA.md
+requirements-legacy.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
