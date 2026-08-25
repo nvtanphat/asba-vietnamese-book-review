@@ -1,0 +1,427 @@
+{
+  "schema_version": 1,
+  "models": {
+    "logistic": [
+      {
+        "model": "logistic",
+        "version": "20260824T132051-e2861b37",
+        "created_at": "2026-08-24T13:20:51.680436+00:00",
+        "artifact_dir": "experiments/logistic",
+        "metrics": {
+          "val_f1_combined": 0.507195,
+          "test_f1_combined": 0.4949,
+          "test_f1_sentiment": 0.418015,
+          "test_f1_aspect_4class_mean": 0.571785
+        },
+        "lineage": {
+          "created_at": "2026-08-23T13:16:05.584822+00:00",
+          "dataset": {
+            "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
+            "bytes": 8510643,
+            "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+          },
+          "git_sha": null,
+          "environment": {
+            "python": "3.13.5",
+            "platform": "linux",
+            "executable": "/opt/pyvenv/bin/python"
+          },
+          "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+        },
+        "tracking_run_id": null,
+        "notes": "Final Kaggle run (combined kernel, --run-test), shared 1 GPU slot"
+      }
+    ],
+    "linear_svm": [
+      {
+        "model": "linear_svm",
+        "version": "20260824T132052-05030d2b",
+        "created_at": "2026-08-24T13:20:52.413423+00:00",
+        "artifact_dir": "experiments/linear_svm",
+        "metrics": {
+          "val_f1_combined": 0.728318,
+          "test_f1_combined": 0.708994,
+          "test_f1_sentiment": 0.759184,
+          "test_f1_aspect_4class_mean": 0.658805
+        },
+        "lineage": {
+          "created_at": "2026-08-23T13:16:05.584822+00:00",
+          "dataset": {
+            "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
+            "bytes": 8510643,
+            "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+          },
+          "git_sha": null,
+          "environment": {
+            "python": "3.13.5",
+            "platform": "linux",
+            "executable": "/opt/pyvenv/bin/python"
+          },
+          "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+        },
+        "tracking_run_id": null,
+        "notes": "Final Kaggle run (combined kernel, --run-test), shared 1 GPU slot"
+      }
+    ],
+    "bilstm": [
+      {
+        "model": "bilstm",
+        "version": "20260824T132053-f4af27b7",
+        "created_at": "2026-08-24T13:20:53.147126+00:00",
+        "artifact_dir": "experiments/bilstm",
+        "metrics": {
+          "val_f1_combined": 0.658801,
+          "test_f1_combined": 0.646604,
+          "test_f1_sentiment": 0.771294,
+          "test_f1_aspect_4class_mean": 0.521915
+        },
+        "lineage": {
+          "created_at": "2026-08-23T13:16:05.584822+00:00",
+          "dataset": {
+            "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
+            "bytes": 8510643,
+            "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+          },
+          "git_sha": null,
+          "environment": {
+            "python": "3.13.5",
+            "platform": "linux",
+            "executable": "/opt/pyvenv/bin/python"
+          },
+          "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+        },
+        "tracking_run_id": null,
+        "notes": "Final Kaggle run (combined kernel, --run-test), shared 1 GPU slot"
+      }
+    ],
+    "textcnn": [
+      {
+        "model": "textcnn",
+        "version": "20260824T132053-f5844717",
+        "created_at": "2026-08-24T13:20:53.887125+00:00",
+        "artifact_dir": "experiments/textcnn",
+        "metrics": {
+          "val_f1_combined": 0.591487,
+          "test_f1_combined": 0.599628,
+          "test_f1_sentiment": 0.767936,
+          "test_f1_aspect_4class_mean": 0.431321
+        },
+        "lineage": {
+          "created_at": "2026-08-23T13:16:05.584822+00:00",
+          "dataset": {
+            "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
+            "bytes": 8510643,
+            "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+          },
+          "git_sha": null,
+          "environment": {
+            "python": "3.13.5",
+            "platform": "linux",
+            "executable": "/opt/pyvenv/bin/python"
+          },
+          "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+        },
+        "tracking_run_id": null,
+        "notes": "Final Kaggle run (combined kernel, --run-test), shared 1 GPU slot"
+      }
+    ],
+    "phobert": [
+      {
+        "model": "phobert",
+        "version": "20260824T132054-6297b23f",
+        "created_at": "2026-08-24T13:20:54.755550+00:00",
+        "artifact_dir": "experiments/phobert",
+        "metrics": {
+          "val_f1_combined": 0.696758,
+          "test_f1_combined": 0.696891,
+          "test_f1_sentiment": 0.817344,
+          "test_f1_aspect_4class_mean": 0.576438
+        },
+        "lineage": {
+          "created_at": "2026-08-23T13:16:05.584822+00:00",
+          "dataset": {
+            "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
+            "bytes": 8510643,
+            "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+          },
+          "git_sha": null,
+          "environment": {
+            "python": "3.13.5",
+            "platform": "linux",
+            "executable": "/opt/pyvenv/bin/python"
+          },
+          "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+        },
+        "tracking_run_id": null,
+        "notes": "Final Kaggle run (combined kernel, --run-test), shared 1 GPU slot",
+        "promotions": [
+          {
+            "alias": "champion",
+            "at": "2026-08-24T13:24:09.827978+00:00",
+            "gate": {
+              "status": "PASS",
+              "passed": true,
+              "checks": [
+                {
+                  "name": "require_metric:val_f1_combined",
+                  "pass": true,
+                  "actual": 0.696758,
+                  "expected": "present"
+                },
+                {
+                  "name": "require_metric:test_f1_combined",
+                  "pass": true,
+                  "actual": 0.696891,
+                  "expected": "present"
+                },
+                {
+                  "name": "require_test",
+                  "pass": true,
+                  "actual": 0.696891,
+                  "expected": "present"
+                },
+                {
+                  "name": "max_generalization_gap",
+                  "pass": true,
+                  "actual": 0.00013300000000004975,
+                  "expected": "<=0.1"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "model": "phobert",
+        "version": "20260825T015658-f3ac7a7e",
+        "created_at": "2026-08-25T01:56:58.522545+00:00",
+        "artifact_dir": "experiments/phobert",
+        "metrics": {
+          "val_f1_combined": 0.774175,
+          "test_f1_combined": 0.774025,
+          "test_f1_sentiment": 0.820227,
+          "test_f1_aspect_4class_mean": 0.727824
+        },
+        "lineage": {
+          "created_at": "2026-08-23T13:16:05.584822+00:00",
+          "dataset": {
+            "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
+            "bytes": 8510643,
+            "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+          },
+          "git_sha": null,
+          "environment": {
+            "python": "3.13.5",
+            "platform": "linux",
+            "executable": "/opt/pyvenv/bin/python"
+          },
+          "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+        },
+        "tracking_run_id": null,
+        "notes": "Final Kaggle run (combined kernel v8, sentiment_weight_max_ratio=3.0 fix, --run-test)",
+        "release_dir": "D:/vietcv/SentenAI-Unified/artifacts/releases/phobert-20260825T015658-f3ac7a7e",
+        "promotions": [
+          {
+            "alias": "champion",
+            "at": "2026-08-25T01:57:12.358522+00:00",
+            "gate": {
+              "status": "PASS",
+              "passed": true,
+              "checks": [
+                {
+                  "name": "require_metric:val_f1_combined",
+                  "pass": true,
+                  "actual": 0.774175,
+                  "expected": "present"
+                },
+                {
+                  "name": "require_metric:test_f1_combined",
+                  "pass": true,
+                  "actual": 0.774025,
+                  "expected": "present"
+                },
+                {
+                  "name": "require_test",
+                  "pass": true,
+                  "actual": 0.774025,
+                  "expected": "present"
+                },
+                {
+                  "name": "max_generalization_gap",
+                  "pass": true,
+                  "actual": 0.00014999999999998348,
+                  "expected": "<=0.1"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "mdeberta": [
+      {
+        "model": "mdeberta",
+        "version": "20260824T163433-329343b8",
+        "created_at": "2026-08-24T16:34:33.050688+00:00",
+        "artifact_dir": "experiments/mdeberta",
+        "metrics": {
+          "val_f1_combined": 0.673336,
+          "test_f1_combined": 0.676445,
+          "test_f1_sentiment": 0.796584,
+          "test_f1_aspect_4class_mean": 0.556306
+        },
+        "lineage": {
+          "created_at": "2026-08-23T13:16:05.584822+00:00",
+          "dataset": {
+            "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
+            "bytes": 8510643,
+            "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+          },
+          "git_sha": null,
+          "environment": {
+            "python": "3.13.5",
+            "platform": "linux",
+            "executable": "/opt/pyvenv/bin/python"
+          },
+          "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+        },
+        "tracking_run_id": null,
+        "notes": "Final Kaggle run (combined kernel v5, --run-test)"
+      },
+      {
+        "model": "mdeberta",
+        "version": "20260825T015659-9086be17",
+        "created_at": "2026-08-25T01:56:59.228641+00:00",
+        "artifact_dir": "experiments/mdeberta",
+        "metrics": {
+          "val_f1_combined": 0.725036,
+          "test_f1_combined": 0.728385,
+          "test_f1_sentiment": 0.789304,
+          "test_f1_aspect_4class_mean": 0.667465
+        },
+        "lineage": {
+          "created_at": "2026-08-23T13:16:05.584822+00:00",
+          "dataset": {
+            "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
+            "bytes": 8510643,
+            "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+          },
+          "git_sha": null,
+          "environment": {
+            "python": "3.13.5",
+            "platform": "linux",
+            "executable": "/opt/pyvenv/bin/python"
+          },
+          "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+        },
+        "tracking_run_id": null,
+        "notes": "Final Kaggle run (combined kernel v8, sentiment_weight_max_ratio=3.0 fix, --run-test)"
+      }
+    ],
+    "vit5": [
+      {
+        "model": "vit5",
+        "version": "20260824T163434-d2c43bcf",
+        "created_at": "2026-08-24T16:34:34.468830+00:00",
+        "artifact_dir": "experiments/vit5",
+        "metrics": {
+          "val_f1_combined": 0.737535,
+          "test_f1_combined": 0.729385,
+          "test_f1_sentiment": 0.756657,
+          "test_f1_aspect_4class_mean": 0.702113
+        },
+        "lineage": {
+          "created_at": "2026-08-23T13:16:05.584822+00:00",
+          "dataset": {
+            "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
+            "bytes": 8510643,
+            "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+          },
+          "git_sha": null,
+          "environment": {
+            "python": "3.13.5",
+            "platform": "linux",
+            "executable": "/opt/pyvenv/bin/python"
+          },
+          "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+        },
+        "tracking_run_id": null,
+        "notes": "Final Kaggle run (combined kernel v5, --run-test)"
+      }
+    ],
+    "xlmr": [
+      {
+        "model": "xlmr",
+        "version": "20260825T020748-95d9ed22",
+        "created_at": "2026-08-25T02:07:48.408270+00:00",
+        "artifact_dir": "experiments/xlmr",
+        "metrics": {
+          "val_f1_combined": 0.772231,
+          "test_f1_combined": 0.782327,
+          "test_f1_sentiment": 0.819378,
+          "test_f1_aspect_4class_mean": 0.745275
+        },
+        "lineage": {
+          "created_at": "2026-08-23T13:16:05.584822+00:00",
+          "dataset": {
+            "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
+            "bytes": 8510643,
+            "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+          },
+          "git_sha": null,
+          "environment": {
+            "python": "3.13.5",
+            "platform": "linux",
+            "executable": "/opt/pyvenv/bin/python"
+          },
+          "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+        },
+        "tracking_run_id": null,
+        "notes": "Final Kaggle run (combined kernel v8, sentiment_weight_max_ratio=3.0 fix, --run-test)"
+      }
+    ],
+    "ensemble_phobert_xlmr": [
+      {
+        "model": "ensemble_phobert_xlmr",
+        "version": "20260825T031005-62ec7ff0",
+        "created_at": "2026-08-25T03:10:05.536431+00:00",
+        "artifact_dir": "experiments/ensemble_phobert_xlmr",
+        "metrics": {
+          "val_f1_combined": 0.786318,
+          "test_f1_combined": 0.791145,
+          "test_f1_sentiment": 0.826258,
+          "test_f1_aspect_4class_mean": 0.756033
+        },
+        "lineage": {
+          "created_at": "2026-08-23T13:16:05.584822+00:00",
+          "dataset": {
+            "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
+            "bytes": 8510643,
+            "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+          },
+          "git_sha": null,
+          "environment": {
+            "python": "3.13.5",
+            "platform": "linux",
+            "executable": "/opt/pyvenv/bin/python"
+          },
+          "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+        },
+        "tracking_run_id": null,
+        "notes": "Equal-weight probability ensemble of phobert+xlmr (both with sentiment_weight_max_ratio=3.0 fix); thresholds recalibrated on val for the ensembled probabilities"
+      }
+    ]
+  },
+  "aliases": {
+    "candidate": {
+      "model": "ensemble_phobert_xlmr",
+      "version": "20260825T031005-62ec7ff0",
+      "updated_at": "2026-08-25T03:10:05.536431+00:00"
+    },
+    "champion": {
+      "model": "phobert",
+      "version": "20260825T015658-f3ac7a7e",
+      "updated_at": "2026-08-25T01:57:12.358522+00:00"
+    }
+  }
+}
