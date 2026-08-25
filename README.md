@@ -132,8 +132,8 @@ Bộ dữ liệu gốc nằm tại [`data/raw/tiki-book-review_merged_fixed_v3.j
 
 ### 1. Cài Đặt Môi Trường
 ```bash
-git clone https://github.com/vietcv/SentenAI-Unified.git
-cd SentenAI-Unified
+git clone https://github.com/nvtanphat/tiki-book-review-absa.git
+cd tiki-book-review-absa
 
 # Cài đặt với uv (Khuyến nghị)
 uv sync --group ml --group mlops
