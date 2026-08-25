@@ -191,7 +191,11 @@ output/
 temp/
 tmp/
 /tmp/
-artifacts/
+artifacts/*
+!artifacts/.gitkeep
+!artifacts/final/
+!artifacts/registry/
+!artifacts/reports/
 notebooks/artifacts/
 notebooks/assets/
 git_status.txt
