@@ -213,7 +213,7 @@ Dự án được phân phối theo giấy phép **MIT License** - xem chi tiế
 
 ```bibtex
 @software{sentenai_2026,
-  author = {Nguyen, Tan Phat and Viet CV and Contributors},
+  author = {Nguyen, Tan Phat and Contributors},
   title = {SentenAI: Industrial Vietnamese Aspect-Based Sentiment Analysis and Fair Benchmark Orchestration},
   year = {2026},
   publisher = {GitHub},
