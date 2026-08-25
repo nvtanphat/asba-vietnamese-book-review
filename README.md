@@ -114,25 +114,25 @@ Bộ dữ liệu gốc nằm tại [`data/raw/tiki-book-review_merged_fixed_v3.j
 
 > Kết quả được tổng hợp trực tiếp và đồng nhất từ pipeline huấn luyện & đánh giá niêm phong trên tập Test (`seed=42`, mã băm tập dữ liệu `c32f956aee64...`).
 
-### 1. Bảng Tổng Quan (Overall & Metrics Summary)
+### 1. Bảng Tổng Quan (Overall Metrics)
 
-| Mô Hình | Họ Kiến Trúc | Val $\text{F1}_{\text{comb}}$ | Test $\text{F1}_{\text{comb}}$ | Test $\text{F1}_{\text{overall}}$ | Test $\text{F1}_{\text{presence}}$ | Test $\text{F1}_{\text{present}}$ | Test 4-Class Mean | Exact Match | Label Acc | Số Params | Trạng Thái |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **PhoBERT + XLM-R** | Probability Ensemble | **0.7863** | **0.7911** | **0.8263** | **0.9475** | **0.7776** | **0.7560** | **0.5924** | **0.9169** | 413M | 👑 **State-of-the-Art** |
-| **XLM-RoBERTa-base** | Hierarchical Transformer | 0.7722 | 0.7823 | 0.8194 | 0.9455 | 0.7650 | 0.7453 | 0.5818 | 0.9122 | 278M | 🥈 Candidate |
-| **PhoBERT-base** | Hierarchical Transformer | 0.7742 | 0.7740 | 0.8202 | 0.9418 | 0.7507 | 0.7278 | 0.5648 | 0.9099 | 135M | 🏆 **Champion** |
-| **ViT5 + LoRA** | Sinh chuỗi Seq2Seq | 0.7375 | 0.7294 | 0.7567 | 0.9205 | 0.7437 | 0.7021 | 0.5161 | 0.8944 | 220M | ✅ Hoàn thành |
-| **mDeBERTa-v3-base** | Hierarchical Transformer | 0.7250 | 0.7284 | 0.7893 | 0.9110 | 0.7011 | 0.6675 | 0.4593 | 0.8759 | 86M | ✅ Hoàn thành |
-| **Linear SVM** | Baseline cổ điển (TF-IDF) | 0.7283 | 0.7090 | 0.7592 | 0.9075 | 0.7004 | 0.6588 | 0.4483 | 0.8781 | — | ✅ Hoàn thành |
-| **BiLSTM** | Mạng nơ-ron tuần tự | 0.6588 | 0.6466 | 0.7713 | 0.6782 | 0.6728 | 0.5219 | 0.0753 | 0.6603 | 2.7M | ✅ Hoàn thành |
-| **TextCNN** | Mạng nơ-ron tích chập | 0.5915 | 0.5996 | 0.7679 | 0.5776 | 0.6059 | 0.4313 | 0.0020 | 0.5534 | 1.3M | ✅ Hoàn thành |
-| **Logistic Reg.** | Baseline cổ điển (TF-IDF) | 0.5072 | 0.4949 | 0.4180 | 0.8765 | 0.5776 | 0.5718 | 0.2018 | 0.8021 | — | ✅ Hoàn thành |
+| Mô Hình | Họ Kiến Trúc | Val F1_comb | Test F1_comb | Test F1_overall | Test F1_aspect | Exact Match | Params | Trạng Thái |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **PhoBERT + XLM-R** | Probability Ensemble | **0.7863** | **0.7911** | **0.8263** | **0.7560** | **0.5924** | 413M | 👑 **State-of-the-Art** |
+| **XLM-RoBERTa-base** | Hierarchical Transformer | 0.7722 | 0.7823 | 0.8194 | 0.7453 | 0.5818 | 278M | 🥈 Candidate |
+| **PhoBERT-base** | Hierarchical Transformer | 0.7742 | 0.7740 | 0.8202 | 0.7278 | 0.5648 | 135M | 🏆 **Champion** |
+| **ViT5 + LoRA** | Sinh chuỗi Seq2Seq | 0.7375 | 0.7294 | 0.7567 | 0.7021 | 0.5161 | 220M | ✅ Hoàn thành |
+| **mDeBERTa-v3-base** | Hierarchical Transformer | 0.7250 | 0.7284 | 0.7893 | 0.6675 | 0.4593 | 86M | ✅ Hoàn thành |
+| **Linear SVM** | Baseline cổ điển (TF-IDF) | 0.7283 | 0.7090 | 0.7592 | 0.6588 | 0.4483 | — | ✅ Hoàn thành |
+| **BiLSTM** | Mạng nơ-ron tuần tự | 0.6588 | 0.6466 | 0.7713 | 0.5219 | 0.0753 | 2.7M | ✅ Hoàn thành |
+| **TextCNN** | Mạng nơ-ron tích chập | 0.5915 | 0.5996 | 0.7679 | 0.4313 | 0.0020 | 1.3M | ✅ Hoàn thành |
+| **Logistic Reg.** | Baseline cổ điển (TF-IDF) | 0.5072 | 0.4949 | 0.4180 | 0.5718 | 0.2018 | — | ✅ Hoàn thành |
 
 <br />
 
-### 2. Bảng Chi Tiết $\text{F1}$ Theo 6 Khía Cạnh Cụ Thể (Per-Aspect F1 Breakdown)
+### 2. Bảng Chi Tiết F1 Theo 6 Khía Cạnh Cụ Thể (Per-Aspect F1 Breakdown)
 
-| Mô Hình | Nội dung (`content`) | Hình thức (`physical`) | Giá cả (`price`) | Đóng gói (`packaging`) | Giao hàng (`delivery`) | Dịch vụ (`service`) | $\text{F1}_{\text{aspect\_mean}}$ |
+| Mô Hình | Nội dung (`content`) | Hình thức (`physical`) | Giá cả (`price`) | Đóng gói (`packaging`) | Giao hàng (`delivery`) | Dịch vụ (`service`) | Aspect F1 Mean |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **PhoBERT + XLM-R** | **0.7753** | **0.8017** | 0.6618 | 0.7435 | 0.7274 | **0.6159** | **0.7560** |
 | **XLM-RoBERTa-base** | 0.7460 | 0.7900 | 0.6537 | **0.7554** | 0.7246 | 0.6042 | 0.7453 |
