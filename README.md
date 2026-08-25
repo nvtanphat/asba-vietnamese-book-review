@@ -96,7 +96,7 @@
 
 ## 📊 Dữ Liệu Tự Xây Dựng & Quy Chuẩn Gán Nhãn
 
- Bộ dữ liệu gốc nằm tại [`data/raw/tiki-book-review_merged_fixed_v3.json`](data/raw/tiki-book-review_merged_fixed_v3.json) được **tự thu thập và gán nhãn chuẩn hóa** cho 7 mục tiêu song song:
+Bộ dữ liệu gốc nằm tại [`data/raw/tiki-book-review_merged_fixed_v3.json`](data/raw/tiki-book-review_merged_fixed_v3.json) được **tự thu thập và gán nhãn thủ công chuẩn hóa** cho 7 mục tiêu song song. Chi tiết xem tại 📑 [**Hướng Dẫn Dán Nhãn Khía Cạnh ABSA**](docs/absa_annotation_guide.md).
 
 | Mục Tiêu | Mã Khía Cạnh | Lớp 0 | Lớp 1 | Lớp 2 | Lớp 3 |
 | :--- | :--- | :---: | :---: | :---: | :---: |
