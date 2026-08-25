@@ -6,10 +6,27 @@ on:
       - "packages/absa_core/**"
       - "infra/**"
       - "artifacts/final/**"
+      - "artifacts/ensemble/**"
+      - "scripts/ci/**"
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # artifacts/final/ and artifacts/ensemble/ track their config/tokenizer/metadata JSON
+      # in git, but *.pt/*.onnx weights are gitignored (hundreds of MB — see the model
+      # registry / docs/kaggle_cli.md for how a real promotion produces those). Build tiny,
+      # randomly-initialized, same-shaped weights here so `docker build`'s COPY steps have
+      # something real to copy, without needing Kaggle credentials or committing model
+      # weights to the repo. See scripts/ci/make_fixture_artifacts.py's docstring.
+      - name: Install deps for fixture generation
+        run: |
+          pip install -q torch --extra-index-url https://download.pytorch.org/whl/cpu
+          pip install -q -e packages/absa_core
+      - name: Build fixture model weights
+        run: python scripts/ci/make_fixture_artifacts.py
       - run: docker build -f infra/api.Dockerfile . -t sentenai-api:test
       - run: docker build -f infra/web.Dockerfile . -t sentenai-web:test
