@@ -154,10 +154,10 @@ export default function Page() {
     const NEG_C = "oklch(48% 0.12 35)", NEG_BG = "oklch(94% 0.03 35)";
 
     if (!prediction) {
-      return { label: "Tích cực", color: POS_C, bg: POS_BG, confidence: 78, posPct: 78, neuPct: 14, negPct: 8 };
+      return { label: "Chưa phân tích", color: NEU_C, bg: NEU_BG, confidence: 0, posPct: 0, neuPct: 0, negPct: 0 };
     }
 
-    const probs = prediction.overall_probs || [0.08, 0.14, 0.78];
+    const probs = prediction.overall_probs || [0, 0, 0];
     const negPct = Math.round((probs[0] || 0) * 100);
     const neuPct = Math.round((probs[1] || 0) * 100);
     const posPct = Math.max(0, 100 - negPct - neuPct);
@@ -180,12 +180,12 @@ export default function Page() {
   // 6 Aspects calculation
   const rawAspects = useMemo(() => {
     const defaultList = [
-      { key: "as_content", name: "Nội dung sách", icon: "book", mentioned: true, confidence: 96, sentiment: "positive" as Sentiment },
-      { key: "as_physical", name: "Hình thức vật lý", icon: "layers", mentioned: false, confidence: 18, sentiment: null },
-      { key: "as_price", name: "Giá cả", icon: "dollar", mentioned: true, confidence: 84, sentiment: "negative" as Sentiment },
-      { key: "as_packaging", name: "Đóng gói", icon: "package", mentioned: true, confidence: 88, sentiment: "positive" as Sentiment },
-      { key: "as_delivery", name: "Giao hàng", icon: "truck", mentioned: true, confidence: 90, sentiment: "negative" as Sentiment },
-      { key: "as_service", name: "Dịch vụ / Tư vấn", icon: "headset", mentioned: false, confidence: 9, sentiment: null },
+      { key: "as_content", name: "Nội dung sách", icon: "book", mentioned: false, confidence: 0, sentiment: null },
+      { key: "as_physical", name: "Hình thức vật lý", icon: "layers", mentioned: false, confidence: 0, sentiment: null },
+      { key: "as_price", name: "Giá cả", icon: "dollar", mentioned: false, confidence: 0, sentiment: null },
+      { key: "as_packaging", name: "Đóng gói", icon: "package", mentioned: false, confidence: 0, sentiment: null },
+      { key: "as_delivery", name: "Giao hàng", icon: "truck", mentioned: false, confidence: 0, sentiment: null },
+      { key: "as_service", name: "Dịch vụ / Tư vấn", icon: "headset", mentioned: false, confidence: 0, sentiment: null },
     ];
 
     if (!prediction) return defaultList;
@@ -388,7 +388,7 @@ export default function Page() {
   const rawJsonText = useMemo(() => {
     return JSON.stringify(
       {
-        overall: { sentiment: prediction?.overall || "positive", confidence: +(overall.confidence / 100).toFixed(2) },
+        overall: { sentiment: prediction?.overall ?? null, confidence: +(overall.confidence / 100).toFixed(2) },
         aspects: aspects.map((a) => ({
           aspect: a.name,
           mentioned: a.mentioned,
