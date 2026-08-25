@@ -267,7 +267,8 @@ data/splits/*
 # MLOps local state / backends
 mlruns/
 .dvc/cache/
-artifacts/registry/
+artifacts/registry/*
+!artifacts/registry/registry.json
 artifacts/releases/
 artifacts/monitoring/
 !mlops/state/

@@ -309,29 +309,27 @@ export default function Page() {
       };
     }, [entries]);
 
-  // Long-term trend bars
+  // Long-term trend bars — real server-persisted data (api.historySummary above), with an
+  // explicit "no data yet" empty state rather than a fabricated chart when history is empty.
   const weeklyTrend = useMemo(() => {
-    if (weeklyRange === "month") {
-      return [
-        { label: "Th3", heightPos: 55, heightNeu: 18, heightNeg: 25, posPct: 56, neuPct: 19, negPct: 26 },
-        { label: "Th4", heightPos: 62, heightNeu: 17, heightNeg: 28, posPct: 58, neuPct: 16, negPct: 26 },
-        { label: "Th5", heightPos: 58, heightNeu: 20, heightNeg: 32, posPct: 53, neuPct: 19, negPct: 29 },
-        { label: "Th6", heightPos: 68, heightNeu: 19, heightNeg: 23, posPct: 62, neuPct: 17, negPct: 21 },
-        { label: "Th7", heightPos: 65, heightNeu: 23, heightNeg: 20, posPct: 60, neuPct: 21, negPct: 19 },
-        { label: "Th8", heightPos: 74, heightNeu: 17, heightNeg: 16, posPct: 69, neuPct: 16, negPct: 15 },
-      ];
-    }
-    return [
-      { label: "T1", heightPos: 60, heightNeu: 21, heightNeg: 25, posPct: 56, neuPct: 20, negPct: 24 },
-      { label: "T2", heightPos: 53, heightNeu: 19, heightNeg: 30, posPct: 52, neuPct: 19, negPct: 29 },
-      { label: "T3", heightPos: 64, heightNeu: 17, heightNeg: 21, posPct: 62, neuPct: 17, negPct: 21 },
-      { label: "T4", heightPos: 46, heightNeu: 24, heightNeg: 40, posPct: 42, neuPct: 21, negPct: 37 },
-      { label: "T5", heightPos: 55, heightNeu: 19, heightNeg: 36, posPct: 50, neuPct: 17, negPct: 33 },
-      { label: "T6", heightPos: 66, heightNeu: 15, heightNeg: 28, posPct: 61, neuPct: 14, negPct: 25 },
-      { label: "T7", heightPos: 58, heightNeu: 21, heightNeg: 19, posPct: 59, neuPct: 22, negPct: 19 },
-      { label: "T8", heightPos: 72, heightNeu: 17, heightNeg: 15, posPct: 69, neuPct: 16, negPct: 14 },
-    ];
-  }, [weeklyRange]);
+    if (!buckets || buckets.length === 0) return [];
+    const maxTotal = Math.max(...buckets.map((b) => b.total), 1);
+    return buckets.map((b) => {
+      const posPct = Math.round((b.positive / b.total) * 100);
+      const neuPct = Math.round((b.neutral / b.total) * 100);
+      const negPct = Math.max(0, 100 - posPct - neuPct);
+      const label = weeklyRange === "week" ? b.period.replace(/^\d{4}-/, "") : b.period;
+      return {
+        label,
+        heightPos: Math.round((b.positive / maxTotal) * 110),
+        heightNeu: Math.round((b.neutral / maxTotal) * 110),
+        heightNeg: Math.round((b.negative / maxTotal) * 110),
+        posPct,
+        neuPct,
+        negPct,
+      };
+    });
+  }, [buckets, weeklyRange]);
 
   // Session table log
   const sessionLog = useMemo(() => {
@@ -809,16 +807,20 @@ export default function Page() {
                 </div>
               </div>
               <div style={{ display: "flex", alignItems: "flex-end", gap: "10px", height: "85px", paddingLeft: "2px" }}>
-                {weeklyTrend.map((w, idx) => (
-                  <div key={idx} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "3px", flex: 1, maxWidth: "30px" }}>
-                    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                      <div style={{ height: `${w.heightNeg}px`, background: "oklch(48% 0.12 35)" }}></div>
-                      <div style={{ height: `${w.heightNeu}px`, background: "var(--color-neutral-500)" }}></div>
-                      <div style={{ height: `${w.heightPos}px`, background: "var(--color-accent-700)" }}></div>
+                {weeklyTrend.length === 0 ? (
+                  <span style={{ fontSize: "11px", opacity: 0.55, alignSelf: "center" }}>Chưa có dữ liệu — hãy phân tích ít nhất một review để bắt đầu tích lũy xu hướng.</span>
+                ) : (
+                  weeklyTrend.map((w, idx) => (
+                    <div key={idx} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "3px", flex: 1, maxWidth: "30px" }}>
+                      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+                        <div style={{ height: `${w.heightNeg}px`, background: "oklch(48% 0.12 35)" }}></div>
+                        <div style={{ height: `${w.heightNeu}px`, background: "var(--color-neutral-500)" }}></div>
+                        <div style={{ height: `${w.heightPos}px`, background: "var(--color-accent-700)" }}></div>
+                      </div>
+                      <span style={{ fontSize: "9px", opacity: 0.6 }}>{w.label}</span>
                     </div>
-                    <span style={{ fontSize: "9px", opacity: 0.6 }}>{w.label}</span>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>

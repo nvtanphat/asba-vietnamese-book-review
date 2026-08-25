@@ -102,27 +102,9 @@ export default function StatsPage() {
       });
     }
 
-    // Default mock data matching the prototype if API has empty history
-    if (groupBy === "month") {
-      return [
-        { label: "Th3", hPos: 69, hNeu: 23, hNeg: 32, posPct: 56, neuPct: 19, negPct: 26 },
-        { label: "Th4", hPos: 78, hNeu: 22, hNeg: 35, posPct: 58, neuPct: 16, negPct: 26 },
-        { label: "Th5", hPos: 74, hNeu: 26, hNeg: 40, posPct: 53, neuPct: 19, negPct: 29 },
-        { label: "Th6", hPos: 86, hNeu: 24, hNeg: 29, posPct: 62, neuPct: 17, negPct: 21 },
-        { label: "Th7", hPos: 82, hNeu: 29, hNeg: 25, posPct: 60, neuPct: 21, negPct: 19 },
-        { label: "Th8", hPos: 92, hNeu: 22, hNeg: 20, posPct: 69, neuPct: 16, negPct: 15 },
-      ];
-    }
-    return [
-      { label: "T1", hPos: 75, hNeu: 27, hNeg: 32, posPct: 56, neuPct: 20, negPct: 24 },
-      { label: "T2", hPos: 67, hNeu: 24, hNeg: 38, posPct: 52, neuPct: 19, negPct: 29 },
-      { label: "T3", hPos: 81, hNeu: 22, hNeg: 27, posPct: 62, neuPct: 17, negPct: 21 },
-      { label: "T4", hPos: 59, hNeu: 30, hNeg: 51, posPct: 42, neuPct: 21, negPct: 37 },
-      { label: "T5", hPos: 70, hNeu: 24, hNeg: 46, posPct: 50, neuPct: 17, negPct: 33 },
-      { label: "T6", hPos: 83, hNeu: 19, hNeg: 35, posPct: 61, neuPct: 14, negPct: 25 },
-      { label: "T7", hPos: 73, hNeu: 27, hNeg: 24, posPct: 59, neuPct: 22, negPct: 19 },
-      { label: "T8", hPos: 91, hNeu: 22, hNeg: 19, posPct: 69, neuPct: 16, negPct: 14 },
-    ];
+    // No fabricated chart when the server has no history yet — the caller renders an
+    // explicit empty state for an empty array instead.
+    return [];
   }, [buckets, groupBy]);
 
   // ── Session Metrics Computation ────────────────────────────────────────
@@ -421,6 +403,9 @@ export default function StatsPage() {
 
         {/* Stacked Bars Chart */}
         <div className="flex items-end gap-4 h-44 mt-2 px-1">
+          {trendBars.length === 0 && (
+            <span className="text-sm opacity-55 self-center">Chưa có dữ liệu — hãy phân tích ít nhất một review để bắt đầu tích lũy xu hướng.</span>
+          )}
           {trendBars.map((w, idx) => (
             <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
               <div className="flex flex-col w-full max-w-[36px]">
