@@ -1,6 +1,6 @@
-# ⚡ SentenAI: Hệ Thống ABSA Tiếng Việt Cho Thương Mại Điện Tử
-
 <div align="center">
+
+# ⚡ SentenAI: Hệ Thống ABSA Tiếng Việt Cho Thương Mại Điện Tử
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
