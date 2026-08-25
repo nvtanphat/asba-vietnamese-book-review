@@ -211,6 +211,8 @@ next-env.d.ts
 # Model weights & local DB (downloaded from HuggingFace at runtime)
 *.safetensors
 *.pt
+*.onnx
+*.npz
 *.joblib
 *.db
 *.sqlite3

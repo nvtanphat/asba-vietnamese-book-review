@@ -42,6 +42,7 @@ services:
       ENVIRONMENT: ${ENVIRONMENT:-production}
       ABSA_ARTIFACT_DIR: /app/artifacts/final
       ABSA_PREFER_UNIFIED_ARTIFACT: "1"
+      ABSA_ENSEMBLE_DIR: /app/artifacts/ensemble
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in infra/.env (openssl rand -hex 32) before running this stack}
     ports:
       - "8000:8000"

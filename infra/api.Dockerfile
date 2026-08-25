@@ -23,6 +23,7 @@ RUN uv venv /opt/venv
 COPY packages/absa_core ./packages/absa_core
 COPY apps/api ./apps/api
 COPY artifacts/final ./artifacts/final
+COPY artifacts/ensemble ./artifacts/ensemble
 # This service never gets GPU passthrough (see docker-compose.yml), but plain PyPI
 # `torch` bundles the full CUDA runtime (~2GB of nvidia-*/triton wheels) regardless —
 # pre-install the CPU-only build so the real install below has nothing left to fetch.
@@ -49,6 +50,7 @@ RUN groupadd --system app && \
 COPY --from=builder /opt/venv /opt/venv
 COPY --from=builder /build/apps/api /app/apps/api
 COPY --from=builder /build/artifacts/final /app/artifacts/final
+COPY --from=builder /build/artifacts/ensemble /app/artifacts/ensemble
 
 WORKDIR /app/apps/api
 # SQLite's default DATABASE_URL lives under ./data — must exist and be writable by
