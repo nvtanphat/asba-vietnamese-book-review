@@ -35,7 +35,12 @@ def dataset_snapshot(
             }
     if include_environment:
         payload["environment"] = environment_info()
-    payload["fingerprint"] = stable_hash({k: v for k, v in payload.items() if k not in {"created_at", "environment"}})
+    # git_sha changes on every commit regardless of whether the dataset itself changed, so
+    # it must stay out of the fingerprint — otherwise `snapshot-data --check` (see
+    # mlops/cli.py's cmd_snapshot) would fail on every single commit after the snapshot was
+    # recorded even when the data is byte-identical. It's still recorded in the payload for
+    # provenance, just not hashed into the identity check.
+    payload["fingerprint"] = stable_hash({k: v for k, v in payload.items() if k not in {"created_at", "environment", "git_sha"}})
     return payload
 
 

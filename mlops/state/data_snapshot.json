@@ -1,15 +1,19 @@
 {
-  "created_at": "2026-08-23T13:16:05.584822+00:00",
+  "created_at": "2026-08-25T06:15:25.368429+00:00",
   "dataset": {
     "path": "data/raw/tiki-book-review_merged_fixed_v3.json",
-    "bytes": 8510643,
-    "sha256": "d996d7acb87c0e526c5cfda5dd3c7d8fd7cde00748ed51701dcec9bd4e8570b7"
+    "bytes": 8685000,
+    "sha256": "86093be711dfd2f30591a2e25dc4679dba839ed4e10f558f63d5edc4ee2909a7"
   },
-  "git_sha": null,
+  "git_sha": "85887d9cb51f2eb40d672ced8de0c6e50862b238",
+  "split_manifest": {
+    "path": "data/splits/split_manifest.json",
+    "sha256": "fc33548994d0dddaec32817c9391b0c21720c153773182e4c0820e944e5143b5"
+  },
   "environment": {
-    "python": "3.13.5",
-    "platform": "linux",
-    "executable": "/opt/pyvenv/bin/python"
+    "python": "3.11.14",
+    "platform": "win32",
+    "executable": "D:\\vietcv\\SentenAI-Unified\\.venv\\Scripts\\python.exe"
   },
-  "fingerprint": "75b31bec7b46b038671f8a0a86bb54ca2d7a9bdc77018e171b217e6d23e21e7a"
+  "fingerprint": "e8b862567372337a35722e69e6dd40689d7dbcadfb952db90f31c39e28ef57e2"
 }
