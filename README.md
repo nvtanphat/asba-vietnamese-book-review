@@ -172,8 +172,6 @@ python packages/absa_core/scripts/export_onnx_unified.py
 
 ## 🌐 Triển Khai Production & Web Dashboard
 
-![SentenAI Web Dashboard Preview](assets/images/dashboard_preview.png)
-
 ```bash
 # Terminal 1: Khởi chạy Backend REST API (FastAPI tại http://localhost:8000/docs)
 make api
