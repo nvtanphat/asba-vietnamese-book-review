@@ -1,0 +1,9 @@
+# These files are hashed for reproducibility (see mlops/lineage.py's dataset_snapshot /
+# mlops snapshot-data --check) — any git-driven line-ending conversion (Windows'
+# core.autocrlf=true converts LF->CRLF on checkout) changes their bytes and therefore
+# their sha256 depending solely on which OS/config checked them out, breaking the
+# fingerprint check for reasons that have nothing to do with the data actually changing.
+# `-text` disables line-ending conversion unconditionally, so every checkout gets the
+# exact bytes stored in the git blob.
+data/raw/tiki-book-review_merged_fixed_v3.json -text
+data/splits/split_manifest.json -text
