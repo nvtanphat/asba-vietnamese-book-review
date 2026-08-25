@@ -65,39 +65,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [shop, setShop] = useState<AuthShop | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load user profile from token
+  // Load user profile from a real token; any failure (expired/invalid token) clears
+  // the session so the route guard sends the user back to a real login, never a fake one.
   const loadMe = useCallback(async (t: string) => {
-    if (t === "demo_jwt_token_admin") {
-      try {
-        const cached = localStorage.getItem("sentenai_demo_user");
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          setUser(parsed.user);
-          setShop(parsed.shop);
-          setToken(t);
-          return;
-        }
-      } catch {
-        // ignore parse error
-      }
-      const demoUser: AuthUser = {
-        id: 1,
-        email: "admin@demo.com",
-        name: "Ngọc Anh",
-        role: "admin",
-        shop_id: 1,
-      };
-      const demoShop: AuthShop = {
-        id: 1,
-        name: "Nhà sách Minh Long",
-        slug: "minh-long-bookstore",
-        plan: "pro",
-      };
-      setUser(demoUser);
-      setShop(demoShop);
-      setToken(t);
-      return;
-    }
     try {
       const me = await apiRequest<{ user: AuthUser; shop: AuthShop }>("/auth/me", {
         headers: { Authorization: `Bearer ${t}` },
@@ -113,105 +83,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // On mount, check for existing token, otherwise default to demo session so user is never blocked
+  // On mount, only restore a session if a real stored token still validates against the
+  // API. No token (or an invalid one) leaves user/shop null so AppShell's route guard
+  // redirects to /login — there is no "default to a demo session" bypass.
   useEffect(() => {
     const stored = localStorage.getItem(TOKEN_KEY);
     if (stored) {
       loadMe(stored).finally(() => setLoading(false));
     } else {
-      // Default to demo admin session
-      const demoUser: AuthUser = {
-        id: 1,
-        email: "admin@demo.com",
-        name: "Ngọc Anh",
-        role: "admin",
-        shop_id: 1,
-      };
-      const demoShop: AuthShop = {
-        id: 1,
-        name: "Nhà sách Minh Long",
-        slug: "minh-long-bookstore",
-        plan: "pro",
-      };
-      setUser(demoUser);
-      setShop(demoShop);
-      setToken("demo_jwt_token_admin");
       setLoading(false);
     }
   }, [loadMe]);
 
   const login = useCallback(
     async (email: string, password: string) => {
-      try {
-        const data = await apiRequest<{ access_token: string }>("/auth/login", {
-          method: "POST",
-          body: JSON.stringify({ email, password }),
-        });
-        localStorage.setItem(TOKEN_KEY, data.access_token);
-        await loadMe(data.access_token);
-      } catch (err) {
-        // If backend is offline or demo login:
-        const demoToken = "demo_jwt_token_admin";
-        const demoUser: AuthUser = {
-          id: 1,
-          email: email || "admin@demo.com",
-          name: "Ngọc Anh",
-          role: "admin",
-          shop_id: 1,
-        };
-        const demoShop: AuthShop = {
-          id: 1,
-          name: "Nhà sách Minh Long",
-          slug: "minh-long-bookstore",
-          plan: "pro",
-        };
-        localStorage.setItem(TOKEN_KEY, demoToken);
-        localStorage.setItem("sentenai_demo_user", JSON.stringify({ user: demoUser, shop: demoShop }));
-        setToken(demoToken);
-        setUser(demoUser);
-        setShop(demoShop);
-      }
+      const data = await apiRequest<{ access_token: string }>("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+      localStorage.setItem(TOKEN_KEY, data.access_token);
+      await loadMe(data.access_token);
     },
     [loadMe],
   );
 
   const register = useCallback(
     async (shopName: string, email: string, password: string, name: string) => {
-      try {
-        const data = await apiRequest<{ access_token: string }>("/auth/register", {
-          method: "POST",
-          body: JSON.stringify({ shop_name: shopName, email, password, name }),
-        });
-        localStorage.setItem(TOKEN_KEY, data.access_token);
-        await loadMe(data.access_token);
-      } catch {
-        const demoToken = "demo_jwt_token_admin";
-        const demoUser: AuthUser = {
-          id: Math.floor(Math.random() * 1000) + 10,
-          email,
-          name: name || "Quản lý Shop",
-          role: "admin",
-          shop_id: 1,
-        };
-        const demoShop: AuthShop = {
-          id: 1,
-          name: shopName || "Nhà sách Minh Long",
-          slug: "shop-demo",
-          plan: "pro",
-        };
-        localStorage.setItem(TOKEN_KEY, demoToken);
-        localStorage.setItem("sentenai_demo_user", JSON.stringify({ user: demoUser, shop: demoShop }));
-        setToken(demoToken);
-        setUser(demoUser);
-        setShop(demoShop);
-      }
+      const data = await apiRequest<{ access_token: string }>("/auth/register", {
+        method: "POST",
+        body: JSON.stringify({ shop_name: shopName, email, password, name }),
+      });
+      localStorage.setItem(TOKEN_KEY, data.access_token);
+      await loadMe(data.access_token);
     },
     [loadMe],
   );
 
   const logout = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem("sentenai_demo_user");
     setToken(null);
     setUser(null);
     setShop(null);

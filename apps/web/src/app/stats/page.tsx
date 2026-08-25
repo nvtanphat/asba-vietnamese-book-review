@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { clearHistory, loadHistory, type HistoryEntry } from "@/lib/session-history";
-import type { HistorySummaryBucket, Sentiment } from "@/lib/types";
+import type { HistorySummaryBucket } from "@/lib/types";
 
 const ASPECT_LABELS: Record<string, string> = {
   as_content: "Nội dung sách",
@@ -390,7 +390,9 @@ export default function StatsPage() {
         {/* Stacked Bars Chart */}
         <div className="flex items-end gap-4 h-44 mt-2 px-1">
           {trendBars.length === 0 && (
-            <span className="text-sm opacity-55 self-center">Chưa có dữ liệu — hãy phân tích ít nhất một review để bắt đầu tích lũy xu hướng.</span>
+            <span className="text-sm opacity-55 self-center">
+              {loadingBuckets ? "Đang tải..." : "Chưa có dữ liệu — hãy phân tích ít nhất một review để bắt đầu tích lũy xu hướng."}
+            </span>
           )}
           {trendBars.map((w, idx) => (
             <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import { appendHistory, loadHistory, clearHistory, type HistoryEntry } from "@/lib/session-history";
-import type { AbsaResult, HistorySummaryBucket, Sentiment, TikiSample } from "@/lib/types";
+import type { AbsaResult, HistorySummaryBucket, TikiSample } from "@/lib/types";
 
 const SAMPLES = [
   {
@@ -51,7 +51,6 @@ export default function Page() {
 
   // Long-term stats state
   const [weeklyRange, setWeeklyRange] = useState<"week" | "month">("week");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [buckets, setBuckets] = useState<HistorySummaryBucket[] | null>(null);
 
   // Session entries
@@ -94,8 +93,8 @@ export default function Page() {
         if (srcLabel) setSourceLabel(srcLabel);
         appendHistory(res);
         setEntries(loadHistory());
-      } catch (err: any) {
-        setError(err.message || "Lỗi kết nối tới mô hình AI");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Lỗi kết nối tới mô hình AI");
       } finally {
         setLoading(false);
       }
@@ -235,7 +234,7 @@ export default function Page() {
   const { quick, overview, donut, trendPoints, trendStartPct, trendEndPct, trendDeltaAbs, aspectRanking, sidebarRanking } =
     useMemo(() => {
       const total = entries.length;
-      let posCount = 0, neuCount = 0, negCount = 0, confSum = 0;
+      let posCount = 0, neuCount = 0, confSum = 0;
       const negAspectCounts: Record<string, number> = {
         "Nội dung sách": 0,
         "Hình thức vật lý": 0,
@@ -248,7 +247,6 @@ export default function Page() {
       entries.forEach((e) => {
         if (e.result.overall === "positive") posCount++;
         else if (e.result.overall === "neutral") neuCount++;
-        else if (e.result.overall === "negative") negCount++;
         const idx = e.result.overall === "negative" ? 0 : e.result.overall === "neutral" ? 1 : 2;
         confSum += (e.result.overall_probs?.[idx] ?? 0.85) * 100;
         e.result.aspects?.forEach((a) => {
