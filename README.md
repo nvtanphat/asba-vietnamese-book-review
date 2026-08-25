@@ -11,6 +11,10 @@
 **Hệ sinh thái Phân tích Cảm xúc theo Khía cạnh (Aspect-Based Sentiment Analysis) tiếng Việt**  
 *Tập dữ liệu tự thu thập & gán nhãn độc quyền • Fair Benchmark 8 Mô hình • Remote Kaggle GPU • Production API & Dashboard*
 
+<br />
+
+![SentenAI Web Dashboard](assets/images/dashboard_preview.png)
+
 </div>
 
 ---
@@ -112,12 +116,12 @@
 
 | Mô Hình | Họ Kiến Trúc | Val $\text{F1}_{\text{comb}}$ | Test $\text{F1}_{\text{comb}}$ | Test $\text{F1}_{\text{overall}}$ | Test $\text{F1}_{\text{presence}}$ | Test $\text{F1}_{\text{present}}$ | Số Lượng Params | Trạng Thái |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **PhoBERT-base** | Hierarchical Transformer | **0.6968** | **0.6969** | **0.8173** | **0.9393** | 0.5663 | 135M | 🏆 **Champion** |
-| **ViT5 + LoRA** | Sinh chuỗi Seq2Seq | 0.7375 | 0.7294 | 0.7567 | 0.9205 | **0.7437** | 220M | ✅ Hoàn thành |
+| **PhoBERT-base** | Hierarchical Transformer | **0.7742** | 0.7740 | **0.8202** | 0.9418 | 0.7507 | 135M | 🏆 **Champion** |
+| **XLM-RoBERTa-base** | Hierarchical Transformer | 0.7722 | **0.7823** | 0.8194 | **0.9455** | **0.7650** | 278M | 🥈 Candidate |
+| **ViT5 + LoRA** | Sinh chuỗi Seq2Seq | 0.7375 | 0.7294 | 0.7567 | 0.9205 | 0.7437 | 220M | ✅ Hoàn thành |
+| **mDeBERTa-v3-base** | Hierarchical Transformer | 0.7250 | 0.7284 | 0.7893 | 0.9110 | 0.7011 | 86M | ✅ Hoàn thành |
 | **Linear SVM** | Baseline cổ điển (TF-IDF) | 0.7283 | 0.7090 | 0.7592 | 0.9075 | 0.7004 | — | ✅ Hoàn thành |
-| **mDeBERTa-v3-base** | Hierarchical Transformer | 0.6733 | 0.6764 | 0.7966 | 0.8886 | 0.5819 | 86M | ✅ Hoàn thành |
 | **BiLSTM** | Mạng nơ-ron tuần tự | 0.6588 | 0.6466 | 0.7713 | 0.6782 | 0.6728 | 2.7M | ✅ Hoàn thành |
-| **XLM-RoBERTa-base** | Hierarchical Transformer | 0.6255 | — | — | — | — | 278M | ✅ Hoàn thành |
 | **TextCNN** | Mạng nơ-ron tích chập | 0.5915 | 0.5996 | 0.7679 | 0.5776 | 0.6059 | 1.3M | ✅ Hoàn thành |
 | **Logistic Reg.** | Baseline cổ điển (TF-IDF) | 0.5072 | 0.4949 | 0.4180 | 0.8765 | 0.5776 | — | ✅ Hoàn thành |
 
@@ -160,6 +164,8 @@ python -m tools.kaggle_cli collect --owner USERNAME --model phobert --register
 ---
 
 ## 🌐 Triển Khai Production & Web Dashboard
+
+![SentenAI Web Dashboard Preview](assets/images/dashboard_preview.png)
 
 ```bash
 # Terminal 1: Khởi chạy Backend REST API (FastAPI tại http://localhost:8000/docs)

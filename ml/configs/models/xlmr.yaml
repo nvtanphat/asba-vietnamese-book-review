@@ -23,6 +23,7 @@ focal_gamma_present: 2.5
 aspect_label_smoothing: 0.10
 class_balanced_beta: 0.999
 absent_weight_scale: 0.2
+sentiment_weight_max_ratio: 3.0
 joint_balanced_sampler: true
 sampler_temperature: 0.5
 sampler_weight_cap: 4.0

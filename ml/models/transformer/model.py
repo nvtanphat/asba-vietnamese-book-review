@@ -157,7 +157,7 @@ class TransformerMultiTaskABSA(ABSABenchmarkModel):
             # Off by default: bundled with other legacy-matching hyperparameters it regressed
             # phobert vs. the proven two_stage+joint_sampler config, and was never isolated.
             weights[0]=class_balanced_weights(train_y[:,0],TASK_SPECS[0].num_classes,beta=float(self.config.get("class_balanced_beta",0.999))).to(self.device)
-        aspect_weights=two_stage_multitask_weights(train_y, beta=float(self.config.get("class_balanced_beta",0.999)), absent_scale=float(self.config.get("absent_weight_scale",0.2))) if is_two_stage else None
+        aspect_weights=two_stage_multitask_weights(train_y, beta=float(self.config.get("class_balanced_beta",0.999)), absent_scale=float(self.config.get("absent_weight_scale",0.2)), sentiment_max_ratio=float(self.config.get("sentiment_weight_max_ratio",3.0))) if is_two_stage else None
         accum_steps=max(1, int(self.config.get("gradient_accumulation_steps", 1)))
         optimizer=torch.optim.AdamW(self.model.parameters(),lr=float(self.config.get("lr",2e-5)),weight_decay=float(self.config.get("weight_decay",0.01)))
         epochs=int(self.config.get("epochs",6))

@@ -1,6 +1,6 @@
 # Model Card — phobert
 
-Generated: 2026-08-24T11:07:08.310920+00:00
+Generated: 2026-08-24T17:34:49.736380+00:00
 
 ## Intended use
 Vietnamese Tiki book-review aspect-based sentiment analysis (ABSA). The production task predicts overall sentiment and six aspect sentiments.
@@ -9,10 +9,10 @@ Vietnamese Tiki book-review aspect-based sentiment analysis (ABSA). The producti
 
 ```json
 {
-  "val_f1_combined": 0.696758,
-  "test_f1_combined": 0.696891,
-  "test_f1_sentiment": 0.817344,
-  "test_f1_aspect_4class_mean": 0.576438
+  "val_f1_combined": 0.774175,
+  "test_f1_combined": 0.774025,
+  "test_f1_sentiment": 0.820227,
+  "test_f1_aspect_4class_mean": 0.727824
 }
 ```
 
@@ -20,7 +20,7 @@ Vietnamese Tiki book-review aspect-based sentiment analysis (ABSA). The producti
 
 ```json
 {
-  "created_at": "2026-08-24T10:41:17.108183+00:00",
+  "created_at": "2026-08-24T17:09:48.175859+00:00",
   "dataset": {
     "path": "/kaggle/working/sentenai/data/raw/tiki-book-review_merged_fixed_v3.json",
     "bytes": 8685000,
