@@ -13,7 +13,8 @@ from app.core.config import DEFAULT_JWT_SECRET, get_settings
 from app.core.limiter import limiter
 from app.db.base import Base
 from app.db.session import engine
-from app.routers import absa, auth, reviews, settings as settings_router, templates
+from app.routers import absa, auth, reviews, templates
+from app.routers import settings as settings_router
 
 # Arbitrary fixed key for the Postgres advisory lock in _ensure_tables — any int64 works,
 # it just has to be the same constant every time this process (or a sibling worker) calls it.

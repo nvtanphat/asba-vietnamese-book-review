@@ -53,6 +53,5 @@ def record_prediction(
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     line = json.dumps(payload, ensure_ascii=False) + "\n"
-    with _lock:
-        with p.open("a", encoding="utf-8") as f:
-            f.write(line)
+    with _lock, p.open("a", encoding="utf-8") as f:
+        f.write(line)

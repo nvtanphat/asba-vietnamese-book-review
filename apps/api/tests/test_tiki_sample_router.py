@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from unittest.mock import patch
 
-from fastapi.testclient import TestClient
-
 from app.services.tiki_fetch import TikiFetchError
+from fastapi.testclient import TestClient
 
 
 class TestTikiSample:

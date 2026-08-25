@@ -5,11 +5,12 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
+import bcrypt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
-import bcrypt
 from sqlalchemy.orm import Session
+
 from app.core.config import get_settings
 from app.db.models import User
 from app.db.session import get_db

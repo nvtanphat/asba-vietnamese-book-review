@@ -112,32 +112,18 @@ export default function StatsPage() {
     const total = entries.length;
     if (total === 0) {
       return {
-        total: 47,
-        posPct: 58,
-        neuPct: 19,
-        negPct: 23,
-        topAspect: "Giao hàng",
-        avgConfidence: 87,
-        ranking: [
-          { name: "Giao hàng", count: 19, barPct: 100 },
-          { name: "Giá cả", count: 14, barPct: 74 },
-          { name: "Đóng gói", count: 6, barPct: 32 },
-          { name: "Hình thức vật lý", count: 4, barPct: 21 },
-          { name: "Dịch vụ / Tư vấn", count: 3, barPct: 16 },
-          { name: "Nội dung sách", count: 1, barPct: 5 },
-        ],
-        sparklinePoints: "0,12.5 27.3,20 54.5,5 81.8,25 109,35 136,27.5 163,40 191,45 218,37.5 245,50 272,55 300,60",
-        startPct: 35,
-        endPct: 16,
-        deltaAbs: 19,
-        donut: {
-          posDash: "182.2 131.96",
-          posOffset: "0",
-          neuDash: "59.7 254.46",
-          neuOffset: "-182.2",
-          negDash: "72.3 241.86",
-          negOffset: "-241.9",
-        },
+        total: 0,
+        posPct: 0,
+        neuPct: 0,
+        negPct: 0,
+        topAspect: "",
+        avgConfidence: 0,
+        ranking: ASPECT_CONFIG.map((c) => ({ name: c.name, count: 0, barPct: 0 })),
+        sparklinePoints: "",
+        startPct: 0,
+        endPct: 0,
+        deltaAbs: 0,
+        donut: { posDash: "0 314.16", posOffset: "0", neuDash: "0 314.16", neuOffset: "0", negDash: "0 314.16", negOffset: "0" },
       };
     }
 

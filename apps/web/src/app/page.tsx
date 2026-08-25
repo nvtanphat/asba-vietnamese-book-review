@@ -234,40 +234,35 @@ export default function Page() {
   // Session summary statistics
   const { quick, overview, donut, trendPoints, trendStartPct, trendEndPct, trendDeltaAbs, aspectRanking, sidebarRanking } =
     useMemo(() => {
-      const total = entries.length > 0 ? entries.length : 47;
+      const total = entries.length;
       let posCount = 0, neuCount = 0, negCount = 0, confSum = 0;
       const negAspectCounts: Record<string, number> = {
-        "Giao hàng": 19,
-        "Giá cả": 14,
-        "Đóng gói": 6,
-        "Hình thức vật lý": 4,
-        "Dịch vụ / Tư vấn": 3,
-        "Nội dung sách": 1,
+        "Nội dung sách": 0,
+        "Hình thức vật lý": 0,
+        "Giá cả": 0,
+        "Đóng gói": 0,
+        "Giao hàng": 0,
+        "Dịch vụ / Tư vấn": 0,
       };
 
-      if (entries.length > 0) {
-        Object.keys(negAspectCounts).forEach((k) => (negAspectCounts[k] = 0));
-        entries.forEach((e) => {
-          if (e.result.overall === "positive") posCount++;
-          else if (e.result.overall === "neutral") neuCount++;
-          else if (e.result.overall === "negative") negCount++;
-          const idx = e.result.overall === "negative" ? 0 : e.result.overall === "neutral" ? 1 : 2;
-          confSum += (e.result.overall_probs?.[idx] ?? 0.85) * 100;
-          e.result.aspects?.forEach((a) => {
-            if (a.presence > 0.45 && a.sentiment === "negative") {
-              const label = ASPECT_LABELS[a.aspect] || a.aspect;
-              negAspectCounts[label] = (negAspectCounts[label] || 0) + 1;
-            }
-          });
+      entries.forEach((e) => {
+        if (e.result.overall === "positive") posCount++;
+        else if (e.result.overall === "neutral") neuCount++;
+        else if (e.result.overall === "negative") negCount++;
+        const idx = e.result.overall === "negative" ? 0 : e.result.overall === "neutral" ? 1 : 2;
+        confSum += (e.result.overall_probs?.[idx] ?? 0.85) * 100;
+        e.result.aspects?.forEach((a) => {
+          if (a.presence > 0.45 && a.sentiment === "negative") {
+            const label = ASPECT_LABELS[a.aspect] || a.aspect;
+            negAspectCounts[label] = (negAspectCounts[label] || 0) + 1;
+          }
         });
-      } else {
-        posCount = 27; neuCount = 9; negCount = 11; confSum = 47 * 87;
-      }
+      });
 
-      const posPct = Math.round((posCount / total) * 100);
-      const neuPct = Math.round((neuCount / total) * 100);
-      const negPct = Math.max(0, 100 - posPct - neuPct);
-      const avgConfidence = Math.round(confSum / total);
+      const posPct = total > 0 ? Math.round((posCount / total) * 100) : 0;
+      const neuPct = total > 0 ? Math.round((neuCount / total) * 100) : 0;
+      const negPct = total > 0 ? Math.max(0, 100 - posPct - neuPct) : 0;
+      const avgConfidence = total > 0 ? Math.round(confSum / total) : 0;
 
       const rankingRaw = Object.entries(negAspectCounts)
         .map(([name, count]) => ({ name, count }))
@@ -275,12 +270,14 @@ export default function Page() {
 
       const maxCount = Math.max(1, rankingRaw[0]?.count || 1);
       const ranking = rankingRaw.map((r) => ({ ...r, barPct: Math.round((r.count / maxCount) * 100) }));
-      const topAspect = ranking[0]?.name || "Giao hàng";
+      const topAspect = (ranking[0]?.count ?? 0) > 0 ? ranking[0].name : "";
 
       const suggestion =
-        topAspect === "Giao hàng"
-          ? `Giao hàng bị phàn nàn nhiều nhất (${ranking[0]?.count} lượt). Cần rà soát SLA giao vận khu vực trễ.`
-          : `${topAspect} nhận nhiều phản hồi tiêu cực nhất (${ranking[0]?.count} lượt). Cần tối ưu quy trình xử lý.`;
+        total === 0
+          ? ""
+          : !topAspect
+            ? "Chưa có khía cạnh nào bị đánh giá tiêu cực trong phiên này."
+            : `${topAspect} bị phàn nàn nhiều nhất trong phiên (${ranking[0]?.count} lượt). Cân nhắc rà soát nguyên nhân.`;
 
       // Donut math
       const C = 314.16;
@@ -296,14 +293,26 @@ export default function Page() {
         negOffset: `${(-(posLen + neuLen)).toFixed(1)}`,
       };
 
+      // Negative-rate trend sparkline: cumulative negative rate after each analysis this
+      // session, so it reflects what actually happened, not a fixed decorative curve.
+      let cumNeg = 0;
+      const trendSeries = entries.map((e, i) => {
+        if (e.result.overall === "negative") cumNeg++;
+        return Math.round((cumNeg / (i + 1)) * 100);
+      });
+      const trendPoints = trendSeries.map((v, i) => `${((i / Math.max(1, trendSeries.length - 1)) * 300).toFixed(1)},${(60 - v * 0.6).toFixed(1)}`).join(" ");
+      const trendStartPct = trendSeries[0] ?? 0;
+      const trendEndPct = trendSeries[trendSeries.length - 1] ?? 0;
+      const trendDeltaAbs = Math.abs(trendStartPct - trendEndPct);
+
       return {
         quick: { total, posPct, neuPct, negPct, topAspect, suggestion },
         overview: { total, negPct, posPct, neuPct, topAspect, avgConfidence },
         donut: donutObj,
-        trendPoints: "0,12.5 27.3,20 54.5,5 81.8,25 109,35 136,27.5 163,40 191,45 218,37.5 245,50 272,55 300,60",
-        trendStartPct: 35,
-        trendEndPct: 16,
-        trendDeltaAbs: 19,
+        trendPoints,
+        trendStartPct,
+        trendEndPct,
+        trendDeltaAbs,
         aspectRanking: ranking,
         sidebarRanking: ranking.slice(0, 3),
       };
@@ -715,14 +724,16 @@ export default function Page() {
                 ))}
               </div>
             </div>
-            <div className="blueprint" style={{ position: "relative", border: "1px solid var(--color-accent)", background: "var(--color-accent-100)", padding: "8px", fontSize: "11px", lineHeight: 1.4, marginTop: "auto" }}>
-              <i className="corner tl"></i><i className="corner tr"></i><i className="corner bl"></i><i className="corner br"></i>
-              <div style={{ display: "flex", alignItems: "center", gap: "4px", fontWeight: 600, marginBottom: "2px", color: "var(--color-accent-800)" }}>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4M12 17h.01"></path></svg>
-                Gợi ý hành động
+            {quick.total > 0 && (
+              <div className="blueprint" style={{ position: "relative", border: "1px solid var(--color-accent)", background: "var(--color-accent-100)", padding: "8px", fontSize: "11px", lineHeight: 1.4, marginTop: "auto" }}>
+                <i className="corner tl"></i><i className="corner tr"></i><i className="corner bl"></i><i className="corner br"></i>
+                <div style={{ display: "flex", alignItems: "center", gap: "4px", fontWeight: 600, marginBottom: "2px", color: "var(--color-accent-800)" }}>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4M12 17h.01"></path></svg>
+                  Gợi ý hành động
+                </div>
+                {quick.suggestion}
               </div>
-              {quick.suggestion}
-            </div>
+            )}
             <button
               className="btn btn-ghost"
               style={{ paddingLeft: 0, justifyContent: "flex-start", fontSize: "11px", cursor: "pointer" }}
