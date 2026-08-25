@@ -28,7 +28,7 @@
 - 🧹 **Tiền Xử Lý Chuẩn Hóa Duy Nhất**: Module [`packages/absa_core`](packages/absa_core) xử lý triệt để lỗi mã hóa (mojibake), chuẩn hóa Unicode NFC, teencode, emoji ngữ cảnh và phân đoạn từ PyVi.
 - ⚖️ **Quy Chuẩn Fair Benchmark**: Phân tách dữ liệu đóng băng **70/15/15** theo nhóm (Group-Stratified Split) với chữ ký SHA-256 (`c32f956a...`), cố định seed=42 và niêm phong tập Test.
 - ⚡ **8 Kiến Trúc Đa Dạng**: Từ Baselines (Logistic, SVM), Deep Learning (TextCNN, BiLSTM), Transformers (PhoBERT, mDeBERTa, XLM-R) tới Generative LLM (ViT5 + LoRA).
-- 🚀 **Production & MLOps**: FastAPI REST Engine, Next.js Dashboard thời gian thực, CLI Kaggle GPU Tesla T4 tự động và quản lý phiên bản dữ liệu DVC / MLflow.
+- 🚀 **Production & MLOps**: FastAPI REST Engine, Next.js Dashboard thời gian thực, CLI Kaggle GPU Tesla T4 tự động, **ONNX Runtime Engine (INT8 Quantization tối ưu độ trễ CPU)** và quản lý phiên bản dữ liệu DVC / MLflow.
 
 ---
 
@@ -160,6 +160,12 @@ python -m ml.benchmark --promote-best
 python -m tools.kaggle_cli doctor
 python -m tools.kaggle_cli run --owner USERNAME --dataset USERNAME/sentenai-data --model phobert --accelerator NvidiaTeslaT4
 python -m tools.kaggle_cli collect --owner USERNAME --model phobert --register
+```
+
+### 4. Tối Ưu Tốc Độ Với ONNX Runtime (CPU / Edge)
+```bash
+# Export mô hình Champion sang ONNX Runtime (FP32, FP16, INT8 Quantization)
+python packages/absa_core/scripts/export_onnx_unified.py
 ```
 
 ---
