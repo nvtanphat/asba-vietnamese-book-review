@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ SentenAI: Hệ Thống ABSA Tiếng Việt Cho Thương Mại Điện Tử
+# ⚡ SentenAI: Hệ Thống ABSA Tiếng Việt Cho Đánh Giá Sách Thương Mại Điện Tử
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -8,8 +8,8 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Hệ sinh thái Phân tích Cảm xúc theo Khía cạnh (Aspect-Based Sentiment Analysis) tiếng Việt**  
-*Tập dữ liệu tự thu thập & gán nhãn độc quyền • Fair Benchmark 8 Mô hình • Remote Kaggle GPU • Production API & Dashboard*
+**Hệ sinh thái Phân tích Cảm xúc theo Khía cạnh (Aspect-Based Sentiment Analysis) Cho Đánh Giá Sách Tiếng Việt**  
+*Bộ dữ liệu 13,412 review sách Tiki độc quyền • Fair Benchmark 8 Mô hình • Remote Kaggle GPU • Production API & Dashboard*
 
 <br />
 
