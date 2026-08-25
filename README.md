@@ -212,10 +212,12 @@ SentenAI-Unified/
 Dự án được phân phối theo giấy phép **MIT License** - xem chi tiết tại [LICENSE](LICENSE).
 
 ```bibtex
-@software{sentenai_unified_2026,
-  author = {Viet CV and Contributors},
+@software{sentenai_2026,
+  author = {Nguyen, Tan Phat and Viet CV and Contributors},
   title = {SentenAI: Industrial Vietnamese Aspect-Based Sentiment Analysis and Fair Benchmark Orchestration},
   year = {2026},
-  url = {https://github.com/vietcv/SentenAI-Unified}
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/nvtanphat/tiki-book-review-absa}
 }
 ```
