@@ -23,6 +23,7 @@ RUN uv venv /opt/venv
 COPY packages/absa_core ./packages/absa_core
 COPY apps/api ./apps/api
 COPY artifacts/final ./artifacts/final
+COPY artifacts/ensemble ./artifacts/ensemble
 # This service never gets GPU passthrough (see docker-compose.yml), but plain PyPI
 # `torch` bundles the full CUDA runtime (~2GB of nvidia-*/triton wheels) regardless —
 # pre-install the CPU-only build so the real install below has nothing left to fetch.
@@ -49,6 +50,7 @@ RUN groupadd --system app && \
 COPY --from=builder /opt/venv /opt/venv
 COPY --from=builder /build/apps/api /app/apps/api
 COPY --from=builder /build/artifacts/final /app/artifacts/final
+COPY --from=builder /build/artifacts/ensemble /app/artifacts/ensemble
 
 WORKDIR /app/apps/api
 # SQLite's default DATABASE_URL lives under ./data — must exist and be writable by
@@ -65,4 +67,9 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
 # GIL, so threads alone don't parallelize it); each process tunes its own torch thread
 # count down via ABSA_TORCH_THREADS (see app/core/config.py) to avoid CPU contention
 # between workers. Override WEB_CONCURRENCY at deploy time to match the host's core count.
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers ${WEB_CONCURRENCY}"]
+# --timeout-worker-healthcheck: the app/main.py startup hook eagerly loads the ONNX
+# ensemble (2 models) before a worker reports ready, which can take well past uvicorn's
+# 5s default — that killed a worker mid-warmup ("Child process died" with no app-level
+# exception, since it's the supervisor's own SIGKILL, not a crash). 150s covers the
+# observed worst case with headroom.
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers ${WEB_CONCURRENCY} --timeout-worker-healthcheck 150"]

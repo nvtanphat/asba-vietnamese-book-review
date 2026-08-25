@@ -33,8 +33,12 @@ def _get_predictor():
             if _predictor is None:
                 settings = get_settings()
                 from pathlib import Path
+                ensemble_meta = Path(settings.absa_ensemble_dir or "") / "metadata.json"
                 unified_meta = Path(settings.absa_artifact_dir) / "metadata.json"
-                if settings.absa_prefer_unified_artifact and unified_meta.exists():
+                if settings.absa_ensemble_dir and ensemble_meta.exists():
+                    from absa_core.models import EnsembleOnnxPredictor
+                    _predictor = EnsembleOnnxPredictor(settings.absa_ensemble_dir, num_threads=settings.absa_torch_threads)
+                elif settings.absa_prefer_unified_artifact and unified_meta.exists():
                     from absa_core.models import UnifiedArtifactPredictor
                     _predictor = UnifiedArtifactPredictor(settings.absa_artifact_dir)
                 elif settings.absa_use_onnx:

@@ -13,7 +13,8 @@ from app.core.config import DEFAULT_JWT_SECRET, get_settings
 from app.core.limiter import limiter
 from app.db.base import Base
 from app.db.session import engine
-from app.routers import absa, auth, reviews, settings as settings_router, templates
+from app.routers import absa, auth, reviews, templates
+from app.routers import settings as settings_router
 
 # Arbitrary fixed key for the Postgres advisory lock in _ensure_tables — any int64 works,
 # it just has to be the same constant every time this process (or a sibling worker) calls it.
@@ -79,6 +80,25 @@ def _check_jwt_secret() -> None:
         "deploying anywhere real.",
         stacklevel=1,
     )
+
+
+@app.on_event("startup")
+def _warm_absa_predictor() -> None:
+    """Load the ABSA model(s) now, during startup, instead of lazily on the first request.
+
+    The ensemble backend (see app/services/absa_service.py) loads two ONNX sessions
+    synchronously and this has been measured to take well over uvicorn's 5s default
+    `timeout_worker_healthcheck` under load. When that cold-load happened during a real
+    request instead, the supervisor decided the worker was hung mid-request and SIGKILLed
+    it (observed in logs as "Child process [N] died" with no application-level exception —
+    it's the supervisor's kill, not a crash). Loading here runs before the worker reports
+    itself ready to serve, so it isn't racing that per-request health check, and it also
+    removes the cold-start latency spike from whichever user's request would otherwise
+    have been first.
+    """
+    from app.services.absa_service import _get_predictor
+
+    _get_predictor()
 
 
 @app.get("/health", tags=["meta"])

@@ -38,6 +38,13 @@ class Settings(BaseSettings):
     # `uv run python packages/absa_core/scripts/export_onnx.py`, then set both.
     absa_use_onnx: bool = False
     absa_onnx_model_path: str = "data/models/onnx/absa_phobert.int8.onnx"
+    # Serve a probability ensemble of multiple promoted encoders (currently phobert+xlmr)
+    # via ONNX instead of a single model — measured higher test f1_combined (0.791) than
+    # either solo model, at the cost of running every member per request (see
+    # packages/absa_core/absa_core/models/ensemble_onnx_predictor.py). Takes priority over
+    # both absa_prefer_unified_artifact and absa_use_onnx when set, since it's a strictly
+    # different serving path (multiple ONNX sessions, not one torch/onnx model).
+    absa_ensemble_dir: str | None = "artifacts/ensemble"
 
     # Privacy-preserving model telemetry for drift/latency monitoring. Raw review text
     # is never persisted; only a short hash, coarse text features and predictions.

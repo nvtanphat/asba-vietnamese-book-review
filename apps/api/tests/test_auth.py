@@ -3,10 +3,8 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
-import pytest
-from jose import jwt
-from fastapi import HTTPException
 
+import pytest
 from app.core.auth import (
     _decode_token,
     create_access_token,
@@ -15,6 +13,8 @@ from app.core.auth import (
 )
 from app.core.config import get_settings
 from app.main import _check_jwt_secret
+from fastapi import HTTPException
+from jose import jwt
 
 
 class TestPasswordHashing:

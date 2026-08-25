@@ -29,3 +29,6 @@ mlops = ["mlflow>=3.1,<4", "dvc>=3,<4"]
 testpaths = ["tests", "packages/absa_core/tests", "apps/api/tests"]
 pythonpath = [".", "packages/absa_core", "apps/api"]
 norecursedirs = ["ml/legacy_phobert", "scripts/migrated_notebooks", ".git", ".venv", "node_modules"]
+
+[tool.ruff.lint]
+ignore = ["B008"]

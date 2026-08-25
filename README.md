@@ -11,6 +11,10 @@
 **Hệ sinh thái Phân tích Cảm xúc theo Khía cạnh (Aspect-Based Sentiment Analysis) tiếng Việt**  
 *Tập dữ liệu tự thu thập & gán nhãn độc quyền • Fair Benchmark 8 Mô hình • Remote Kaggle GPU • Production API & Dashboard*
 
+<br />
+
+![SentenAI Web Dashboard](assets/images/dashboard_preview.png)
+
 </div>
 
 ---
@@ -24,13 +28,75 @@
 - 🧹 **Tiền Xử Lý Chuẩn Hóa Duy Nhất**: Module [`packages/absa_core`](packages/absa_core) xử lý triệt để lỗi mã hóa (mojibake), chuẩn hóa Unicode NFC, teencode, emoji ngữ cảnh và phân đoạn từ PyVi.
 - ⚖️ **Quy Chuẩn Fair Benchmark**: Phân tách dữ liệu đóng băng **70/15/15** theo nhóm (Group-Stratified Split) với chữ ký SHA-256 (`c32f956a...`), cố định seed=42 và niêm phong tập Test.
 - ⚡ **8 Kiến Trúc Đa Dạng**: Từ Baselines (Logistic, SVM), Deep Learning (TextCNN, BiLSTM), Transformers (PhoBERT, mDeBERTa, XLM-R) tới Generative LLM (ViT5 + LoRA).
-- 🚀 **Production & MLOps**: FastAPI REST Engine, Next.js Dashboard thời gian thực, CLI Kaggle GPU Tesla T4 tự động và quản lý phiên bản dữ liệu DVC / MLflow.
+- 🚀 **Production & MLOps**: FastAPI REST Engine, Next.js Dashboard thời gian thực, CLI Kaggle GPU Tesla T4 tự động, **ONNX Runtime Engine (INT8 Quantization tối ưu độ trễ CPU)** và quản lý phiên bản dữ liệu DVC / MLflow.
+
+---
+
+## 🏛️ Kiến Trúc Hệ Thống
+
+```text
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │            DỮ LIỆU ĐÁNH GIÁ TIKI TỰ THU THẬP             │
+                                  │      (13,412 Bình luận | 2,009 Sản phẩm | 7 Mục tiêu)    │
+                                  └────────────────────────────┬─────────────────────────────┘
+                                                               │
+                                                               ▼
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │      Pipeline Tiền Xử Lý (packages/absa_core)            │
+                                  │   Unicode NFC • Làm sạch nhiễu • Teencode • Emoji        │
+                                  └────────────────────────────┬─────────────────────────────┘
+                                                               │
+                                                               ▼
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │       Phân Tách Nhóm Cố Định 70/15/15 (Stratified)       │
+                                  │   Train (9,300) | Val (1,991) | Sealed Test (1,992)      │
+                                  │   Mã băm SHA-256: c32f956aee64af890c0645d37da203a9...    │
+                                  └─────────┬──────────────────┬───────────────────┬─────────┘
+                                            │                  │                   │
+                      ┌─────────────────────┘                  │                   └─────────────────────┐
+                      ▼                                        ▼                                         ▼
+         ┌─────────────────────────┐              ┌─────────────────────────┐              ┌─────────────────────────┐
+         │    Baseline Cổ Điển     │              │    Mạng Nơ-ron Chuỗi    │              │  Transformer Tiền Huấn  │
+         │  • Logistic Regression  │              │  • TextCNN              │              │  • PhoBERT-base         │
+         │  • Linear SVM (TF-IDF)  │              │  • BiLSTM               │              │  • XLM-RoBERTa-base     │
+         └────────────┬────────────┘              └────────────┬────────────┘              │  • mDeBERTa-v3-base     │
+                      │                                        │                           │  • ViT5 + LoRA (Sinh)   │
+                      │                                        │                           └────────────┬────────────┘
+                      └────────────────────────────┬───────────┴────────────────────────────────────────┘
+                                                   │
+                                                   ▼
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │         Hiệu Chỉnh Ngưỡng Hiện Diện (Validation Only)    │
+                                  │       Tối ưu P(present) = 1 - P(absent) >= t_aspect      │
+                                  │     Hàm mục tiêu: 3-Class Macro F1 + Neutral Protection  │
+                                  └────────────────────────────┬─────────────────────────────┘
+                                                               │
+                                                               ▼
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │             Xếp Hạng Bảng Benchmark Công Bằng            │
+                                  │            Đánh giá theo Validation F1 Kết hợp:          │
+                                  │   F1_comb = 0.5 * F1_overall + 0.5 * mean(F1_aspects)    │
+                                  └────────────────────────────┬─────────────────────────────┘
+                                                               │
+                                                               ▼
+                                  ┌──────────────────────────────────────────────────────────┐
+                                  │               Cổng Chất Lượng & Đề Xuất                  │
+                                  │    Mở niêm phong Test -> Đăng ký -> artifacts/final/     │
+                                  └─────────┬──────────────────────────────────────┬─────────┘
+                                            │                                      │
+                                            ▼                                      ▼
+                         ┌─────────────────────────────────────┐ ┌─────────────────────────────────────┐
+                         │          FastAPI REST Engine        │ │        Next.js Web Dashboard        │
+                         │   • /predict (Đơn & Hàng loạt)      │ │   • Thử nghiệm phân tích real-time  │
+                         │   • /model-info & Giám sát Drift    │ │   • Thống kê biểu đồ khía cạnh      │
+                         └─────────────────────────────────────┘ └─────────────────────────────────────┘
+```
 
 ---
 
 ## 📊 Dữ Liệu Tự Xây Dựng & Quy Chuẩn Gán Nhãn
 
- Bộ dữ liệu gốc nằm tại [`data/raw/tiki-book-review_merged_fixed_v3.json`](data/raw/tiki-book-review_merged_fixed_v3.json) được **tự thu thập và gán nhãn chuẩn hóa** cho 7 mục tiêu song song:
+Bộ dữ liệu gốc nằm tại [`data/raw/tiki-book-review_merged_fixed_v3.json`](data/raw/tiki-book-review_merged_fixed_v3.json) được **tự thu thập và gán nhãn thủ công chuẩn hóa** cho 7 mục tiêu song song. Chi tiết xem tại 📑 [**Hướng Dẫn Dán Nhãn Khía Cạnh ABSA**](docs/absa_annotation_guide.md).
 
 | Mục Tiêu | Mã Khía Cạnh | Lớp 0 | Lớp 1 | Lớp 2 | Lớp 3 |
 | :--- | :--- | :---: | :---: | :---: | :---: |
@@ -50,12 +116,13 @@
 
 | Mô Hình | Họ Kiến Trúc | Val $\text{F1}_{\text{comb}}$ | Test $\text{F1}_{\text{comb}}$ | Test $\text{F1}_{\text{overall}}$ | Test $\text{F1}_{\text{presence}}$ | Test $\text{F1}_{\text{present}}$ | Số Lượng Params | Trạng Thái |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **PhoBERT-base** | Hierarchical Transformer | **0.6968** | **0.6969** | **0.8173** | **0.9393** | 0.5663 | 135M | 🏆 **Champion** |
-| **ViT5 + LoRA** | Sinh chuỗi Seq2Seq | 0.7375 | 0.7294 | 0.7567 | 0.9205 | **0.7437** | 220M | ✅ Hoàn thành |
+| **PhoBERT + XLM-R** | Probability Ensemble | **0.7863** | **0.7911** | **0.8263** | **0.9475** | **0.7776** | 413M | 👑 **State-of-the-Art** |
+| **PhoBERT-base** | Hierarchical Transformer | 0.7742 | 0.7740 | 0.8202 | 0.9418 | 0.7507 | 135M | 🏆 **Champion** |
+| **XLM-RoBERTa-base** | Hierarchical Transformer | 0.7722 | 0.7823 | 0.8194 | 0.9455 | 0.7650 | 278M | 🥈 Candidate |
+| **ViT5 + LoRA** | Sinh chuỗi Seq2Seq | 0.7375 | 0.7294 | 0.7567 | 0.9205 | 0.7437 | 220M | ✅ Hoàn thành |
+| **mDeBERTa-v3-base** | Hierarchical Transformer | 0.7250 | 0.7284 | 0.7893 | 0.9110 | 0.7011 | 86M | ✅ Hoàn thành |
 | **Linear SVM** | Baseline cổ điển (TF-IDF) | 0.7283 | 0.7090 | 0.7592 | 0.9075 | 0.7004 | — | ✅ Hoàn thành |
-| **mDeBERTa-v3-base** | Hierarchical Transformer | 0.6733 | 0.6764 | 0.7966 | 0.8886 | 0.5819 | 86M | ✅ Hoàn thành |
 | **BiLSTM** | Mạng nơ-ron tuần tự | 0.6588 | 0.6466 | 0.7713 | 0.6782 | 0.6728 | 2.7M | ✅ Hoàn thành |
-| **XLM-RoBERTa-base** | Hierarchical Transformer | 0.6255 | — | — | — | — | 278M | ✅ Hoàn thành |
 | **TextCNN** | Mạng nơ-ron tích chập | 0.5915 | 0.5996 | 0.7679 | 0.5776 | 0.6059 | 1.3M | ✅ Hoàn thành |
 | **Logistic Reg.** | Baseline cổ điển (TF-IDF) | 0.5072 | 0.4949 | 0.4180 | 0.8765 | 0.5776 | — | ✅ Hoàn thành |
 
@@ -65,8 +132,8 @@
 
 ### 1. Cài Đặt Môi Trường
 ```bash
-git clone https://github.com/vietcv/SentenAI-Unified.git
-cd SentenAI-Unified
+git clone https://github.com/nvtanphat/tiki-book-review-absa.git
+cd tiki-book-review-absa
 
 # Cài đặt với uv (Khuyến nghị)
 uv sync --group ml --group mlops
@@ -95,9 +162,17 @@ python -m tools.kaggle_cli run --owner USERNAME --dataset USERNAME/sentenai-data
 python -m tools.kaggle_cli collect --owner USERNAME --model phobert --register
 ```
 
+### 4. Tối Ưu Tốc Độ Với ONNX Runtime (CPU / Edge)
+```bash
+# Export mô hình Champion sang ONNX Runtime (FP32, FP16, INT8 Quantization)
+python packages/absa_core/scripts/export_onnx_unified.py
+```
+
 ---
 
 ## 🌐 Triển Khai Production & Web Dashboard
+
+![SentenAI Web Dashboard Preview](assets/images/dashboard_preview.png)
 
 ```bash
 # Terminal 1: Khởi chạy Backend REST API (FastAPI tại http://localhost:8000/docs)
@@ -137,10 +212,12 @@ SentenAI-Unified/
 Dự án được phân phối theo giấy phép **MIT License** - xem chi tiết tại [LICENSE](LICENSE).
 
 ```bibtex
-@software{sentenai_unified_2026,
-  author = {Viet CV and Contributors},
+@software{sentenai_2026,
+  author = {Nguyen, Van Tan Phat and Contributors},
   title = {SentenAI: Industrial Vietnamese Aspect-Based Sentiment Analysis and Fair Benchmark Orchestration},
   year = {2026},
-  url = {https://github.com/vietcv/SentenAI-Unified}
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/nvtanphat/tiki-book-review-absa}
 }
 ```

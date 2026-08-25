@@ -191,7 +191,12 @@ output/
 temp/
 tmp/
 /tmp/
-artifacts/
+artifacts/*
+!artifacts/.gitkeep
+!artifacts/final/
+!artifacts/ensemble/
+!artifacts/registry/
+!artifacts/reports/
 notebooks/artifacts/
 notebooks/assets/
 git_status.txt
@@ -211,6 +216,8 @@ next-env.d.ts
 # Model weights & local DB (downloaded from HuggingFace at runtime)
 *.safetensors
 *.pt
+*.onnx
+*.npz
 *.joblib
 *.db
 *.sqlite3
@@ -233,6 +240,11 @@ next-env.d.ts
 !data/maps/
 !data/maps/*.json
 !packages/absa_core/absa_core/models/thresholds.json
+# Promoted-artifact config/metadata (thresholds, HF encoder config, tokenizer_config) — the
+# *.pt/*.onnx weight files stay ignored above; only these small JSON/text files are tracked
+# so a fresh clone has a structurally complete (if weight-less) artifacts/final|ensemble tree.
+!artifacts/final/**/*.json
+!artifacts/ensemble/**/*.json
 
 # SentenAI Unified reproducibility inputs. The provided raw v3 dataset is intentionally
 # versioned in this project copy; generated split rows stay local, while the manifest may
@@ -257,11 +269,15 @@ data/splits/*
 .kaggle_work/
 .kaggle/
 
+# scripts/ci/make_fixture_artifacts.py's scratch staging for tiny ensemble-member configs
+.ci_tmp/
+
 
 # MLOps local state / backends
 mlruns/
 .dvc/cache/
-artifacts/registry/
+artifacts/registry/*
+!artifacts/registry/registry.json
 artifacts/releases/
 artifacts/monitoring/
 !mlops/state/

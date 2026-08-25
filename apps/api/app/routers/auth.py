@@ -18,7 +18,15 @@ from app.core.auth import (
 from app.core.limiter import limiter
 from app.db.models import Shop, User
 from app.db.session import get_db
-from app.schemas.auth import InviteIn, LoginIn, MeOut, RegisterIn, ShopOut, TokenOut, UserOut
+from app.schemas.auth import (
+    InviteIn,
+    LoginIn,
+    MeOut,
+    RegisterIn,
+    ShopOut,
+    TokenOut,
+    UserOut,
+)
 from app.schemas.settings import UserUpdateIn
 
 router = APIRouter(prefix="/auth", tags=["auth"])

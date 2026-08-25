@@ -99,11 +99,19 @@ def two_stage_aspect_loss(
     return stage1_weight * presence_loss + stage2_weight * sentiment_loss
 
 
-def two_stage_multitask_weights(train_y, beta: float = 0.999, absent_scale: float = 0.2):
+def two_stage_multitask_weights(train_y, beta: float = 0.999, absent_scale: float = 0.2, sentiment_max_ratio: float = 3.0):
     """Per-aspect (presence_weight, sentiment_weight) CPU tensors derived from training
     labels (columns 1: of `train_y`, one per aspect task). Shared by every trainer that
     supports a two_stage head (transformer encoders, BiLSTM, TextCNN) so the weight
-    derivation logic lives in one place."""
+    derivation logic lives in one place.
+
+    `sentiment_max_ratio` bounds the max/min ratio across the 3 present-only sentiment
+    classes. Uncapped effective-number weighting blows this up to 10-15x on aspects where
+    "neutral" is a rare present-only label (e.g. as_service: 49 neutral vs. 1368 negative
+    present samples) — confirmed via error analysis to make the model hedge toward "neutral"
+    on unambiguous positive/negative text (e.g. "giao hang nhanh" predicted neutral) because
+    missing a neutral sample was penalized far more than missing a negative/positive one.
+    """
     n_aspects = train_y.shape[1] - 1
     presence_weights, sentiment_weights = [], []
     for i in range(1, n_aspects + 1):
@@ -113,6 +121,7 @@ def two_stage_multitask_weights(train_y, beta: float = 0.999, absent_scale: floa
         presence_weights.append(pw)
         present_values = aspect_col[aspect_col != 3]
         sw = class_balanced_weights(present_values, 3, beta=beta) if len(present_values) else torch.ones(3, dtype=torch.float32)
+        sw = sw.clamp(min=sw.max() / float(sentiment_max_ratio))
         sentiment_weights.append(sw)
     return presence_weights, sentiment_weights
 

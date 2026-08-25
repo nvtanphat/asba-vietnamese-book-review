@@ -1,0 +1,12 @@
+{
+  "ensemble": true,
+  "members": [
+    "phobert",
+    "xlmr"
+  ],
+  "weights": [
+    1.0,
+    1.0
+  ],
+  "name": "phobert_xlmr_ensemble"
+}

@@ -154,10 +154,10 @@ export default function Page() {
     const NEG_C = "oklch(48% 0.12 35)", NEG_BG = "oklch(94% 0.03 35)";
 
     if (!prediction) {
-      return { label: "Tích cực", color: POS_C, bg: POS_BG, confidence: 78, posPct: 78, neuPct: 14, negPct: 8 };
+      return { label: "Chưa phân tích", color: NEU_C, bg: NEU_BG, confidence: 0, posPct: 0, neuPct: 0, negPct: 0 };
     }
 
-    const probs = prediction.overall_probs || [0.08, 0.14, 0.78];
+    const probs = prediction.overall_probs || [0, 0, 0];
     const negPct = Math.round((probs[0] || 0) * 100);
     const neuPct = Math.round((probs[1] || 0) * 100);
     const posPct = Math.max(0, 100 - negPct - neuPct);
@@ -180,19 +180,21 @@ export default function Page() {
   // 6 Aspects calculation
   const rawAspects = useMemo(() => {
     const defaultList = [
-      { key: "as_content", name: "Nội dung sách", icon: "book", mentioned: true, confidence: 96, sentiment: "positive" as Sentiment },
-      { key: "as_physical", name: "Hình thức vật lý", icon: "layers", mentioned: false, confidence: 18, sentiment: null },
-      { key: "as_price", name: "Giá cả", icon: "dollar", mentioned: true, confidence: 84, sentiment: "negative" as Sentiment },
-      { key: "as_packaging", name: "Đóng gói", icon: "package", mentioned: true, confidence: 88, sentiment: "positive" as Sentiment },
-      { key: "as_delivery", name: "Giao hàng", icon: "truck", mentioned: true, confidence: 90, sentiment: "negative" as Sentiment },
-      { key: "as_service", name: "Dịch vụ / Tư vấn", icon: "headset", mentioned: false, confidence: 9, sentiment: null },
+      { key: "as_content", name: "Nội dung sách", icon: "book", mentioned: false, confidence: 0, sentiment: null },
+      { key: "as_physical", name: "Hình thức vật lý", icon: "layers", mentioned: false, confidence: 0, sentiment: null },
+      { key: "as_price", name: "Giá cả", icon: "dollar", mentioned: false, confidence: 0, sentiment: null },
+      { key: "as_packaging", name: "Đóng gói", icon: "package", mentioned: false, confidence: 0, sentiment: null },
+      { key: "as_delivery", name: "Giao hàng", icon: "truck", mentioned: false, confidence: 0, sentiment: null },
+      { key: "as_service", name: "Dịch vụ / Tư vấn", icon: "headset", mentioned: false, confidence: 0, sentiment: null },
     ];
 
     if (!prediction) return defaultList;
 
     return defaultList.map((a) => {
       const match = prediction.aspects?.find((x) => x.aspect === a.key);
-      if (!match) return a;
+      // The API only includes aspects the model judged as present — no match means the
+      // model did not mention this aspect at all, not "keep the placeholder mock value".
+      if (!match) return { ...a, mentioned: false, confidence: 0, sentiment: null };
       const isM = match.presence > 0.45;
       return {
         ...a,
@@ -232,40 +234,35 @@ export default function Page() {
   // Session summary statistics
   const { quick, overview, donut, trendPoints, trendStartPct, trendEndPct, trendDeltaAbs, aspectRanking, sidebarRanking } =
     useMemo(() => {
-      const total = entries.length > 0 ? entries.length : 47;
+      const total = entries.length;
       let posCount = 0, neuCount = 0, negCount = 0, confSum = 0;
       const negAspectCounts: Record<string, number> = {
-        "Giao hàng": 19,
-        "Giá cả": 14,
-        "Đóng gói": 6,
-        "Hình thức vật lý": 4,
-        "Dịch vụ / Tư vấn": 3,
-        "Nội dung sách": 1,
+        "Nội dung sách": 0,
+        "Hình thức vật lý": 0,
+        "Giá cả": 0,
+        "Đóng gói": 0,
+        "Giao hàng": 0,
+        "Dịch vụ / Tư vấn": 0,
       };
 
-      if (entries.length > 0) {
-        Object.keys(negAspectCounts).forEach((k) => (negAspectCounts[k] = 0));
-        entries.forEach((e) => {
-          if (e.result.overall === "positive") posCount++;
-          else if (e.result.overall === "neutral") neuCount++;
-          else if (e.result.overall === "negative") negCount++;
-          const idx = e.result.overall === "negative" ? 0 : e.result.overall === "neutral" ? 1 : 2;
-          confSum += (e.result.overall_probs?.[idx] ?? 0.85) * 100;
-          e.result.aspects?.forEach((a) => {
-            if (a.presence > 0.45 && a.sentiment === "negative") {
-              const label = ASPECT_LABELS[a.aspect] || a.aspect;
-              negAspectCounts[label] = (negAspectCounts[label] || 0) + 1;
-            }
-          });
+      entries.forEach((e) => {
+        if (e.result.overall === "positive") posCount++;
+        else if (e.result.overall === "neutral") neuCount++;
+        else if (e.result.overall === "negative") negCount++;
+        const idx = e.result.overall === "negative" ? 0 : e.result.overall === "neutral" ? 1 : 2;
+        confSum += (e.result.overall_probs?.[idx] ?? 0.85) * 100;
+        e.result.aspects?.forEach((a) => {
+          if (a.presence > 0.45 && a.sentiment === "negative") {
+            const label = ASPECT_LABELS[a.aspect] || a.aspect;
+            negAspectCounts[label] = (negAspectCounts[label] || 0) + 1;
+          }
         });
-      } else {
-        posCount = 27; neuCount = 9; negCount = 11; confSum = 47 * 87;
-      }
+      });
 
-      const posPct = Math.round((posCount / total) * 100);
-      const neuPct = Math.round((neuCount / total) * 100);
-      const negPct = Math.max(0, 100 - posPct - neuPct);
-      const avgConfidence = Math.round(confSum / total);
+      const posPct = total > 0 ? Math.round((posCount / total) * 100) : 0;
+      const neuPct = total > 0 ? Math.round((neuCount / total) * 100) : 0;
+      const negPct = total > 0 ? Math.max(0, 100 - posPct - neuPct) : 0;
+      const avgConfidence = total > 0 ? Math.round(confSum / total) : 0;
 
       const rankingRaw = Object.entries(negAspectCounts)
         .map(([name, count]) => ({ name, count }))
@@ -273,12 +270,14 @@ export default function Page() {
 
       const maxCount = Math.max(1, rankingRaw[0]?.count || 1);
       const ranking = rankingRaw.map((r) => ({ ...r, barPct: Math.round((r.count / maxCount) * 100) }));
-      const topAspect = ranking[0]?.name || "Giao hàng";
+      const topAspect = (ranking[0]?.count ?? 0) > 0 ? ranking[0].name : "";
 
       const suggestion =
-        topAspect === "Giao hàng"
-          ? `Giao hàng bị phàn nàn nhiều nhất (${ranking[0]?.count} lượt). Cần rà soát SLA giao vận khu vực trễ.`
-          : `${topAspect} nhận nhiều phản hồi tiêu cực nhất (${ranking[0]?.count} lượt). Cần tối ưu quy trình xử lý.`;
+        total === 0
+          ? ""
+          : !topAspect
+            ? "Chưa có khía cạnh nào bị đánh giá tiêu cực trong phiên này."
+            : `${topAspect} bị phàn nàn nhiều nhất trong phiên (${ranking[0]?.count} lượt). Cân nhắc rà soát nguyên nhân.`;
 
       // Donut math
       const C = 314.16;
@@ -294,42 +293,52 @@ export default function Page() {
         negOffset: `${(-(posLen + neuLen)).toFixed(1)}`,
       };
 
+      // Negative-rate trend sparkline: cumulative negative rate after each analysis this
+      // session, so it reflects what actually happened, not a fixed decorative curve.
+      let cumNeg = 0;
+      const trendSeries = entries.map((e, i) => {
+        if (e.result.overall === "negative") cumNeg++;
+        return Math.round((cumNeg / (i + 1)) * 100);
+      });
+      const trendPoints = trendSeries.map((v, i) => `${((i / Math.max(1, trendSeries.length - 1)) * 300).toFixed(1)},${(60 - v * 0.6).toFixed(1)}`).join(" ");
+      const trendStartPct = trendSeries[0] ?? 0;
+      const trendEndPct = trendSeries[trendSeries.length - 1] ?? 0;
+      const trendDeltaAbs = Math.abs(trendStartPct - trendEndPct);
+
       return {
         quick: { total, posPct, neuPct, negPct, topAspect, suggestion },
         overview: { total, negPct, posPct, neuPct, topAspect, avgConfidence },
         donut: donutObj,
-        trendPoints: "0,12.5 27.3,20 54.5,5 81.8,25 109,35 136,27.5 163,40 191,45 218,37.5 245,50 272,55 300,60",
-        trendStartPct: 35,
-        trendEndPct: 16,
-        trendDeltaAbs: 19,
+        trendPoints,
+        trendStartPct,
+        trendEndPct,
+        trendDeltaAbs,
         aspectRanking: ranking,
         sidebarRanking: ranking.slice(0, 3),
       };
     }, [entries]);
 
-  // Long-term trend bars
+  // Long-term trend bars — real server-persisted data (api.historySummary above), with an
+  // explicit "no data yet" empty state rather than a fabricated chart when history is empty.
   const weeklyTrend = useMemo(() => {
-    if (weeklyRange === "month") {
-      return [
-        { label: "Th3", heightPos: 55, heightNeu: 18, heightNeg: 25, posPct: 56, neuPct: 19, negPct: 26 },
-        { label: "Th4", heightPos: 62, heightNeu: 17, heightNeg: 28, posPct: 58, neuPct: 16, negPct: 26 },
-        { label: "Th5", heightPos: 58, heightNeu: 20, heightNeg: 32, posPct: 53, neuPct: 19, negPct: 29 },
-        { label: "Th6", heightPos: 68, heightNeu: 19, heightNeg: 23, posPct: 62, neuPct: 17, negPct: 21 },
-        { label: "Th7", heightPos: 65, heightNeu: 23, heightNeg: 20, posPct: 60, neuPct: 21, negPct: 19 },
-        { label: "Th8", heightPos: 74, heightNeu: 17, heightNeg: 16, posPct: 69, neuPct: 16, negPct: 15 },
-      ];
-    }
-    return [
-      { label: "T1", heightPos: 60, heightNeu: 21, heightNeg: 25, posPct: 56, neuPct: 20, negPct: 24 },
-      { label: "T2", heightPos: 53, heightNeu: 19, heightNeg: 30, posPct: 52, neuPct: 19, negPct: 29 },
-      { label: "T3", heightPos: 64, heightNeu: 17, heightNeg: 21, posPct: 62, neuPct: 17, negPct: 21 },
-      { label: "T4", heightPos: 46, heightNeu: 24, heightNeg: 40, posPct: 42, neuPct: 21, negPct: 37 },
-      { label: "T5", heightPos: 55, heightNeu: 19, heightNeg: 36, posPct: 50, neuPct: 17, negPct: 33 },
-      { label: "T6", heightPos: 66, heightNeu: 15, heightNeg: 28, posPct: 61, neuPct: 14, negPct: 25 },
-      { label: "T7", heightPos: 58, heightNeu: 21, heightNeg: 19, posPct: 59, neuPct: 22, negPct: 19 },
-      { label: "T8", heightPos: 72, heightNeu: 17, heightNeg: 15, posPct: 69, neuPct: 16, negPct: 14 },
-    ];
-  }, [weeklyRange]);
+    if (!buckets || buckets.length === 0) return [];
+    const maxTotal = Math.max(...buckets.map((b) => b.total), 1);
+    return buckets.map((b) => {
+      const posPct = Math.round((b.positive / b.total) * 100);
+      const neuPct = Math.round((b.neutral / b.total) * 100);
+      const negPct = Math.max(0, 100 - posPct - neuPct);
+      const label = weeklyRange === "week" ? b.period.replace(/^\d{4}-/, "") : b.period;
+      return {
+        label,
+        heightPos: Math.round((b.positive / maxTotal) * 110),
+        heightNeu: Math.round((b.neutral / maxTotal) * 110),
+        heightNeg: Math.round((b.negative / maxTotal) * 110),
+        posPct,
+        neuPct,
+        negPct,
+      };
+    });
+  }, [buckets, weeklyRange]);
 
   // Session table log
   const sessionLog = useMemo(() => {
@@ -379,7 +388,7 @@ export default function Page() {
   const rawJsonText = useMemo(() => {
     return JSON.stringify(
       {
-        overall: { sentiment: prediction?.overall || "positive", confidence: +(overall.confidence / 100).toFixed(2) },
+        overall: { sentiment: prediction?.overall ?? null, confidence: +(overall.confidence / 100).toFixed(2) },
         aspects: aspects.map((a) => ({
           aspect: a.name,
           mentioned: a.mentioned,
@@ -715,14 +724,16 @@ export default function Page() {
                 ))}
               </div>
             </div>
-            <div className="blueprint" style={{ position: "relative", border: "1px solid var(--color-accent)", background: "var(--color-accent-100)", padding: "8px", fontSize: "11px", lineHeight: 1.4, marginTop: "auto" }}>
-              <i className="corner tl"></i><i className="corner tr"></i><i className="corner bl"></i><i className="corner br"></i>
-              <div style={{ display: "flex", alignItems: "center", gap: "4px", fontWeight: 600, marginBottom: "2px", color: "var(--color-accent-800)" }}>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4M12 17h.01"></path></svg>
-                Gợi ý hành động
+            {quick.total > 0 && (
+              <div className="blueprint" style={{ position: "relative", border: "1px solid var(--color-accent)", background: "var(--color-accent-100)", padding: "8px", fontSize: "11px", lineHeight: 1.4, marginTop: "auto" }}>
+                <i className="corner tl"></i><i className="corner tr"></i><i className="corner bl"></i><i className="corner br"></i>
+                <div style={{ display: "flex", alignItems: "center", gap: "4px", fontWeight: 600, marginBottom: "2px", color: "var(--color-accent-800)" }}>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4M12 17h.01"></path></svg>
+                  Gợi ý hành động
+                </div>
+                {quick.suggestion}
               </div>
-              {quick.suggestion}
-            </div>
+            )}
             <button
               className="btn btn-ghost"
               style={{ paddingLeft: 0, justifyContent: "flex-start", fontSize: "11px", cursor: "pointer" }}
@@ -807,16 +818,20 @@ export default function Page() {
                 </div>
               </div>
               <div style={{ display: "flex", alignItems: "flex-end", gap: "10px", height: "85px", paddingLeft: "2px" }}>
-                {weeklyTrend.map((w, idx) => (
-                  <div key={idx} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "3px", flex: 1, maxWidth: "30px" }}>
-                    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                      <div style={{ height: `${w.heightNeg}px`, background: "oklch(48% 0.12 35)" }}></div>
-                      <div style={{ height: `${w.heightNeu}px`, background: "var(--color-neutral-500)" }}></div>
-                      <div style={{ height: `${w.heightPos}px`, background: "var(--color-accent-700)" }}></div>
+                {weeklyTrend.length === 0 ? (
+                  <span style={{ fontSize: "11px", opacity: 0.55, alignSelf: "center" }}>Chưa có dữ liệu — hãy phân tích ít nhất một review để bắt đầu tích lũy xu hướng.</span>
+                ) : (
+                  weeklyTrend.map((w, idx) => (
+                    <div key={idx} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "3px", flex: 1, maxWidth: "30px" }}>
+                      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+                        <div style={{ height: `${w.heightNeg}px`, background: "oklch(48% 0.12 35)" }}></div>
+                        <div style={{ height: `${w.heightNeu}px`, background: "var(--color-neutral-500)" }}></div>
+                        <div style={{ height: `${w.heightPos}px`, background: "var(--color-accent-700)" }}></div>
+                      </div>
+                      <span style={{ fontSize: "9px", opacity: 0.6 }}>{w.label}</span>
                     </div>
-                    <span style={{ fontSize: "9px", opacity: 0.6 }}>{w.label}</span>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>

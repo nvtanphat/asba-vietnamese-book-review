@@ -24,7 +24,7 @@ class Shop(Base):
     settings: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_now)
 
-    users: Mapped[list["User"]] = relationship(back_populates="shop")
+    users: Mapped[list[User]] = relationship(back_populates="shop")
 
 
 class User(Base):
