@@ -116,8 +116,9 @@
 
 | Mô Hình | Họ Kiến Trúc | Val $\text{F1}_{\text{comb}}$ | Test $\text{F1}_{\text{comb}}$ | Test $\text{F1}_{\text{overall}}$ | Test $\text{F1}_{\text{presence}}$ | Test $\text{F1}_{\text{present}}$ | Số Lượng Params | Trạng Thái |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **PhoBERT-base** | Hierarchical Transformer | **0.7742** | 0.7740 | **0.8202** | 0.9418 | 0.7507 | 135M | 🏆 **Champion** |
-| **XLM-RoBERTa-base** | Hierarchical Transformer | 0.7722 | **0.7823** | 0.8194 | **0.9455** | **0.7650** | 278M | 🥈 Candidate |
+| **PhoBERT + XLM-R** | Probability Ensemble | **0.7863** | **0.7911** | **0.8263** | **0.9475** | **0.7776** | 413M | 👑 **State-of-the-Art** |
+| **PhoBERT-base** | Hierarchical Transformer | 0.7742 | 0.7740 | 0.8202 | 0.9418 | 0.7507 | 135M | 🏆 **Champion** |
+| **XLM-RoBERTa-base** | Hierarchical Transformer | 0.7722 | 0.7823 | 0.8194 | 0.9455 | 0.7650 | 278M | 🥈 Candidate |
 | **ViT5 + LoRA** | Sinh chuỗi Seq2Seq | 0.7375 | 0.7294 | 0.7567 | 0.9205 | 0.7437 | 220M | ✅ Hoàn thành |
 | **mDeBERTa-v3-base** | Hierarchical Transformer | 0.7250 | 0.7284 | 0.7893 | 0.9110 | 0.7011 | 86M | ✅ Hoàn thành |
 | **Linear SVM** | Baseline cổ điển (TF-IDF) | 0.7283 | 0.7090 | 0.7592 | 0.9075 | 0.7004 | — | ✅ Hoàn thành |
