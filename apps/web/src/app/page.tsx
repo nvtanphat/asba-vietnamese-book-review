@@ -192,7 +192,9 @@ export default function Page() {
 
     return defaultList.map((a) => {
       const match = prediction.aspects?.find((x) => x.aspect === a.key);
-      if (!match) return a;
+      // The API only includes aspects the model judged as present — no match means the
+      // model did not mention this aspect at all, not "keep the placeholder mock value".
+      if (!match) return { ...a, mentioned: false, confidence: 0, sentiment: null };
       const isM = match.presence > 0.45;
       return {
         ...a,
