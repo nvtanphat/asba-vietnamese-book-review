@@ -95,10 +95,24 @@ def _warm_absa_predictor() -> None:
     itself ready to serve, so it isn't racing that per-request health check, and it also
     removes the cold-start latency spike from whichever user's request would otherwise
     have been first.
+
+    Never lets a warmup failure crash startup: apps/api/tests/conftest.py mocks
+    `absa_service.analyze` for every test's TestClient, not this internal predictor-loading
+    path, so a fresh clone/CI checkout with no promoted model artifacts (they're gitignored
+    — see scripts/ci/make_fixture_artifacts.py) would otherwise fail *every* test that spins
+    up the app, not just ABSA ones. On failure, this just logs and leaves `_get_predictor`
+    to retry lazily on first real request, exactly like before this warmup existed.
     """
     from app.services.absa_service import _get_predictor
 
-    _get_predictor()
+    try:
+        _get_predictor()
+    except Exception:
+        import logging
+
+        logging.getLogger(__name__).exception(
+            "ABSA model warmup failed at startup; will retry lazily on first /absa/analyze request."
+        )
 
 
 @app.get("/health", tags=["meta"])
